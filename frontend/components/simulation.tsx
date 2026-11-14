@@ -162,9 +162,10 @@ export default function Simulation(){
 
     <nav className="simpy-inpage-nav" aria-label="Simulation sections">
       <a href="#simpy-scenario">01 / Configure</a>
-      <a href="#simpy-timeline">02 / Replay & charts</a>
-      <a href="#simpy-results">03 / Verdict</a>
-      <a href="#simpy-deepdive">04 / Model evidence</a>
+      <a href="#simpy-timeline">02 / Replay</a>
+      <a href="#simpy-analytics">03 / Charts</a>
+      <a href="#simpy-results">04 / Verdict</a>
+      <a href="#simpy-deepdive">05 / Evidence</a>
     </nav>
 
 

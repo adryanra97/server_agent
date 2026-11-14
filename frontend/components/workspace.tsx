@@ -68,6 +68,13 @@ export default function Workspace(){
     window.addEventListener('serveragent-demo-user',update);
     return()=>window.removeEventListener('serveragent-demo-user',update);
   },[]);
+  // Consistent first-load position when moving between role workspaces.
+  // Preserve in-page hash navigation for intentional anchor links.
+  useEffect(()=>{
+    if(!window.location.hash){
+      window.scrollTo({top:0,left:0,behavior:'auto'});
+    }
+  },[pathname]);
   const pages=role?allowedPages(role):[];
   const primary=pages.filter(x=>['/dashboard','/simulation','/compare','/alignment','/incident','/signoff','/reports'].includes(x.href));
   const secondary=pages.filter(x=>!primary.some(p=>p.href===x.href));

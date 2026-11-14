@@ -29,7 +29,7 @@ const checks:CheckDefinition[]=[
 ];
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
-const branch='feat/serveragent-platform';
+const branch='main';
 const fallback:QualityEvidence={
   source:'GitHub Actions',repository:'adryanra97/server_agent',branch,status:'unavailable',conclusion:null,
   url:workflow,run_id:null,coverage:null,coverage_line:null,coverage_branch:null,coverage_status:'not-reported',
@@ -163,11 +163,9 @@ export default function Quality(){
       <div className="eq-metric"><span>BANDIT HIGH + MEDIUM</span><strong>{security.status==='reported'?Number(security.high)+Number(security.medium):'—'}</strong><p>{security.status==='reported'?'Findings across both severities':'Security scan not reported yet'}</p></div>
     </div>
 
-    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null}/>
-
-    <div className="eq-content">
+    <div className="eq-content eq-content-pipeline">
       <section className="eq-checks">
-        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Six checks. Independently verified.</h3><p>Each result corresponds to a real step in the latest GitHub Actions run. The Pytest list above shows each executed case.</p></div><Workflow size={23}/></div>
+        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Six checks. Independently verified.</h3><p>Each result corresponds to a real step in the latest GitHub Actions run. The detailed Pytest report in section 02 shows every executed case.</p></div><Workflow size={23}/></div>
         <div className="eq-check-list">{statuses.map((check,index)=><div className="eq-check" key={check.key}>
           <span className="eq-check-number">{String(index+1).padStart(2,'0')}</span>
           <div className="eq-check-text"><strong>{check.name}</strong><p>{check.description}</p><code>{check.command}</code></div>
@@ -177,7 +175,11 @@ export default function Quality(){
         </div>)}</div>
         <p className="eq-footnote"><Info size={16}/> A completed workflow can still contain skipped steps. A missing check is shown as not reported, never automatically counted as passed.</p>
       </section>
+    </div>
 
+    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null}/>
+
+    <div className="eq-content eq-content-security">
       <section className="eq-security">
         <div className="eq-section-head"><div><span>03 / SECURITY ANALYSIS</span><h3>Bandit Python scan.</h3><p>Source-code security findings grouped by severity.</p></div><ShieldCheck size={23}/></div>
         <div className="eq-security-status"><div className={'eq-trust-indicator '+statusClass(securityJob?.conclusion)}>{securityJob?.conclusion==='success'?<CheckCircle2 size={23}/>:securityJob?.conclusion==='failure'?<ShieldAlert size={23}/>:<Clock3 size={23}/>}</div>

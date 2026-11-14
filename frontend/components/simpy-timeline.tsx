@@ -225,7 +225,7 @@ export default function SimulationTimeline({
     <input type="range" className="timeline-scrubber" min={0} max={last} step={1} disabled={!hasTrace} value={Math.min(index,last)} onChange={e=>chooseSecond(Number(e.target.value))} aria-label="Simulation second" />
     <div className="timeline-axis-text"><span>0 seconds</span><span>{hasTrace?last+' seconds':'Awaiting simulation'}</span></div>
 
-    <div className="timeline-chart-header"><div><span className="simpy-section-number">03 / TIME-SERIES ANALYTICS</span><h3>What changes each second?</h3><p className="sa-chart-subtitle">One question at a time. Select a metric group, then drag the timeline or click the chart.</p></div>
+    <div className="timeline-chart-header" id="simpy-analytics"><div><span className="simpy-section-number">03 / TIME-SERIES ANALYTICS</span><h3>What changes each second?</h3><p className="sa-chart-subtitle">One question at a time. Select a metric group, then drag the timeline or click the chart.</p></div>
       {hasTrace&&<button type="button" className="timeline-export" onClick={()=>exportTrace(trace)}><ArrowDownToLine size={16}/> Export per-second CSV</button>}
     </div>
 

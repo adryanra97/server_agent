@@ -2006,3 +2006,208 @@ body,.sa-app{background:#F5FAFE;color:#183D57}
     scroll-behavior:auto;
   }
 }
+
+
+/* November 2026 desktop first-view consistency pass.
+   Shared shell rhythm and no clipped controls at standard laptop heights. */
+:root{--sa-header-height:72px;--sa-shell-gap:18px;--sa-section-gap:18px}
+.sa-app .sa-header-main{
+  min-height:var(--sa-header-height);
+  height:var(--sa-header-height);
+  max-width:1540px;
+  padding-inline:clamp(18px,2.8vw,42px);
+}
+.sa-app .sa-main-nav>a,
+.sa-app .sa-more,.sa-app .sa-more>button{
+  min-height:var(--sa-header-height);
+  height:var(--sa-header-height);
+}
+.sa-app .sa-main{
+  width:100%;
+  max-width:1540px;
+  min-width:0;
+  margin-inline:auto;
+  padding:var(--sa-shell-gap) clamp(18px,2.8vw,42px) 0;
+}
+.sa-app .sa-main>*{min-width:0}
+.sa-app .sa-breadcrumb{
+  margin:0 0 15px;
+  min-height:20px;
+  flex-wrap:wrap;
+  gap:8px;
+  line-height:1.45;
+}
+.sa-app .sa-page-header{
+  margin-bottom:var(--sa-section-gap);
+  padding-bottom:16px;
+  align-items:flex-start;
+}
+.sa-app .sa-page-header h1{
+  font-size:clamp(28px,2.55vw,38px);
+  line-height:1.16;
+  margin:7px 0 8px;
+  letter-spacing:-.045em;
+}
+.sa-app .sa-page-header p{
+  font-size:clamp(13px,1.02vw,15px);
+  line-height:1.6;
+  max-width:790px;
+  margin-bottom:0;
+}
+.sa-app .page-stack{gap:var(--sa-section-gap)}
+.sa-app .sa-demo-label{flex-shrink:0}
+.sa-app .sa-section-dashboard .sa-page-header,
+.sa-app .sa-section-alignment .sa-page-header,
+.sa-app .sa-section-incident .sa-page-header,
+.sa-app .sa-section-signoff .sa-page-header,
+.sa-app .sa-section-reports .sa-page-header,
+.sa-app .sa-section-methodology .sa-page-header{
+  margin-bottom:var(--sa-section-gap);
+}
+/* Shared lightweight feature introductions: no oversized above-fold walls. */
+.sa-app .role-hero,
+.sa-app .simpy-intro,
+.sa-app .sa-api-hero,
+.sa-app .eq-hero,
+.sa-app .qa-compare-banner{
+  padding:clamp(22px,2.3vw,32px);
+  min-height:0;
+}
+.sa-app .role-hero{
+  grid-template-columns:minmax(0,1.45fr) minmax(270px,.78fr);
+  gap:clamp(18px,2.6vw,38px);
+}
+.sa-app .role-hero h2{
+  font-size:clamp(32px,3vw,43px);
+  line-height:1.14;
+  margin:12px 0;
+}
+.sa-app .role-hero-copy>p{font-size:14px;line-height:1.6}
+.sa-app .role-hero-buttons{margin-top:17px;gap:13px}
+.sa-app .role-hero-brief{
+  min-width:0;
+  padding:clamp(17px,2vw,25px);
+}
+.sa-app .role-hero-brief>span{margin-bottom:12px}
+.sa-app .role-hero-brief>strong{font-size:23px}
+.sa-app .role-hero-brief p{margin:11px 0 16px;line-height:1.6}
+.sa-app .simpy-intro{
+  overflow:visible;
+  padding:clamp(22px,2.2vw,30px);
+}
+.sa-app .simpy-intro h2{
+  max-width:980px;
+  font-size:clamp(30px,2.9vw,42px);
+  margin:8px 0 10px;
+}
+.sa-app .simpy-intro p{font-size:14px;line-height:1.6}
+.sa-app .simpy-intro-facts{margin-top:15px;gap:10px 19px}
+.sa-app .simpy-inpage-nav{
+  min-width:0;
+  flex-wrap:wrap;
+  gap:10px 22px;
+  overflow:visible;
+}
+.sa-app .simpy-inpage-nav a{
+  min-height:40px;
+  padding:11px 0;
+}
+.sa-app .simpy-page,.sa-app .sa-api,.sa-app .eq-page{gap:var(--sa-section-gap)}
+.sa-app .qa-compare-banner h2,
+.sa-app .sa-api-hero h2,
+.sa-app .eq-hero h2{
+  font-size:clamp(31px,2.85vw,42px);
+  line-height:1.14;
+  margin:10px 0 12px;
+}
+.sa-app .qa-compare-banner p,
+.sa-app .sa-api-hero p,
+.sa-app .eq-hero p{line-height:1.58;font-size:14px}
+.sa-app .eq-hero-meta{margin-top:14px}
+.sa-app .eq-hero-actions{min-width:166px}
+.sa-app .eq-trust{padding:15px 20px}
+.sa-app .eq-metrics{gap:12px}
+.sa-app .eq-metric{min-height:119px;padding:17px 20px;gap:6px}
+.sa-app .eq-metric>strong{font-size:clamp(28px,2.3vw,36px)}
+.sa-app .eq-metric>p{font-size:11px;line-height:1.45}
+.sa-app .eq-content-pipeline,
+.sa-app .eq-content-security{display:block}
+.sa-app .eq-content-pipeline>.eq-checks,
+.sa-app .eq-content-security>.eq-security{width:100%}
+.sa-app .eq-checks,.sa-app .eq-security,.sa-app .eq-detail{
+  padding:clamp(19px,2.25vw,30px);
+}
+.sa-app .eq-section-head{padding-bottom:15px}
+.sa-app .eq-section-head h3{font-size:clamp(23px,2vw,29px)}
+.sa-app .eq-content-pipeline .eq-check-list{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:17px;
+}
+.sa-app .eq-content-pipeline .eq-check{
+  align-items:flex-start;
+  min-width:0;
+  padding:16px 13px;
+  background:#F7FBFF;
+  border:1px solid #D6E6F0;
+  gap:10px;
+}
+.sa-app .eq-content-pipeline .eq-check-number{min-width:19px}
+.sa-app .eq-content-pipeline .eq-check-text>strong{font-size:14px}
+.sa-app .eq-content-pipeline .eq-check-text>p{font-size:12px;margin:5px 0}
+.sa-app .eq-content-pipeline .eq-check-text code{font-size:10px}
+.sa-app .eq-content-pipeline .eq-check-state{gap:12px}
+.sa-app .eq-content-pipeline .eq-check-pill{font-size:10px;padding:7px;gap:4px}
+.sa-app .eq-security-counts{gap:14px}
+.sa-app .eq-security-counts>div{padding:18px}
+.sa-app .eq-security-counts strong{font-size:33px}
+/* Wide data stays inside its section, with a local horizontal scroll when needed. */
+.sa-app .qa-compare,.sa-app .sa-api,.sa-app .eq-page,
+.sa-app .reports-table,.sa-app .simpy-page,.sa-app .role-list-panel,
+.sa-app .sa-api-layout,.sa-app .sa-api-console{min-width:0;max-width:100%}
+.sa-app .sa-api-response pre,.sa-app .simpy-raw pre{max-width:100%;overflow:auto}
+.sa-app .reports-table{overflow-x:auto}
+#simpy-scenario,#simpy-timeline,#simpy-analytics,
+#simpy-results,#simpy-deepdive,#pytest-details{
+  scroll-margin-top:calc(var(--sa-header-height) + 18px);
+}
+/* The old desktop login forced 100dvh + overflow:hidden and cut off inputs.
+   Allow normal page scroll instead of silently cropping the panel. */
+.demo-login{height:auto;min-height:100dvh;overflow:visible}
+.demo-login-main{height:auto;min-height:calc(100dvh - 68px);overflow:visible;flex:1}
+.demo-login-story,.demo-login-side{height:auto;min-height:0;overflow:visible}
+.demo-login-side{align-self:stretch}
+.demo-login-panel{max-width:min(100%,550px)}
+@media(min-width:901px) and (max-height:820px){
+  :root{--sa-shell-gap:14px;--sa-section-gap:15px}
+  .sa-app .role-hero,
+  .sa-app .simpy-intro,
+  .sa-app .sa-api-hero,
+  .sa-app .eq-hero,
+  .sa-app .qa-compare-banner{padding:22px 25px}
+  .sa-app .role-hero h2{font-size:34px}
+  .sa-app .simpy-intro h2{font-size:34px}
+  .sa-app .role-hero-brief{padding:18px 20px}
+  .sa-app .eq-metric{min-height:105px}
+  .demo-login-story{padding:23px clamp(26px,3.6vw,55px)}
+  .demo-login-side{padding:14px clamp(25px,3vw,48px)}
+}
+@media(max-width:1250px){
+  .sa-app .eq-content-pipeline .eq-check-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sa-app .eq-check-state{white-space:normal}
+}
+@media(max-width:1000px){
+  .sa-app .role-hero{grid-template-columns:1fr}
+  .sa-app .role-hero-brief{max-width:none}
+}
+@media(max-width:900px){
+  :root{--sa-header-height:68px;--sa-shell-gap:16px}
+  .sa-app .sa-header-main{height:var(--sa-header-height);min-height:var(--sa-header-height)}
+  .sa-app .sa-main{padding-inline:clamp(16px,3vw,24px)}
+  .sa-app .sa-page-header{flex-wrap:wrap}
+  .sa-app .eq-content-pipeline .eq-check-list{grid-template-columns:1fr}
+  .sa-app .eq-security-counts{gap:8px}
+  .sa-app .eq-security-counts>div{padding:12px}
+  .demo-login-main{min-height:calc(100dvh - 68px)}
+}

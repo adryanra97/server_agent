@@ -73,7 +73,7 @@ def test_quality_returns_measured_jobs_and_metrics(monkeypatch):
     assert data["bandit"] == {"high": 0, "medium": 1, "low": 2, "status": "reported"}
     assert len(data["jobs"]) == 2
     assert data["data_status"] == "live"
-    assert "branch=feat/serveragent-platform" in requested[0]
+    assert "branch=main" in requested[0]
     assert "/actions/runs/123/jobs" in requested[1]
 
 

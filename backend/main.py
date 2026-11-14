@@ -21,7 +21,7 @@ from app.main import app, require_api_key
 from app.schemas import EvaluationInput, VerdictRequest, VerdictResponse
 
 QUALITY_REPO = "adryanra97/server_agent"
-QUALITY_BRANCH = "feat/serveragent-platform"
+QUALITY_BRANCH = "main"
 QUALITY_ROOT = f"https://api.github.com/repos/{QUALITY_REPO}"
 
 
