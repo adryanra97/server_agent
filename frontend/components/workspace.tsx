@@ -1,13 +1,17 @@
 'use client';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
-  Activity, ArrowRight, ArrowUpRight, CheckCircle2, ChevronDown, CircleAlert,
-  Cpu, FileClock, GitBranch, Layers3, Menu, Network, Server, ShieldCheck, Terminal, Waves, X,
+  Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText, ChevronDown,
+  ClipboardCheck, FileClock, FileSignature, FlaskConical, GitBranch,
+  LogOut, Menu, ShieldCheck, Terminal, UserRound, Waves, X,
 } from 'lucide-react';
-import { Brand, Eyebrow, navigation, Outcome, ResourceBars } from './ui';
-import { history, type HistoryItem } from '../lib/model';
+import { Brand, Eyebrow } from './ui';
+import { getDemoRole, getPersona, allowedPages, canVisit, demoLogout, type DemoRole } from '../lib/demo';
+import DemoRoleDashboard from './demo-dashboard';
+import DemoWorkflows from './demo-workflows';
 import Simulation from './simulation';
 import Compare from './compare';
 import Reports from './reports';
@@ -15,93 +19,124 @@ import Developer from './developer';
 import Quality from './quality';
 import Methodology from './methodology';
 
-const labels:Record<string,{title:string;description:string;eyebrow:string}>={
-  dashboard:{title:'Capacity intelligence.',description:'Everything starts with the original copdash capacity evaluation engine.',eyebrow:'WORKSPACE / OVERVIEW'},
-  simulation:{title:'SimPy workbench.',description:'Run the original discrete-event engine, inspect execution evidence, and compare against deterministic rules.',eyebrow:'WORKSPACE / DISCRETE-EVENT SIMULATION'},
-  compare:{title:'Compare workloads',description:'Run the original /verdict endpoint for three different load levels.',eyebrow:'WORKSPACE / COMPARISON'},
-  reports:{title:'Run history',description:'Revisit completed evaluations stored locally in this browser.',eyebrow:'WORKSPACE / HISTORY'},
-  developer:{title:'API Explorer',description:'Inspect the original copdash endpoints and send real JSON requests.',eyebrow:'ENGINEERING / API'},
-  quality:{title:'Engineering Quality',description:'GitHub tests, Python quality checks, and verified CI status.',eyebrow:'ENGINEERING / CI'},
-  methodology:{title:'About the engines',description:'Understand the formulas, simulation mechanics, assumptions, and boundaries.',eyebrow:'ENGINEERING / METHODOLOGY'},
+const titles:Record<string,{title:string;description:string;eyebrow:string}>={
+  dashboard:{title:'Your workspace.',description:'Role-specific decisions and the latest evidence from the original SimPy engine.',eyebrow:'ROLE WORKSPACE / OVERVIEW'},
+  simulation:{title:'SimPy workbench.',description:'Run a discrete-event server simulation and explore its event-derived time series.',eyebrow:'MODEL / SIMULATION'},
+  compare:{title:'Compare workloads.',description:'Test the same server at normal, 2× and 3× demand.',eyebrow:'MODEL / CAPACITY COMPARISON'},
+  alignment:{title:'Release alignment.',description:'Submit technical evidence and record the decision for each sprint cycle.',eyebrow:'UC-01 / SCHEDULED ALIGNMENT'},
+  incident:{title:'Incident response.',description:'Record escalation, reproduce model conditions, and compare a mitigation scenario.',eyebrow:'UC-02 / INCIDENT HANDLING'},
+  signoff:{title:'Release sign-off.',description:'Approve or reject the technical recommendation with a recorded decision.',eyebrow:'UC-04 / SIGN-OFF'},
+  reports:{title:'Reports & history.',description:'Explore saved evaluations and role-workflow decisions from this browser.',eyebrow:'UC-03 / REPORTING'},
+  developer:{title:'API explorer.',description:'Inspect live endpoint responses from the original copdash FastAPI service.',eyebrow:'ENGINEERING / API'},
+  quality:{title:'Engineering quality.',description:'Review real GitHub Actions checks, coverage, and build status.',eyebrow:'ENGINEERING / CI'},
+  methodology:{title:'About the engines.',description:'Understand assumptions, thresholds, and limitations of the current model.',eyebrow:'ENGINEERING / METHODOLOGY'},
 };
-function Overview(){
-  const [health,setHealth]=useState<'checking'|'online'|'unavailable'>('checking');
-  const [engines,setEngines]=useState<string[]>([]);
-  const [runs,setRuns]=useState<HistoryItem[]>([]);
-  useEffect(()=>{
-    const update=()=>setRuns(history());
-    update(); window.addEventListener('serveragent-history',update);
-    const healthCheck=fetch('/health').then(r=>r.json()).then(d=>setHealth(d.status==='ok'?'online':'unavailable')).catch(()=>setHealth('unavailable'));
-    const engineCheck=fetch('/engines').then(r=>r.json()).then(d=>setEngines(d.engines??[])).catch(()=>setEngines([]));
-    return()=>{window.removeEventListener('serveragent-history',update)};
-  },[]);
-  const last=runs[0];
-  return <div className="page-stack">
-    <div className="notice"><div className="notice-icon"><Cpu size={19}/></div><div><strong>Faithful to copdash.</strong><span>Two original engines, one input schema, three possible verdicts. The additional interface makes the underlying Python calculations easier to explore.</span></div><Link href="/simulation" className="notice-link">Run an evaluation <ArrowRight size={16}/></Link></div>
-    <div className="overview-stats">
-      <div className="stat-card"><div className="stat-top">BACKEND HEALTH <Activity size={18}/></div><strong className="overview-stat-word">{health==='online'?'Online':health==='checking'?'Checking':'Unavailable'}</strong><div className="stat-meta">Original GET /health endpoint</div></div>
-      <div className="stat-card"><div className="stat-top">AVAILABLE ENGINES <Waves size={18}/></div><strong>{engines.length||'—'}</strong><div className="stat-meta">{engines.length?engines.join(' · '):'Awaiting engine registry'}</div></div>
-      <div className="stat-card"><div className="stat-top">BROWSER HISTORY <FileClock size={18}/></div><strong>{runs.length}</strong><div className="stat-meta">Real evaluations saved locally</div></div>
-      <div className="stat-card"><div className="stat-top">API CONTRACT <Terminal size={18}/></div><strong className="overview-stat-word">OpenAPI</strong><div className="stat-meta">GET /openapi.json</div></div>
-    </div>
-    <div className="overview-columns">
-      <section className="panel panel-trend"><div className="panel-heading"><div><span className="kicker">THE CORE OF COPDASH</span><h3>From server specifications to a verdict</h3><p>The exact processing path in the source repository.</p></div><span className="demo-tag">2 ENGINES</span></div>
-        <div className="logic-flow"><div className="logic-card"><span className="logic-number">01</span><Cpu size={23}/><strong>Server spec</strong><small>CPU · RAM · Network</small></div><ArrowRight className="logic-arrow" size={22}/><div className="logic-card"><span className="logic-number">02</span><Activity size={23}/><strong>Load profile</strong><small>RPS · CPU ms · Payload</small></div><ArrowRight className="logic-arrow" size={22}/><div className="logic-card logic-primary"><span className="logic-number">03</span><Waves size={23}/><strong>Engine</strong><small>Rules or SimPy</small></div><ArrowRight className="logic-arrow" size={22}/><div className="logic-card"><span className="logic-number">04</span><CheckCircle2 size={23}/><strong>Verdict</strong><small>Risk · Confidence · Reasons</small></div></div>
-        <p className="logic-caption">The site does not simulate a load balancer or send traffic to actual infrastructure. It evaluates the defined mathematical / discrete-event models.</p>
-      </section>
-      <section className="panel panel-readiness"><div className="panel-heading"><div><span className="kicker">MOST RECENT EVALUATION</span><h3>{last?'Your latest model output':'No runs yet'}</h3></div><span className="icon-frame"><FileClock size={18}/></span></div>
-        {last?<><div className="latest-run"><Outcome verdict={last.result.verdict}/><strong>{last.label}</strong><small>{new Date(last.created_at).toLocaleString()} · {last.result.engine}</small></div><ResourceBars result={last.result}/><p className="latest-run-note">Bottleneck: {last.result.bottleneck??'none'} · Confidence heuristic: {(last.result.confidence*100).toFixed(0)}%</p></>:<div className="overview-empty"><Waves size={34}/><p>Complete your first evaluation to see actual results here.</p></div>}
-        <Link className="wide-action" href="/simulation">{last?'Evaluate another workload':'Start evaluating'} <ArrowUpRight size={17}/></Link>
-      </section>
-    </div>
-    <div className="overview-bottom">
-      <Link href="/compare" className="feature-tile"><span className="feature-tile-icon"><Activity size={22}/></span><div><span className="kicker">COMPARE INPUTS</span><h3>How much load can it handle?</h3><p>Run the original engine across three input profiles.</p></div><ArrowUpRight size={18}/></Link>
-      <Link href="/developer" className="feature-tile"><span className="feature-tile-icon"><Terminal size={22}/></span><div><span className="kicker">API TRANSPARENCY</span><h3>Inspect the original endpoints.</h3><p>Try POST /verdict or open Swagger docs directly.</p></div><ArrowUpRight size={18}/></Link>
-    </div>
+
+const navIcons:Record<string,typeof Activity>={
+  '/dashboard':Activity,'/simulation':FlaskConical,'/compare':BarChart3,
+  '/alignment':ClipboardCheck,'/incident':Waves,'/signoff':FileSignature,
+  '/reports':FileClock,'/methodology':BookOpenText,
+  '/developer':Terminal,'/quality':ShieldCheck,
+};
+const navShort:Record<string,string>={
+  '/dashboard':'Overview','/simulation':'Simulation','/compare':'Compare',
+  '/alignment':'Alignment','/incident':'Incidents','/signoff':'Sign-Off','/reports':'Reports',
+};
+function NotSignedIn(){
+  return <div className="sa-access-gate">
+    <div className="sa-gate-graphic"><UserRound size={35}/></div>
+    <span className="role-eyebrow">ROLE WORKSPACE / DEMONSTRATION</span>
+    <h1>Select a demo account to continue.</h1>
+    <p>Different roles see different menus, tasks, and decisions. No database or account registration is needed for this prototype.</p>
+    <Link href="/login">Choose demo user <ArrowRight size={18}/></Link>
+    <small>Client-side demonstration only · Not production authentication</small>
   </div>;
 }
 export default function Workspace(){
-  const path=usePathname();
-  const section=path.split('/')[1]||'dashboard';
-  const page=labels[section]??labels.dashboard;
+  const pathname=usePathname();
+  const router=useRouter();
+  const section=pathname.split('/')[1]||'dashboard';
+  const title=titles[section]??titles.dashboard;
+  const [role,setRole]=useState<DemoRole|null>(null);
+  const [loaded,setLoaded]=useState(false);
   const [mobileOpen,setMobileOpen]=useState(false);
-  const primary=navigation.filter(item=>item.group==='WORKSPACE');
-  const secondary=navigation.filter(item=>item.group==='ENGINEERING');
-  const close=()=>setMobileOpen(false);
+  const [moreOpen,setMoreOpen]=useState(false);
+
+  useEffect(()=>{
+    const update=()=>{setRole(getDemoRole());setLoaded(true);};
+    update();
+    window.addEventListener('serveragent-demo-user',update);
+    return()=>window.removeEventListener('serveragent-demo-user',update);
+  },[]);
+  const pages=role?allowedPages(role):[];
+  const primary=pages.filter(x=>['/dashboard','/simulation','/compare','/alignment','/incident','/signoff','/reports'].includes(x.href));
+  const secondary=pages.filter(x=>!primary.some(p=>p.href===x.href));
+  const currentUser=role?getPersona(role):null;
+  const allowed=role?canVisit(role,pathname):false;
+  function leave(){
+    demoLogout();setMobileOpen(false);setMoreOpen(false);router.push('/login');
+  }
+  function closeMenu(){setMobileOpen(false);setMoreOpen(false);}
+  if(!loaded){
+    return <div className="sa-app"><div className="sa-loading-demo" aria-label="Preparing role workspace"><Waves size={34}/><span>Loading role workspace…</span></div></div>;
+  }
+  if(!role){
+    return <div className="sa-app"><header className="sa-header"><div className="sa-header-main"><Brand dark/><Link href="/login" className="sa-run-cta">Demo login <ArrowUpRight size={16}/></Link></div></header><NotSignedIn/></div>;
+  }
   return <div className="sa-app">
     <header className="sa-header">
       <div className="sa-header-main">
         <Brand dark/>
-        <nav className="sa-main-nav" aria-label="Primary navigation">
-          {primary.map(item=><Link key={item.href} href={item.href} aria-current={path===item.href?'page':undefined}
-            className={path===item.href?'current':''}>{item.label==='SimPy Workbench'?'SimPy':item.label==='Compare Loads'?'Compare':item.label==='Run History'?'History':item.label}</Link>)}
-          <details className="sa-more">
-            <summary className={secondary.some(item=>item.href===path)?'current':''}>Explore <ChevronDown size={15}/></summary>
-            <div className="sa-more-menu">{secondary.map(item=><Link key={item.href} href={item.href}
-              aria-current={path===item.href?'page':undefined}><item.icon size={17}/>{item.label}</Link>)}</div>
-          </details>
+        <nav className="sa-main-nav" aria-label="Role-based primary navigation">
+          {primary.map(page=><Link key={page.href} href={page.href} aria-current={pathname===page.href?'page':undefined}
+            className={pathname===page.href?'current':''}>{navShort[page.href]??page.label}</Link>)}
+          {secondary.length>0&&<div className="sa-more">
+            <button type="button" className={secondary.some(p=>p.href===pathname)?'current':''}
+              aria-expanded={moreOpen} onClick={()=>setMoreOpen(v=>!v)}>Explore <ChevronDown size={15}/></button>
+            {moreOpen&&<div className="sa-more-menu">{secondary.map(page=>{
+              const Icon=navIcons[page.href]??Activity;
+              return <Link key={page.href} href={page.href} onClick={closeMenu}><Icon size={17}/>{page.label}</Link>;
+            })}</div>}
+          </div>}
         </nav>
         <div className="sa-header-actions">
-          <span className="sa-header-indicator"><span className="live-indicator"/> MODEL SANDBOX</span>
-          <a href="/docs" target="_blank" rel="noopener noreferrer" className="sa-docs-link">API docs <ArrowUpRight size={15}/></a>
-          <Link className="sa-run-cta" href="/simulation">Run simulation <ArrowUpRight size={16}/></Link>
+          <span className="sa-role-identity" title={currentUser?.role}><span className="sa-role-avatar">{currentUser?.initial}</span><span className="sa-role-name"><strong>{currentUser?.name}</strong><small>{currentUser?.shortRole}</small></span></span>
+          <Link className="sa-switch-role" href="/login" title="Switch demo persona">Switch user</Link>
+          <button type="button" className="sa-logout" onClick={leave} title="Sign out" aria-label="Sign out"><LogOut size={19}/></button>
           <button type="button" className="sa-mobile-toggle" onClick={()=>setMobileOpen(v=>!v)}
-            aria-expanded={mobileOpen} aria-controls="sa-mobile-navigation"
-            aria-label={mobileOpen?'Close menu':'Open menu'}>{mobileOpen?<X size={24}/>:<Menu size={24}/>}</button>
+            aria-expanded={mobileOpen} aria-controls="sa-mobile-navigation" aria-label={mobileOpen?'Close menu':'Open menu'}>{mobileOpen?<X size={24}/>:<Menu size={24}/>}</button>
         </div>
       </div>
-      {mobileOpen&&<nav id="sa-mobile-navigation" className="sa-mobile-nav" aria-label="Mobile navigation">
-        {[...primary,...secondary].map(item=><Link key={item.href} href={item.href} onClick={close}
-          aria-current={path===item.href?'page':undefined}><item.icon size={19}/>{item.label}<ArrowUpRight size={15}/></Link>)}
-        <a href="/docs" target="_blank" rel="noopener noreferrer" onClick={close}><Terminal size={19}/>Swagger API<ArrowUpRight size={15}/></a>
+      {mobileOpen&&<nav id="sa-mobile-navigation" className="sa-mobile-nav" aria-label="Mobile role navigation">
+        {pages.map(page=>{
+          const Icon=navIcons[page.href]??Activity;
+          return <Link key={page.href} href={page.href} onClick={closeMenu} aria-current={pathname===page.href?'page':undefined}>
+            <Icon size={18}/>{page.label}<ArrowUpRight size={16}/></Link>;
+        })}
+        <Link href="/login" onClick={closeMenu}><UserRound size={18}/>Switch demo user<ArrowUpRight size={16}/></Link>
+        <button type="button" onClick={leave}><LogOut size={18}/>Sign out</button>
       </nav>}
     </header>
     <main className="sa-main">
-      <div className="sa-breadcrumb"><Link href="/" aria-label="ServerAgent homepage">ServerAgent</Link><span>/</span><span>{page.eyebrow.replace('WORKSPACE / ','').replace('ENGINEERING / ','')}</span></div>
-      <div className="page-header sa-page-header"><div><Eyebrow>{page.eyebrow}</Eyebrow><h1>{page.title}</h1><p>{page.description}</p></div><div className="page-header-right"><span className="build-label"><span/> BUILT ON COPDASH</span></div></div>
-      {section==='dashboard'?<Overview/>:section==='simulation'?<Simulation/>:section==='compare'?<Compare/>:section==='reports'?<Reports/>:section==='developer'?<Developer/>:section==='quality'?<Quality/>:section==='methodology'?<Methodology/>:<Overview/>}
-      <footer className="sa-footer"><div><Brand dark/><p>Capacity decisions, grounded in model evidence.</p></div>
-        <div><span>Based on the original copdash Rules + SimPy engines.</span><span>Modeled predictions · Not observed production outcomes.</span></div></footer>
+      <div className="sa-breadcrumb"><Link href="/" aria-label="ServerAgent website">ServerAgent</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
+      {allowed?<><div className="page-header sa-page-header"><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ROLE DEMONSTRATION</span></div>
+        {section==='dashboard'?<DemoRoleDashboard role={role}/>:
+          section==='simulation'?<Simulation/>:
+          section==='compare'?<Compare/>:
+          section==='alignment'?<DemoWorkflows role={role} section="alignment"/>:
+          section==='incident'?<DemoWorkflows role={role} section="incident"/>:
+          section==='signoff'?<DemoWorkflows role={role} section="signoff"/>:
+          section==='reports'?<Reports/>:
+          section==='developer'?<Developer/>:
+          section==='quality'?<Quality/>:
+          section==='methodology'?<Methodology/>:<DemoRoleDashboard role={role}/>}
+      </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>
+        <h2>This page is not part of your demo role.</h2>
+        <p><strong>{currentUser?.shortRole}</strong> has a different responsibility in the proposed AKPSI workflow. Switch accounts to explore this menu.</p>
+        <Link href="/dashboard">Return to your dashboard <ArrowRight size={16}/></Link>
+        <Link href="/login">Switch demo persona <ArrowUpRight size={16}/></Link></div>}
+      <footer className="sa-footer"><div><Brand dark/><p>Capacity evidence meets role-based decision making.</p></div>
+        <div><span>Educational workflow demonstration · browser-local records</span><span>SimPy core from copdash · not production authentication or deployment approval</span></div></footer>
     </main>
   </div>;
 }
