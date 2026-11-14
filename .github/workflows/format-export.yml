@@ -1,0 +1,34 @@
+name: Temporary source-format export
+on:
+  push:
+    branches: [feat/serveragent-platform]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install black ruff
+      - name: Apply recommended formatting
+        working-directory: backend
+        run: |
+          ruff check --fix app main.py tests || true
+          black app main.py tests
+          ruff check app main.py tests || true
+      - name: Export formatted files
+        working-directory: backend
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          import subprocess
+          from pathlib import Path
+          files = subprocess.check_output(["git", "diff", "--name-only"], text=True).splitlines()
+          payload = {path: Path("../" + path).read_text() for path in files if path.startswith("backend/") and path.endswith(".py")}
+          print("FORMATTED_PAYLOAD:" + base64.b64encode(json.dumps(payload).encode()).decode())
+          print("FORMATTED_FILES:" + ",".join(files))
+          PY
