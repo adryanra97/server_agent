@@ -57,6 +57,23 @@ def quality():
     return value
 
 
+class TimelineSecond(BaseModel):
+    """A one-second bucket derived from SimPy events, not synthetic chart points."""
+
+    second: int
+    duration_seconds: float
+    arrivals: int
+    completed: int
+    in_flight: int
+    cpu_percent: float
+    ram_percent: float
+    connection_percent: float
+    network_mbps: float
+    network_percent: float
+    queue_avg: float
+    cpu_queue_avg: float
+
+
 class SimPyDiagnostics(BaseModel):
     """Structured evidence from the original copdash discrete-event engine."""
 
@@ -69,6 +86,10 @@ class SimPyDiagnostics(BaseModel):
     completed: int
     simulated_elapsed_seconds: float
     cpu_slots: int
+    timeline_resolution_seconds: int
+    timeline_limit_seconds: int
+    timeline_truncated: bool
+    timeline: list[TimelineSecond]
     measured_utilization: dict[str, float]
     offered_utilization: dict[str, float]
 
@@ -98,7 +119,8 @@ def inspect_simpy(request: VerdictRequest) -> SimPyInspectionResponse:
         )
     start = time.perf_counter()
     result, diagnostics = SimPyEngine().inspect(
-        EvaluationInput(spec=request.spec, load=request.load)
+        EvaluationInput(spec=request.spec, load=request.load),
+        collect_timeline=True,
     )
     execution_ms = (time.perf_counter() - start) * 1000
     return SimPyInspectionResponse(

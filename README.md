@@ -80,3 +80,20 @@ The additional endpoint invokes the same copdash `SimPyEngine` as `/verdict` and
 Edge case: for any nonzero RPS, a single request's RAM allocation cannot exceed the configured server RAM; the API rejects that impossible reservation with a 422 response. Zero-memory requests are supported.
 
 UI design is editorial and information-first. The process-flow animation explains **model mechanics**, not per-request playback. Analyzed numbers and verdicts come from actual Python simulation, not generated frontend data.
+
+## Event-derived time-series replay
+
+ServerAgent's `POST /api/v1/simpy/inspect` now additionally returns a one-second `simulation.timeline[]` built from the original SimPy event timestamps. Each sample reports:
+
+- arrivals and completions within the second, and requests still in-flight at its end;
+- time-integrated CPU, RAM, and active connection utilization;
+- completed payload throughput (Mbps) and percent of configured bandwidth;
+- average pending requests across network, RAM and CPU queues, plus CPU queue average.
+
+The trace is deterministic for a given request and seed. Time-series collection is enabled **only for the inspection endpoint**; the original `/verdict` contract stays unchanged. Traces are capped at 240 one-second buckets to bound response size; `timeline_truncated` explains if the simulation ran longer.
+
+The UI exposes interactive replay, chart tabs, per-second seeking, speed controls and CSV export. The animated request path is a **visualization of the pipeline**, not a recording of individual SimPy entities. Chart numbers are calculated from actual simulation events, never fabricated frontend series.
+
+### Interface layout
+
+The workspace uses top navigation rather than a sidebar, with enlarged editorial typography, a responsive menu, and direct access to the SimPy Workbench. Future user roles and application workflows will be addressed separately.

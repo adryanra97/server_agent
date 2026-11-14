@@ -31,6 +31,7 @@ from typing import Literal
 
 import simpy
 
+from app.engines.timeline import MAX_TIMELINE_SECONDS, TimelineRecorder
 from app.schemas import (
     EvaluationInput,
     ResourceSummary,
@@ -58,7 +59,9 @@ class SimPyEngine:
         result, _ = self.inspect(input)
         return result
 
-    def inspect(self, input: EvaluationInput) -> tuple[VerdictResult, dict[str, object]]:
+    def inspect(
+        self, input: EvaluationInput, collect_timeline: bool = False
+    ) -> tuple[VerdictResult, dict[str, object]]:
         """Run exactly the same simulation, returning explicit execution evidence."""
         spec = input.spec
         load = input.load
@@ -83,31 +86,51 @@ class SimPyEngine:
             "bytes": 0.0,  # KB shipped
         }
 
+        timeline = TimelineRecorder() if collect_timeline else None
+
         def request() -> None:
             cpu_time = load.avg_cpu_ms_per_req / 1000.0
             wire_time = load.payload_kb * 8.0 / (spec.network.bandwidth_mbps * 1000.0)
             mem_hold = load.avg_mem_mb_per_req
 
+            net_wait_start = env.now
             with net.request() as conn_req:
                 yield conn_req
+                if timeline is not None:
+                    timeline.interval("network_wait", net_wait_start, env.now)
                 conn_acquired = env.now
+                mem_wait_start = env.now
                 if mem_hold > 0:
                     yield ram.get(mem_hold)
+                if timeline is not None:
+                    timeline.interval("ram_wait", mem_wait_start, env.now)
                 mem_acquired = env.now
                 try:
+                    cpu_wait_start = env.now
                     with cpu.request() as cpu_req:
                         yield cpu_req
+                        cpu_started = env.now
+                        if timeline is not None:
+                            timeline.interval("cpu_wait", cpu_wait_start, cpu_started)
                         yield env.timeout(cpu_time)
                         stats["cpu_busy"] += cpu_time
+                        if timeline is not None:
+                            timeline.interval("cpu_busy", cpu_started, env.now)
                     # Wire transfer: connection + memory still held, core released.
                     yield env.timeout(wire_time)
                 finally:
                     if mem_hold > 0:
                         yield ram.put(mem_hold)
                 stats["ram_busy"] += mem_hold * (env.now - mem_acquired)
+                if timeline is not None:
+                    timeline.interval("ram_busy", mem_acquired, env.now, mem_hold)
             stats["net_busy"] += env.now - conn_acquired
             stats["bytes"] += load.payload_kb
             stats["completed"] += 1
+            if timeline is not None:
+                timeline.interval("connection_busy", conn_acquired, env.now)
+                timeline.event("payload_kb", env.now, load.payload_kb)
+                timeline.event("completed", env.now)
 
         # Number of arrivals to simulate: enough to fill a HORIZON-second
         # arrival window, capped so a single verdict stays fast at high rps.
@@ -118,6 +141,8 @@ class SimPyEngine:
             for _ in range(arrivals_count):
                 yield env.timeout(rng.expovariate(load.rps))
                 stats["arrived"] += 1
+                if timeline is not None:
+                    timeline.event("arrivals", env.now)
                 env.process(request())
 
         env.process(arrivals())
@@ -188,6 +213,13 @@ class SimPyEngine:
             resources=resources,
             reasons=reasons,
         )
+        if timeline is not None:
+            second_samples, timeline_truncated = timeline.finish(
+                env.now, cpu_capacity, spec.ram.total_mb,
+                spec.network.max_connections, spec.network.bandwidth_mbps,
+            )
+        else:
+            second_samples, timeline_truncated = [], False
         details = {
             "arrival_process": "Poisson (exponential interarrival times)",
             "seed": SEED,
@@ -198,6 +230,10 @@ class SimPyEngine:
             "completed": stats["completed"],
             "simulated_elapsed_seconds": round(env.now, 4),
             "cpu_slots": cpu_capacity,
+            "timeline_resolution_seconds": 1,
+            "timeline_limit_seconds": MAX_TIMELINE_SECONDS,
+            "timeline_truncated": timeline_truncated,
+            "timeline": second_samples,
             "measured_utilization": {
                 "cpu": round(cpu_measured, 5),
                 "ram": round(ram_measured, 5),

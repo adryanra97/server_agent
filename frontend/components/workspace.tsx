@@ -61,20 +61,47 @@ function Overview(){
   </div>;
 }
 export default function Workspace(){
-  const path=usePathname(); const section=path.split('/')[1]||'dashboard'; const page=labels[section]??labels.dashboard;
-  const [open,setOpen]=useState(false);
-  return <div className="workspace">
-    <aside className={`sidebar ${open?'sidebar-mobile-open':''}`}>
-      <div className="sidebar-top"><Brand/><button className="sidebar-close" onClick={()=>setOpen(false)} aria-label="Close navigation"><X size={18}/></button></div>
-      <div className="sidebar-project"><span className="project-icon"><Server size={17}/></span><div><strong>Server capacity workspace</strong><small>Powered by copdash engines</small></div><ChevronDown size={15}/></div>
-      <nav className="sidebar-nav" aria-label="Workspace navigation">{['WORKSPACE','ENGINEERING'].map(group=><div className="nav-group" key={group}><div className="nav-group-label">{group}</div>{navigation.filter(n=>n.group===group).map(({label,href,icon:Icon})=><Link key={href} href={href} onClick={()=>setOpen(false)} className={`sidebar-link ${path===href?'active':''}`} aria-current={path===href?'page':undefined}><Icon size={18}/><span>{label}</span>{path===href&&<span className="active-marker"/>}</Link>)}</div>)}</nav>
-      <div className="sidebar-foot"><div className="sidebar-card"><span className="sidebar-card-label"><span className="live-indicator"/> SOURCE-FIRST</span><strong>Real engines. Real responses.</strong><p>Explore the API or see the code that produces every verdict.</p><a href="https://github.com/mauikut-com/copdash" target="_blank" rel="noopener noreferrer">Original copdash <ArrowUpRight size={14}/></a></div><div className="sidebar-bottomline"><span className="user-avatar">SA</span><div><strong>ServerAgent</strong><small>Capacity evaluation · v0.2</small></div><ShieldCheck size={16}/></div></div>
-    </aside>
-    {open&&<button className="sidebar-scrim" aria-label="Close menu" onClick={()=>setOpen(false)}/>}
-    <div className="workspace-main"><header className="app-topbar"><div className="app-topbar-left"><button className="menu-mobile" onClick={()=>setOpen(true)} aria-label="Open menu"><Menu size={20}/></button><span className="breadcrumb-root">Workspace</span><span className="breadcrumb-divider">/</span><strong>{navigation.find(n=>n.href===path)?.label??'Overview'}</strong></div><div className="app-topbar-right"><span className="topbar-environment"><span className="live-indicator"/> MODEL SANDBOX</span><a href="https://github.com/adryanra97/server_agent" target="_blank" rel="noopener noreferrer" aria-label="ServerAgent on GitHub"><GitBranch size={18}/></a><a href="/docs" target="_blank" rel="noopener noreferrer" aria-label="Swagger API documentation"><Terminal size={18}/></a></div></header>
-      <main className="workspace-content"><div className="page-header"><div><Eyebrow>{page.eyebrow}</Eyebrow><h1>{page.title}</h1><p>{page.description}</p></div><div className="page-header-right"><span className="build-label"><span/> COPDash ENGINE FOUNDATION</span></div></div>
-        {section==='dashboard'?<Overview/>:section==='simulation'?<Simulation/>:section==='compare'?<Compare/>:section==='reports'?<Reports/>:section==='developer'?<Developer/>:section==='quality'?<Quality/>:section==='methodology'?<Methodology/>:<Overview/>}
-        <footer className="workspace-footer"><span>ServerAgent · Built on the original copdash capacity model</span><span>Modeled estimates · Not observed production outcomes</span></footer>
-      </main></div>
+  const path=usePathname();
+  const section=path.split('/')[1]||'dashboard';
+  const page=labels[section]??labels.dashboard;
+  const [mobileOpen,setMobileOpen]=useState(false);
+  const primary=navigation.filter(item=>item.group==='WORKSPACE');
+  const secondary=navigation.filter(item=>item.group==='ENGINEERING');
+  const close=()=>setMobileOpen(false);
+  return <div className="sa-app">
+    <header className="sa-header">
+      <div className="sa-header-main">
+        <Brand dark/>
+        <nav className="sa-main-nav" aria-label="Primary navigation">
+          {primary.map(item=><Link key={item.href} href={item.href} aria-current={path===item.href?'page':undefined}
+            className={path===item.href?'current':''}>{item.label==='SimPy Workbench'?'SimPy':item.label==='Compare Loads'?'Compare':item.label==='Run History'?'History':item.label}</Link>)}
+          <details className="sa-more">
+            <summary className={secondary.some(item=>item.href===path)?'current':''}>Explore <ChevronDown size={15}/></summary>
+            <div className="sa-more-menu">{secondary.map(item=><Link key={item.href} href={item.href}
+              aria-current={path===item.href?'page':undefined}><item.icon size={17}/>{item.label}</Link>)}</div>
+          </details>
+        </nav>
+        <div className="sa-header-actions">
+          <span className="sa-header-indicator"><span className="live-indicator"/> MODEL SANDBOX</span>
+          <a href="/docs" target="_blank" rel="noopener noreferrer" className="sa-docs-link">API docs <ArrowUpRight size={15}/></a>
+          <Link className="sa-run-cta" href="/simulation">Run simulation <ArrowUpRight size={16}/></Link>
+          <button type="button" className="sa-mobile-toggle" onClick={()=>setMobileOpen(v=>!v)}
+            aria-expanded={mobileOpen} aria-controls="sa-mobile-navigation"
+            aria-label={mobileOpen?'Close menu':'Open menu'}>{mobileOpen?<X size={24}/>:<Menu size={24}/>}</button>
+        </div>
+      </div>
+      {mobileOpen&&<nav id="sa-mobile-navigation" className="sa-mobile-nav" aria-label="Mobile navigation">
+        {[...primary,...secondary].map(item=><Link key={item.href} href={item.href} onClick={close}
+          aria-current={path===item.href?'page':undefined}><item.icon size={19}/>{item.label}<ArrowUpRight size={15}/></Link>)}
+        <a href="/docs" target="_blank" rel="noopener noreferrer" onClick={close}><Terminal size={19}/>Swagger API<ArrowUpRight size={15}/></a>
+      </nav>}
+    </header>
+    <main className="sa-main">
+      <div className="sa-breadcrumb"><Link href="/" aria-label="ServerAgent homepage">ServerAgent</Link><span>/</span><span>{page.eyebrow.replace('WORKSPACE / ','').replace('ENGINEERING / ','')}</span></div>
+      <div className="page-header sa-page-header"><div><Eyebrow>{page.eyebrow}</Eyebrow><h1>{page.title}</h1><p>{page.description}</p></div><div className="page-header-right"><span className="build-label"><span/> BUILT ON COPDASH</span></div></div>
+      {section==='dashboard'?<Overview/>:section==='simulation'?<Simulation/>:section==='compare'?<Compare/>:section==='reports'?<Reports/>:section==='developer'?<Developer/>:section==='quality'?<Quality/>:section==='methodology'?<Methodology/>:<Overview/>}
+      <footer className="sa-footer"><div><Brand dark/><p>Capacity decisions, grounded in model evidence.</p></div>
+        <div><span>Based on the original copdash Rules + SimPy engines.</span><span>Modeled predictions · Not observed production outcomes.</span></div></footer>
+    </main>
   </div>;
 }

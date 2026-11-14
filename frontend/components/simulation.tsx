@@ -11,7 +11,8 @@ import {
   defaultLoad, defaultSpec, requestVerdict, saveRun, type VerdictRequest,
   type VerdictResult, type ServerSpec, type Load,
 } from '../lib/model';
-import { Outcome, ResourceBars, VerdictCard } from './ui';
+import { Outcome, ResourceBars } from './ui';
+import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
 
 type SimulationEvidence = {
   arrival_process: string;
@@ -23,6 +24,10 @@ type SimulationEvidence = {
   completed: number;
   simulated_elapsed_seconds: number;
   cpu_slots: number;
+  timeline_resolution_seconds: number;
+  timeline_limit_seconds: number;
+  timeline_truncated: boolean;
+  timeline: TimelinePoint[];
   measured_utilization: Record<string, number>;
   offered_utilization: Record<string, number>;
 };
@@ -163,10 +168,16 @@ export default function Simulation(){
       </div>
     </section>
 
-    <div className="simpy-process-caption"><span>01 <b>/ Configure the experiment</b></span><span>02 <b>/ Execute the model</b></span><span>03 <b>/ Interpret the evidence</b></span></div>
+    <nav className="simpy-inpage-nav" aria-label="Simulation sections">
+      <a href="#simpy-scenario">01 / Configure</a>
+      <a href="#simpy-timeline">02 / Replay & charts</a>
+      <a href="#simpy-results">03 / Verdict</a>
+      <a href="#simpy-deepdive">04 / Model evidence</a>
+    </nav>
+    <div className="simpy-process-caption"><span>01 <b>/ Define workload</b></span><span>02 <b>/ Replay events</b></span><span>03 <b>/ Inspect real measurements</b></span></div>
 
     <div className="simpy-columns">
-      <section className="simpy-config" aria-label="Simulation configuration">
+      <section id="simpy-scenario" className="simpy-config" aria-label="Simulation configuration">
         <div className="simpy-config-head"><div><span className="simpy-section-number">01 / INPUT</span><h3>Build your scenario.</h3><p>Every field maps directly to the original copdash request schema.</p></div><Server size={23}/></div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>SERVER CAPACITY</span><span>WHAT IS AVAILABLE</span></div>
           <div className="simpy-fields">
@@ -200,21 +211,14 @@ export default function Simulation(){
       </section>
 
       <div className="simpy-main-column">
-        <section className="simpy-flow-card" aria-labelledby="flow-title">
-          <div className="simpy-card-header"><div><span className="simpy-section-number">02 / SIMULATION MECHANICS</span><h3 id="flow-title">Follow a request.</h3></div><span className="simpy-card-aside">CONCEPTUAL PATH · NOT EVENT REPLAY</span></div>
-          <div className={`simpy-step-chain ${busy?'is-running':''}`}>
-            {flow.map((step,index)=><div className="simpy-flow-row" key={step.number}>
-              <div className="simpy-flow-number">{step.number}</div>
-              <div className="simpy-flow-icon"><step.icon size={22} strokeWidth={1.65}/></div>
-              <div className="simpy-flow-content"><strong>{step.label}</strong><span>{step.detail}</span></div>
-              {index===flow.length-1?<CheckCircle2 className="simpy-flow-check" size={18}/>:<span className="simpy-flow-line"><span/></span>}
-            </div>)}
-          </div>
-          <div className="simpy-flow-footer"><span className="simpy-pulse"/><span>{busy?'SimPy engine executing this scenario…':report?'Execution complete. See measured results below.':'Flow diagram describes the underlying SimPy model.'}</span></div>
-        </section>
-
-        <section className="simpy-result-card" aria-labelledby="result-title" aria-live="polite">
-          <div className="simpy-card-header"><div><span className="simpy-section-number">03 / CAPACITY EVIDENCE</span><h3 id="result-title">What did the model find?</h3></div><span className="simpy-card-aside">{report?'ACTUAL ENGINE RESPONSE':'READY TO SIMULATE'}</span></div>
+        <SimulationTimeline
+          trace={details?.timeline ?? []}
+          running={busy}
+          truncated={details?.timeline_truncated ?? false}
+          limit={details?.timeline_limit_seconds ?? 240}
+        />
+        <section id="simpy-results" className="simpy-result-card" aria-labelledby="result-title" aria-live="polite">
+          <div className="simpy-card-header"><div><span className="simpy-section-number">04 / CAPACITY VERDICT</span><h3 id="result-title">What did the model find?</h3></div><span className="simpy-card-aside">{report?'ACTUAL ENGINE RESPONSE':'READY TO SIMULATE'}</span></div>
           {verdict?<div className="simpy-result-content">
             <div className="simpy-verdict-overview"><div><Outcome verdict={verdict.verdict}/><h4>{verdict.verdict==='will_survive'?'Capacity remains within the defined envelope.':verdict.verdict==='at_risk'?'The server is approaching its operating limit.':'The modeled demand exceeds available capacity.'}</h4></div><div className="simpy-bottleneck"><span>LIMITING RESOURCE</span><strong>{affected?.toUpperCase()??'NONE'}</strong></div></div>
             <div className="simpy-evidence-stats">
@@ -235,8 +239,8 @@ export default function Simulation(){
       </div>
     </div>
 
-    {report&&details&&<div className="simpy-deepdive">
-      <div className="simpy-deepdive-head"><span className="simpy-section-number">04 / MODEL TRANSPARENCY</span><h3>What was measured? <em>What was assumed?</em></h3><p>SimPy exposes two kinds of capacity figures: observed utilization inside the simulation and offered demand from the original rules formulas. Offered demand is used to show overload beyond 100%.</p></div>
+    {report&&details&&<div className="simpy-deepdive" id="simpy-deepdive">
+      <div className="simpy-deepdive-head"><span className="simpy-section-number">05 / MODEL TRANSPARENCY</span><h3>What was measured? <em>What was assumed?</em></h3><p>SimPy exposes two kinds of capacity figures: observed utilization inside the simulation and offered demand from the original rules formulas. Offered demand is used to show overload beyond 100%.</p></div>
       <div className="simpy-metrics-table" role="table" aria-label="SimPy model metrics">
         <div role="row" className="simpy-metrics-heading"><span role="columnheader">Resource</span><span role="columnheader">Simulated mean</span><span role="columnheader">Offered demand</span></div>
         {labels.map(row=><div role="row" key={row.key} className="simpy-metrics-row"><strong role="cell">{row.label}</strong><span role="cell">{pct(details.measured_utilization[row.key])}</span><span role="cell">{pct(details.offered_utilization[row.key])}</span></div>)}
@@ -245,7 +249,7 @@ export default function Simulation(){
     </div>}
 
     {report&&compare&&<section className="simpy-compare-card" aria-label="Engine parity comparison">
-      <div className="simpy-card-header"><div><span className="simpy-section-number">05 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Exactly the same server specification and workload sent to both original engines.</p></div><GitCompareArrows size={22}/></div>
+      <div className="simpy-card-header"><div><span className="simpy-section-number">06 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Exactly the same server specification and workload sent to both original engines.</p></div><GitCompareArrows size={22}/></div>
       {rules&&verdict?<><div className="simpy-compare-grid"><div><span>DISCRETE-EVENT</span><strong>SimPy</strong><Outcome verdict={verdict.verdict}/></div><div><span>DETERMINISTIC</span><strong>Rules</strong><Outcome verdict={rules.verdict}/></div><div className="simpy-agreement">{rules.verdict===verdict.verdict?<><CheckCircle2 size={17}/> Verdicts agree</>:<><CircleAlert size={17}/> Model verdicts differ</>}</div></div>
         <div className="simpy-difference-grid">{difference.map(row=><div key={row.label}><strong>{row.label}</strong><span>SimPy {pct(row.simpy)}</span><span>Rules {pct(row.rules)}</span></div>)}</div>
         <p className="simpy-compare-caption">Differences can occur near the 80% and 100% thresholds because SimPy uses sampled arrival timing. Neither model is ground-truth production telemetry.</p>
