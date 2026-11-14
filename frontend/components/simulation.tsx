@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, CheckCircle2, CircleAlert, Cpu, Database, Gauge, Info, LoaderCircle, Network, Play, RotateCcw, Server, Waves } from 'lucide-react';
+import { Activity, ArrowRight, ArrowUpRight, CheckCircle2, CircleAlert, Cpu, Database, Gauge, Info, LoaderCircle, Network, Play, RotateCcw, Server, Waves } from 'lucide-react';
 import { defaultLoad, defaultSpec, requestVerdict, saveRun, type Engine, type VerdictRequest, type VerdictResult } from '../lib/model';
 import { Empty, Outcome, ResourceBars, SectionHead, VerdictCard } from './ui';
 

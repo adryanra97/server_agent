@@ -4,6 +4,7 @@ The copdash FastAPI app is imported intact so its public endpoints,
 validation contracts, engine registry and native OpenAPI stay unchanged.
 Only engineering-quality metadata is added for the optional UI panel.
 """
+
 from __future__ import annotations
 
 import json

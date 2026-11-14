@@ -117,6 +117,7 @@ def test_api_key_optional(client: TestClient, monkeypatch):
     )
     assert ok.status_code == 200
 
+
 def test_rules_no_load(client: TestClient):
     """A zero-load request has no bottleneck and exercises the idle path."""
     empty_load = {key: 0 for key in BASE_LOAD}

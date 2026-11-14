@@ -1,4 +1,5 @@
 """Web integration checks — original copdash routes remain the public API."""
+
 from fastapi.testclient import TestClient
 
 from main import app
@@ -52,7 +53,11 @@ def test_original_openapi_document():
 def test_original_schema_validation():
     response = client.post(
         "/verdict",
-        json={"engine": "rules", "spec": {**SPEC, "cpu": {"cores": 0, "clock_ghz": 2.5}}, "load": LOAD},
+        json={
+            "engine": "rules",
+            "spec": {**SPEC, "cpu": {"cores": 0, "clock_ghz": 2.5}},
+            "load": LOAD,
+        },
     )
     assert response.status_code == 422
 
@@ -78,7 +83,9 @@ def test_quality_reports_latest_run(monkeypatch):
 
     class FakeResponse:
         def __enter__(self):
-            return io.BytesIO(b'{"workflow_runs":[{"status":"completed","conclusion":"success","id":42,"html_url":"https://github.com/example/run"}]}')
+            return io.BytesIO(
+                b'{"workflow_runs":[{"status":"completed","conclusion":"success","id":42,"html_url":"https://github.com/example/run"}]}'
+            )
 
         def __exit__(self, *args):
             return False
