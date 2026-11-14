@@ -137,10 +137,7 @@ def quality() -> dict:
     return value
 
 
-QUALITY_REPORT_ROOT = (
-    "https://raw.githubusercontent.com/adryanra97/server_agent/"
-    "quality-reports"
-)
+QUALITY_REPORT_ROOT = "https://raw.githubusercontent.com/adryanra97/server_agent/" "quality-reports"
 
 
 @app.get("/api/v1/quality/tests", tags=["Engineering"])

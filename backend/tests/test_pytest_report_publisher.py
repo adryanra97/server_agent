@@ -17,12 +17,12 @@ def test_report_distinguishes_outcomes_and_source(tmp_path, monkeypatch):
         '<testcase classname="tests.test_platform" name="test_health" time="0.25"/>'
         '<testcase classname="tests.test_platform" name="test_unhealthy" time="0.1">'
         '<failure message="assertion error">private captured data must not be included</failure>'
-        '</testcase>'
+        "</testcase>"
         '<testcase classname="tests.test_simpy" name="test_overload" time="0.35">'
         '<skipped message="optional"/></testcase>'
         '<testcase classname="tests.test_verdict" name="test_api" time="0.2">'
         '<error message="setup issue">sensitive diagnostic output</error></testcase>'
-        '</testsuite></testsuites>',
+        "</testsuite></testsuites>",
         encoding="utf-8",
     )
     monkeypatch.setenv("GITHUB_RUN_ID", "456")
@@ -47,7 +47,9 @@ def test_report_distinguishes_outcomes_and_source(tmp_path, monkeypatch):
     assert by_name["test_overload"]["status"] == "skipped"
     assert by_name["test_api"]["status"] == "error"
     assert by_name["test_health"]["file"] == "backend/tests/test_platform.py"
-    assert all("private" not in str(item) and "sensitive" not in str(item) for item in report["tests"])
+    assert all(
+        "private" not in str(item) and "sensitive" not in str(item) for item in report["tests"]
+    )
 
 
 def test_report_handles_invalid_duration_and_blank_module(tmp_path, monkeypatch):
