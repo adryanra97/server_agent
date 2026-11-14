@@ -151,7 +151,7 @@ export default function Quality(){
     <div className="eq-trust">
       <div className={'eq-trust-indicator '+statusClass(overall)}>{loading?<LoaderCircle className="spin" size={22}/>:overall==='success'?<CheckCircle2 size={22}/>:overall==='failure'?<ShieldAlert size={22}/>:<Clock3 size={22}/>}</div>
       <div><strong>{loading&& !ready?'Connecting to engineering pipeline…':ready?summary:'No verified execution available'}</strong>
-        <p>{ready?'Run #'+quality.run_id+' · '+(origin==='github'?'Live GitHub API fallback':'Engineering service')+' · '+(quality.status==='completed'?'Completed execution':'Running or queued execution'):'The dashboard will not substitute a placeholder metric when the source is unavailable.'}</p>
+        <p>{ready?'Run #'+quality.run_id+' · '+(origin==='github'?'Live GitHub API fallback':'Engineering service')+' · '+(quality.status==='completed'?'Completed execution':'Running or queued execution'):'Check the latest execution status in GitHub Actions.'}</p>
       </div>
       <span className={'eq-trust-badge '+statusClass(overall)}>{ready?labelStatus(overall):'Awaiting evidence'}</span>
     </div>
@@ -173,7 +173,7 @@ export default function Quality(){
             {check.job?.url&&<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View job <ArrowUpRight size={14}/></a>}
           </div>
         </div>)}</div>
-        <p className="eq-footnote"><Info size={16}/> A completed workflow can still contain skipped steps. A missing check is shown as not reported, never automatically counted as passed.</p>
+        <p className="eq-footnote"><Info size={16}/> Check statuses reflect the latest GitHub Actions execution.</p>
       </section>
     </div>
 

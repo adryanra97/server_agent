@@ -2211,3 +2211,117 @@ body,.sa-app{background:#F5FAFE;color:#183D57}
   .sa-app .eq-security-counts>div{padding:12px}
   .demo-login-main{min-height:calc(100dvh - 68px)}
 }
+
+
+/* ========================================================
+   Daylight-blue readability corrections (2026-11)
+   Previous dark-theme headings, labels and navigation links
+   retained pale/white text after their surfaces became light.
+   Keep dark ink on light surfaces; reserve white for true
+   blue-filled buttons and data panels.
+   ======================================================== */
+:root{
+  --sa-readable-heading:#123F61;
+  --sa-readable-body:#355D77;
+  --sa-readable-secondary:#41657A;
+  --sa-readable-interactive:#096BA8;
+  --sa-readable-hover:#07527F;
+}
+.sa-app .role-hero,.sa-app .simpy-intro,
+.sa-app .sa-api-hero,.sa-app .eq-hero{
+  color:var(--sa-readable-heading);
+}
+.sa-app .role-greeting,
+.sa-app .role-greeting strong,
+.sa-app .role-hero-copy .role-greeting{
+  color:#285A79;
+}
+.sa-app .role-greeting strong{color:#123F61}
+.sa-app .role-secondary-action{
+  color:#095F93;
+  border-bottom-color:#96BFD7;
+}
+.sa-app .role-secondary-action:hover{
+  color:#064D79;
+  border-bottom-color:#096BA8;
+}
+.sa-app .role-hero-eyebrow,
+.sa-app .simpy-overline,
+.sa-app .sa-api-hero .role-eyebrow,
+.sa-app .eq-eyebrow{color:#096BA8}
+.sa-app .simpy-intro h2,
+.sa-app .sa-api-hero h2,
+.sa-app .eq-hero h2,
+.sa-app .role-hero h2{color:#123F61}
+.sa-app .simpy-intro h2 em,
+.sa-app .eq-hero h2 em{color:#086CA5}
+.sa-app .simpy-intro p,
+.sa-app .sa-api-hero p,
+.sa-app .eq-hero p,
+.sa-app .role-hero-copy>p{color:#355D77}
+.sa-app .simpy-intro-facts,
+.sa-app .eq-hero-meta>span{color:#41657A}
+.sa-app .eq-hero-actions a{color:#095B8A}
+.sa-app .sa-mobile-toggle{
+  color:#095D91;
+  border-color:#AFD0E4;
+  background:#F1F9FD;
+}
+.sa-app .sa-mobile-toggle:hover,
+.sa-app .sa-mobile-toggle[aria-expanded=true]{
+  background:#D8EDF8;
+  color:#064D79;
+}
+.sa-app .sa-more>button,
+.sa-app .sa-main-nav>a,
+.sa-app .sa-role-name strong{color:#244B65}
+.sa-app .sa-more>button:hover,
+.sa-app .sa-more>button.current,
+.sa-app .sa-main-nav>a:hover,
+.sa-app .sa-main-nav>a.current{color:#075C93}
+.demo-login-bottom{color:#355D77}
+.demo-login-bottom svg{color:#096BA8}
+.demo-login-overline,
+.demo-login-path>div>span{color:#096BA8}
+/* The compare introduction is also a light corporate section. */
+.sa-app .qa-compare-banner{
+  background:
+    radial-gradient(ellipse at 93% 15%,rgba(61,153,205,.16),transparent 57%),
+    linear-gradient(120deg,#E5F4FC,#F7FCFF 62%,#DFEFF9);
+  color:#123F61;
+  border:1px solid #C6E1EE;
+}
+.sa-app .qa-compare-banner h2{color:#123F61}
+.sa-app .qa-compare-banner p{color:#355D77}
+.sa-app .qa-compare-banner .role-eyebrow{color:#096BA8}
+.sa-app .qa-compare-banner-meta{color:#245F85}
+.sa-app .qa-compare-banner-meta svg{color:#127EAE}
+/* Explicit contrast in pale feature-card and explanation content. */
+.sa-app .role-hero-brief>span,
+.sa-app .role-hero-brief p,
+.sa-app .sa-api-status small{color:#41657A}
+.sa-app .role-hero-brief>strong,
+.sa-app .sa-api-status strong{color:#123F61}
+.sa-app .role-hero-brief>div{color:#355D77}
+.sa-app .eq-hero-actions button,
+.sa-app .simpy-run-button,
+.sa-app .sa-api-send button{color:#FFF}
+/* Dark code consoles and modeled hardware remain intentionally dark. */
+.sa-app .sa-api-editor textarea,
+.sa-app .sa-api-response pre,
+.sa-app .flow-visual{color:#F0FAFF}
+@media(max-width:900px){
+  .sa-app .sa-mobile-nav{
+    background:#FFF;
+    border-top:1px solid #CFE4F0;
+  }
+  .sa-app .sa-mobile-nav a,
+  .sa-app .sa-mobile-nav button{
+    color:#164C72;
+    border-bottom-color:#D8E8F2;
+  }
+  .sa-app .sa-mobile-nav a[aria-current=page]{
+    color:#075D91;
+    background:#E9F5FC;
+  }
+}

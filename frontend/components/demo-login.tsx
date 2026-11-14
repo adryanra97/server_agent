@@ -59,7 +59,7 @@ export default function DemoLogin(){
             </div>
             <div className="demo-persona-preview">
               <div className="demo-persona-avatar">{persona.initial}</div>
-              <div><span>YOUR DEMO ROLE</span><strong>{persona.role}</strong><p>{persona.mission}</p></div>
+              <div><span>YOUR ROLE</span><strong>{persona.role}</strong><p>{persona.mission}</p></div>
             </div>
             <label className="demo-login-label" htmlFor="demo-password">ACCESS PASSWORD</label>
             <div className="demo-login-password"><LockKeyhole size={18}/>
@@ -73,7 +73,7 @@ export default function DemoLogin(){
           </form>
           <div className="demo-login-foot"><Waves size={18}/><span>Role views reflect the defined release workflow. Simulation calculations use the same validated evaluation engine.</span></div>
         </section>
-        <div className="demo-login-help"><CheckCircle2 size={17}/><span>Switch users at any time. Records from this browser remain available when you change roles.</span></div>
+        <div className="demo-login-help"><CheckCircle2 size={17}/><span>Switch users at any time to explore each team's responsibilities.</span></div>
       </div>
     </main>
   </div>;

@@ -20,13 +20,13 @@ import Quality from './quality';
 import Methodology from './methodology';
 
 const titles:Record<string,{title:string;description:string;eyebrow:string}>={
-  dashboard:{title:'Your workspace.',description:'Role-specific decisions and the latest evidence from the original SimPy engine.',eyebrow:'ROLE WORKSPACE / OVERVIEW'},
+  dashboard:{title:'Your workspace.',description:'Role-specific decisions and the latest SimPy evaluation evidence.',eyebrow:'ROLE WORKSPACE / OVERVIEW'},
   simulation:{title:'SimPy workbench.',description:'Run a discrete-event server simulation and explore its event-derived time series.',eyebrow:'MODEL / SIMULATION'},
   compare:{title:'Compare workloads.',description:'Test the same server at normal, 2× and 3× demand.',eyebrow:'MODEL / CAPACITY COMPARISON'},
   alignment:{title:'Release alignment.',description:'Submit technical evidence and record the decision for each sprint cycle.',eyebrow:'UC-01 / SCHEDULED ALIGNMENT'},
   incident:{title:'Incident response.',description:'Record escalation, reproduce model conditions, and compare a mitigation scenario.',eyebrow:'UC-02 / INCIDENT HANDLING'},
   signoff:{title:'Release sign-off.',description:'Approve or reject the technical recommendation with a recorded decision.',eyebrow:'UC-04 / SIGN-OFF'},
-  reports:{title:'Reports & history.',description:'Explore saved evaluations and role-workflow decisions from this browser.',eyebrow:'UC-03 / REPORTING'},
+  reports:{title:'Reports & history.',description:'Explore past evaluations and release decisions.',eyebrow:'UC-03 / REPORTING'},
   developer:{title:'API explorer.',description:'Explore all seven registered evaluation and operational endpoints.',eyebrow:'ENGINEERING / API'},
   quality:{title:'Engineering quality.',description:'Review real GitHub Actions checks, coverage, and build status.',eyebrow:'ENGINEERING / CI'},
   methodology:{title:'About the engines.',description:'Understand assumptions, thresholds, and limitations of the current model.',eyebrow:'ENGINEERING / METHODOLOGY'},
@@ -47,7 +47,7 @@ function NotSignedIn(){
     <div className="sa-gate-graphic"><UserRound size={35}/></div>
     <span className="role-eyebrow">ROLE WORKSPACE / DEMONSTRATION</span>
     <h1>Select a demo account to continue.</h1>
-    <p>Different roles see different menus, tasks, and decisions. No database or account registration is needed for this prototype.</p>
+    <p>Explore the menus, responsibilities, and decisions assigned to each role.</p>
     <Link href="/login">Choose demo user <ArrowRight size={18}/></Link>
     <small>Guided access · Role-based experience</small>
   </div>;
@@ -143,7 +143,7 @@ export default function Workspace(){
         <Link href="/dashboard">Return to your dashboard <ArrowRight size={16}/></Link>
         <Link href="/login">Switch demo persona <ArrowUpRight size={16}/></Link></div>}
       <footer className="sa-footer"><div><Brand dark/><p>Capacity evidence meets role-based decision making.</p></div>
-        <div><span>Role-based evaluation workspace · browser-local records</span><span>Simulation-based evaluation · release workflow decision support</span></div></footer>
+        <div><span>Role-based capacity evaluation workspace</span><span>Simulation-based evaluation · release workflow decision support</span></div></footer>
     </main>
   </div>;
 }

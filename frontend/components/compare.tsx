@@ -225,6 +225,5 @@ export default function Compare(){
         </div>
       </div>
     </section>}
-    <p className="qa-compare-disclosure"><Info size={16}/> SimPy uses a fixed random seed. The workload window is bounded and may be capped at 20,000 arrivals. Reported utilization above 100% reflects the engine's offered-demand estimate. Clock speed is reserved in the underlying model and is not treated as an effective tuning knob.</p>
   </div>;
 }

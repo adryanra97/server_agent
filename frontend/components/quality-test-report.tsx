@@ -159,7 +159,7 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
             </div>;
           }):<div className="eq-test-no-match"><Search size={22}/><strong>No tests match the filter.</strong><p>Try a different status or search term.</p><button onClick={()=>{setFilter('all');setSearch('');}}>Clear filters</button></div>}
         </div>
-        <div className="eq-detail-footer"><Info size={17}/><p>These are measured results from this CI execution. A passing test does not prove the entire feature is correct; click a test to inspect its assertions and scope. Failing test logs and the complete JUnit file are available in the linked GitHub Actions run.</p>
+        <div className="eq-detail-footer"><Info size={17}/><p>Explore each test's outcome, duration, and source. Detailed execution logs are available through the GitHub Actions report.</p>
           <a href={'https://github.com/adryanra97/server_agent/actions/runs/'+report.run_id} target="_blank" rel="noopener noreferrer">Open full report <ArrowUpRight size={16}/></a>
         </div>
       </>}

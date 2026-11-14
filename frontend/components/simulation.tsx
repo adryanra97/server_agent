@@ -179,7 +179,6 @@ export default function Simulation(){
             <NumberInput label="Network bandwidth" unit="Mbps" min={0.01} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
             <NumberInput label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
           </div>
-          <div className="simpy-reserved-info"><Info size={15}/> Clock speed ({body.spec.cpu.clock_ghz} GHz) is a fixed model attribute; this model does not use it to calculate capacity.</div>
         </div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>REQUEST WORKLOAD</span><span>WHAT IS DEMANDED</span></div>
           <div className="simpy-preset-row"><span>Request-rate examples</span>{[{rps:100,label:'Normal'},{rps:360,label:'Peak'},{rps:900,label:'Stress'}].map(p=><button type="button" key={p.rps} className={body.load.rps===p.rps?'active':''} onClick={()=>preset(p.rps)}>{p.label} <small>{p.rps} RPS</small></button>)}</div>
@@ -242,15 +241,14 @@ export default function Simulation(){
     </details>}
 
     {report&&compare&&<section className="simpy-compare-card" aria-label="Engine parity comparison">
-      <div className="simpy-card-header"><div><span className="simpy-section-number">06 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Exactly the same server specification and workload sent to both original engines.</p></div><GitCompareArrows size={22}/></div>
+      <div className="simpy-card-header"><div><span className="simpy-section-number">06 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Compare both engines using the same server capacity and workload.</p></div><GitCompareArrows size={22}/></div>
       {rules&&verdict?<><div className="simpy-compare-grid"><div><span>DISCRETE-EVENT</span><strong>SimPy</strong><Outcome verdict={verdict.verdict}/></div><div><span>DETERMINISTIC</span><strong>Rules</strong><Outcome verdict={rules.verdict}/></div><div className="simpy-agreement">{rules.verdict===verdict.verdict?<><CheckCircle2 size={17}/> Verdicts agree</>:<><CircleAlert size={17}/> Model verdicts differ</>}</div></div>
         <div className="simpy-difference-grid">{difference.map(row=><div key={row.label}><strong>{row.label}</strong><span>SimPy {pct(row.simpy)}</span><span>Rules {pct(row.rules)}</span></div>)}</div>
-        <p className="simpy-compare-caption">Differences can occur near the 80% and 100% thresholds because SimPy uses sampled arrival timing. Neither model is ground-truth production telemetry.</p>
+        <p className="simpy-compare-caption">Results can differ near capacity thresholds because SimPy models request arrivals over time.</p>
       </>:<p className="simpy-compare-caption">{comparisonError||'The rules comparison has not been completed.'}</p>}
     </section>}
 
-    {report&&<details className="simpy-raw" open={rawOpen} onToggle={e=>setRawOpen(e.currentTarget.open)}><summary><Terminal size={17}/> Inspect the complete model JSON <span>OPEN SOURCE OUTPUT</span></summary><pre><code>{JSON.stringify(report,null,2)}</code></pre></details>}
+    {report&&<details className="simpy-raw" open={rawOpen} onToggle={e=>setRawOpen(e.currentTarget.open)}><summary><Terminal size={17}/> Inspect the complete model JSON <span>EVALUATION OUTPUT</span></summary><pre><code>{JSON.stringify(report,null,2)}</code></pre></details>}
 
-    <div className="simpy-bottom-notes"><div><Info size={18}/><p><strong>Model limitations.</strong> A fixed-seed simulation and closed-form demand estimates are useful for exploring capacity assumptions. The original model does not use clock speed in its formulas and does not incorporate real production traces or calibrated probabilities.</p></div><Link href="/methodology">Understand how the model works <ArrowUpRight size={16}/></Link></div>
   </div>;
 }

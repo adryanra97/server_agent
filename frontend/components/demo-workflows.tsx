@@ -74,7 +74,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
       result:selectedRun.result,rps:selectedRun.request.load.rps,
     });
     setNote('');
-    setMessage('The alignment evidence is now available to the Technical Lead in this browser.');
+    setMessage('Alignment evidence submitted for Technical Lead review.');
   }
   function decideAlignment(item:DemoAlignment,status:'returned'|'pending-signoff'){
     if(role!=='lead'||item.status!=='review')return;
@@ -134,7 +134,6 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
       </div>
       <div className="role-workflow-owner"><span>YOUR RESPONSIBILITY</span><strong>{getPersona(role).shortRole}</strong><small>{section==='incident'&&role==='support'?'Record & escalate':section==='incident'&&role==='engineer'?'Reproduce & test':section==='alignment'&&role==='qa'?'Prepare evidence':section==='alignment'&&role==='lead'?'Review & decide':section==='signoff'?'Approve or reject':'Read-only oversight'}</small></div>
     </div>
-    <div className="role-workflow-banner"><Info size={18}/><p><strong>Interactive local prototype.</strong> Role-based workflow records are stored in this browser. Capacity verdicts come from the real copdash SimPy engine. This does not authorize production deployment or replace SIT/UAT.</p></div>
     {message&&<div className="role-workflow-message" role="status"><Info size={18}/>{message}</div>}
 
     {section==='alignment'&&<>
@@ -152,7 +151,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
           <div className="role-form-wide role-form-footer"><Link href="/simulation">Open SimPy simulator <ArrowUpRight size={16}/></Link><button type="submit" disabled={!selectedRun}>Submit for Technical Lead review <ArrowRight size={16}/></button></div>
         </form>
       </section>}
-      {role==='lead'&&<div className="role-review-hint"><ClipboardCheck size={19}/><span>Review submitted model evidence. Only the Technical Lead can record the demo alignment decision.</span></div>}
+      {role==='lead'&&<div className="role-review-hint"><ClipboardCheck size={19}/><span>Review submitted model evidence. The Technical Lead records the alignment decision.</span></div>}
       <section className="role-list-panel"><div className="role-panel-head"><div><span className="role-eyebrow">ALIGNMENT RECORDS</span><h3>Sprint-cycle evidence</h3></div><span className="role-count">{latestByRelease.length} records</span></div>
         {latestByRelease.length?latestByRelease.map(item=><article className="role-record" key={item.id}>
           <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
@@ -175,7 +174,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
           <label>Incident type<select value={incidentType} onChange={e=>setIncidentType(e.target.value)}><option>Traffic spike</option><option>Memory pressure</option><option>Batch job overlap</option><option>Response timeout</option></select></label>
           <label>Peak request rate<input type="number" min="0" max="100000" required value={incidentRps} onChange={e=>setIncidentRps(Number(e.target.value))}/></label>
           <label className="role-form-wide">Observed symptoms<textarea required rows={3} value={symptom} onChange={e=>setSymptom(e.target.value)}/></label>
-          <div className="role-form-wide role-form-footer"><span>Browser-local escalation</span><button type="submit">Record & escalate <ArrowRight size={16}/></button></div>
+          <div className="role-form-wide role-form-footer"><span>Incident escalation</span><button type="submit">Record & escalate <ArrowRight size={16}/></button></div>
         </form>
       </section>}
       {role==='engineer'&&<div className="role-review-hint"><Cpu size={19}/><span>Select an incident below. SimPy will evaluate its original server profile, then evaluate the same load with your proposed CPU capacity.</span></div>}
@@ -200,7 +199,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
         <p><strong>Technical review:</strong> {item.reviewerNote||'No additional note recorded.'}</p>
         {item.signoffNote&&<p className="role-review-note"><strong>Manager note:</strong> {item.signoffNote}</p>}
         {item.status==='pending-signoff'&&role==='manager'&&<div className="role-record-actions"><textarea value={note} onChange={e=>setNote(e.target.value)} aria-label="Sign-off review note" placeholder="Decision rationale and conditions (recommended)"/><div><button className="role-secondary-button" onClick={()=>signOff(item,'rejected')}>Reject sign-off</button><button onClick={()=>signOff(item,'approved')}>Approve sign-off <CheckCircle2 size={16}/></button></div></div>}
-        {item.status==='approved'&&<div className="role-locked"><ShieldCheck size={18}/> Signed document {item.signedVersion} · {item.signedAt?date(item.signedAt):''}. Demo-only approval; no deployment triggered.</div>}
+        {item.status==='approved'&&<div className="role-locked"><ShieldCheck size={18}/> Signed document {item.signedVersion} · {item.signedAt?date(item.signedAt):''}. Approval recorded in the release review.</div>}
       </article>):<EmptyRecords message="No sign-off candidate yet. QA must submit a real simulation, and the Technical Lead must forward the recommendation before the Manager can decide."/>}
     </section>}
   </div>;

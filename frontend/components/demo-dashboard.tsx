@@ -12,7 +12,7 @@ import { Outcome } from './ui';
 
 const missions:Record<DemoRole,{eyebrow:string;title:string;description:string;primary:string;primaryHref:string;secondary:string;secondaryHref:string}> = {
   qa:{eyebrow:'YOUR WORK / PERFORMANCE EVIDENCE',title:'Prepare the evidence. Move the release forward.',
-    description:'Build a realistic traffic profile, run the original SimPy capacity model and attach the outcome to a release-cycle submission for the Technical Lead.',
+    description:'Build a realistic traffic profile, run the SimPy capacity model and attach the outcome to a release-cycle submission for the Technical Lead.',
     primary:'Run SimPy simulation',primaryHref:'/simulation',secondary:'Submit release alignment',secondaryHref:'/alignment'},
   lead:{eyebrow:'YOUR WORK / TECHNICAL DECISIONS',title:'Turn the model into a cycle decision.',
     description:'Review QA evidence and the limiting resource. Record whether the release candidate can progress toward sign-off or needs another cycle in Development.',
@@ -21,16 +21,16 @@ const missions:Record<DemoRole,{eyebrow:string;title:string;description:string;p
     description:'Inspect escalated incidents, replay their traffic in SimPy and compare the same load against a CPU capacity mitigation, without sending Production traffic.',
     primary:'Open incident queue',primaryHref:'/incident',secondary:'Launch SimPy workbench',secondaryHref:'/simulation'},
   manager:{eyebrow:'YOUR WORK / RELEASE GOVERNANCE',title:'Make decisions grounded in evidence.',
-    description:'Review technical recommendations, documented verdicts and limitations before approving or rejecting a demo release sign-off.',
+    description:'Review technical recommendations, documented verdicts and limitations before approving or rejecting a release sign-off recommendation.',
     primary:'Review sign-off queue',primaryHref:'/signoff',secondary:'Read reports',secondaryHref:'/reports'},
   support:{eyebrow:'YOUR WORK / MONITORING & REPORTS',title:'From anomaly to actionable handoff.',
-    description:'Capture incident symptoms, escalate to Integration Engineering, then collect browser-local release and incident records for reporting.',
+    description:'Capture incident symptoms, escalate to Integration Engineering, then review release and incident records for reporting.',
     primary:'Record incident escalation',primaryHref:'/incident',secondary:'Explore reports',secondaryHref:'/reports'},
 };
 const workflow=[
   {id:'UC-01',name:'Scheduled release alignment',detail:'QA prepares evidence; Technical Lead decides next cycle',href:'/alignment'},
   {id:'UC-02',name:'Incident reproduction',detail:'Support escalates; Integration Engineer models mitigation',href:'/incident'},
-  {id:'UC-03',name:'Reports & history',detail:'Review past evaluations and browser-local workflow records',href:'/reports'},
+  {id:'UC-03',name:'Reports & history',detail:'Review past evaluations and workflow decisions',href:'/reports'},
   {id:'UC-04',name:'Sign-off decision',detail:'Manager approves or rejects a technical recommendation',href:'/signoff'},
 ];
 export default function DemoRoleDashboard({role}:{role:DemoRole}){
@@ -68,8 +68,8 @@ export default function DemoRoleDashboard({role}:{role:DemoRole}){
     <div className="role-stat-grid">
       <div><span>YOUR WORK QUEUE</span><strong>{queue}</strong><small>{queueLabel}</small></div>
       <div><span>EVALUATION ENGINE</span><strong className="role-stat-word">{engineStatus}</strong><small>Service health check</small></div>
-      <div><span>RELEASE RECORDS</span><strong>{records.alignments.length}</strong><small>Saved in this browser</small></div>
-      <div><span>INCIDENT RECORDS</span><strong>{records.incidents.length}</strong><small>Saved in this browser</small></div>
+      <div><span>RELEASE RECORDS</span><strong>{records.alignments.length}</strong><small>Recorded in your workspace</small></div>
+      <div><span>INCIDENT RECORDS</span><strong>{records.incidents.length}</strong><small>Recorded in your workspace</small></div>
     </div>
     <div className="role-dashboard-body">
       <section className="role-dashboard-panel"><div className="role-panel-head"><div><span className="role-eyebrow">FUNCTIONAL MODEL / AKPSI</span><h3>The workflow behind each decision.</h3></div><span>FOUR USE CASES</span></div>
@@ -83,10 +83,9 @@ export default function DemoRoleDashboard({role}:{role:DemoRole}){
       </section>
       <section className="role-dashboard-panel role-quick-panel"><div className="role-panel-head"><div><span className="role-eyebrow">QUICK ACCESS</span><h3>Your available workspace.</h3></div><ShieldCheck size={20}/></div>
         <div className="role-quick-links">{visiblePages.filter(x=>x.href!=='/dashboard').map(page=><Link href={page.href} key={page.href}><span>{page.label}</span><ArrowUpRight size={17}/></Link>)}</div>
-        <p className="role-quick-note">Routes are filtered for the selected demo role. This is a product UX demonstration, not server-side access control.</p>
       </section>
     </div>
-    <section className="role-latest"><div><span className="role-eyebrow">RECENT MODEL EVIDENCE</span><h3>{runs[0]?'Latest browser-local simulation':'No runs in this browser yet'}</h3><p>{runs[0]?'A real engine result saved by the SimPy workbench.':'Create an evaluation in SimPy to populate shared demo evidence for the QA alignment flow.'}</p></div>
+    <section className="role-latest"><div><span className="role-eyebrow">RECENT MODEL EVIDENCE</span><h3>{runs[0]?'Latest simulation result':'No simulation results yet'}</h3><p>{runs[0]?'The most recent SimPy capacity evaluation.':'Run a simulation to prepare evidence for QA review.'}</p></div>
       {runs[0]?<div className="role-latest-outcome"><Outcome verdict={runs[0].result.verdict}/><strong>{runs[0].request.load.rps} RPS</strong><span>{runs[0].result.engine.toUpperCase()} · bottleneck {runs[0].result.bottleneck??'none'}</span></div>:<Waves size={34}/>}
     </section>
   </div>;
