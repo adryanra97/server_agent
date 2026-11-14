@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowRight, ArrowUpRight, Activity, ArrowDownRight, CheckCircle2,
   BarChart3, Braces, Cpu, Gauge, GitBranch, Layers3, Play, Server, ShieldCheck, Waves,
@@ -10,6 +10,13 @@ import { Brand, Eyebrow, Outcome, ResourceBars } from './ui';
 
 export default function Home(){
   const [engine,setEngine]=useState<Engine>('simpy');
+  const [health,setHealth]=useState<'checking'|'online'|'unavailable'>('checking');
+  useEffect(()=>{
+    fetch('/health',{cache:'no-store'})
+      .then(async response=>response.ok?response.json():Promise.reject(new Error('health unavailable')))
+      .then(data=>setHealth(data.status==='ok'?'online':'unavailable'))
+      .catch(()=>setHealth('unavailable'));
+  },[]);
   const [result,setResult]=useState<VerdictResult|null>(null);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
@@ -30,7 +37,7 @@ export default function Home(){
         <div className="truth-facts"><span>01 / TWO ENGINES</span><span>02 / THREE RESOURCES</span><span>03 / EXPLAINABLE RESULTS</span></div>
       </div>
       <div className="truth-console">
-        <div className="truth-console-top"><span className="kicker">CAPACITY EVALUATION</span><span className="truth-indicator"><span className="live-indicator"/> ENGINE ONLINE</span></div>
+        <div className="truth-console-top"><span className="kicker">CAPACITY EVALUATION</span><span className="truth-indicator"><span className="live-indicator"/> {health==='online'?'ENGINE ONLINE':health==='checking'?'CHECKING ENGINE':'ENGINE UNAVAILABLE'}</span></div>
         <div className="truth-console-title"><div><small>SERVER PROFILE</small><h3>4 CPU cores · 8 GB RAM</h3><span>1,000 Mbps bandwidth · 10,000 connections</span></div><Cpu size={25}/></div>
         <div className="truth-request"><span>TEST WORKLOAD</span><strong>360 <small>requests / second</small></strong><p>10 ms CPU / request · 100 connections · 10 KB payload</p></div>
         <div className="truth-choice"><span>ENGINE</span><div><button className={engine==='rules'?'active':''} onClick={()=>{setEngine('rules');setResult(null)}}>Rules</button><button className={engine==='simpy'?'active':''} onClick={()=>{setEngine('simpy');setResult(null)}}>SimPy</button></div></div>
