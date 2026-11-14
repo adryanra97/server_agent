@@ -116,3 +116,11 @@ def test_api_key_optional(client: TestClient, monkeypatch):
         headers={"Authorization": "Bearer secret"},
     )
     assert ok.status_code == 200
+
+def test_rules_no_load(client: TestClient):
+    """A zero-load request has no bottleneck and exercises the idle path."""
+    empty_load = {key: 0 for key in BASE_LOAD}
+    response = post_verdict(client, BASE_SPEC, empty_load, engine="rules")
+    assert response.status_code == 200
+    assert response.json()["verdict"] == "will_survive"
+    assert response.json()["bottleneck"] is None

@@ -1,23 +1,22 @@
 [project]
-name = "serveragent-platform"
+name = "serveragent-copdash-web"
 version = "0.1.0"
-description = "ServerAgent backend based on copdash deterministic and SimPy verdict engines"
+description = "Faithful copdash verdict engines with a visual web interface"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.115,<1",
-    "pydantic>=2.7,<3",
-    "simpy>=4.1.2,<5",
-    "uvicorn>=0.30,<1",
-    "psycopg[binary]>=3.2,<4",
+  "fastapi>=0.115,<1",
+  "pydantic>=2.7,<3",
+  "simpy>=4.1.2,<5",
+  "uvicorn>=0.30,<1",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "httpx>=0.27",
-    "pytest>=8.2",
-    "pytest-cov>=6.0",
-    "black>=25.1",
-    "ruff>=0.11",
+  "httpx>=0.27",
+  "pytest>=8.2",
+  "pytest-cov>=6.0",
+  "black>=25.1",
+  "ruff>=0.11",
 ]
 
 [tool.pytest.ini_options]

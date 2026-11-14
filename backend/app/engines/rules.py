@@ -105,9 +105,7 @@ class RulesEngine:
         if bottleneck is None:
             reasons.append("No load: every resource is idle.")
         else:
-            reasons.append(
-                f"Peak utilization {peak:.1%} on {bottleneck}; verdict {verdict}."
-            )
+            reasons.append(f"Peak utilization {peak:.1%} on {bottleneck}; verdict {verdict}.")
 
         return VerdictResult(
             verdict=verdict,

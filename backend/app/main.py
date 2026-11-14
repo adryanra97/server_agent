@@ -34,7 +34,7 @@ _bearer = HTTPBearer(auto_error=False)
 
 
 def require_api_key(
-    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),  # noqa: B008
 ) -> None:
     """Optional Bearer-token auth. Enforced only when API_KEY is set."""
     expected = os.environ.get("API_KEY")

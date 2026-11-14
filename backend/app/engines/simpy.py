@@ -44,7 +44,7 @@ CRASH_THRESHOLD = 1.0
 
 # Simulation controls. Bounded so a single verdict stays fast even at high rps.
 HORIZON = 30.0  # simulated seconds per run
-SEED = 0        # fixed for reproducibility
+SEED = 0  # fixed for reproducibility
 MAX_ARRIVALS = 20_000
 
 
@@ -69,10 +69,10 @@ class SimPyEngine:
         stats = {
             "arrived": 0,
             "completed": 0,
-            "cpu_busy": 0.0,   # core-seconds of CPU work
-            "ram_busy": 0.0,   # MB-seconds of memory held
-            "net_busy": 0.0,   # connection-seconds held
-            "bytes": 0.0,      # KB shipped
+            "cpu_busy": 0.0,  # core-seconds of CPU work
+            "ram_busy": 0.0,  # MB-seconds of memory held
+            "net_busy": 0.0,  # connection-seconds held
+            "bytes": 0.0,  # KB shipped
         }
 
         def request() -> None:
@@ -101,11 +101,7 @@ class SimPyEngine:
 
         # Number of arrivals to simulate: enough to fill a HORIZON-second
         # arrival window, capped so a single verdict stays fast at high rps.
-        arrivals_count = (
-            min(MAX_ARRIVALS, max(1, int(load.rps * HORIZON)))
-            if load.rps > 0
-            else 0
-        )
+        arrivals_count = min(MAX_ARRIVALS, max(1, int(load.rps * HORIZON))) if load.rps > 0 else 0
 
         def arrivals() -> None:
             rng = random.Random(SEED)
@@ -123,9 +119,7 @@ class SimPyEngine:
         # --- Measured (time-averaged) utilization ----------------------------- #
         cpu_measured = stats["cpu_busy"] / (cpu_capacity * horizon)
         ram_measured = stats["ram_busy"] / (spec.ram.total_mb * horizon)
-        bw_measured = (
-            stats["bytes"] * 8.0 / 1000.0 / horizon / spec.network.bandwidth_mbps
-        )
+        bw_measured = stats["bytes"] * 8.0 / 1000.0 / horizon / spec.network.bandwidth_mbps
         conn_measured = stats["net_busy"] / (spec.network.max_connections * horizon)
 
         # --- Offered (closed-form) utilization, matching the rules engine ------ #

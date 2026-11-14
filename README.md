@@ -1,66 +1,54 @@
-# ServerAgent
+# ServerAgent — Copdash-powered capacity verdict
 
-An AI-powered digital twin foundation for server capacity modeling and release intelligence, built from the [copdash](https://github.com/mauikut-com/copdash) Rules and SimPy engines with a visual Next.js workspace.
+A clean web interface for the original [mauikut-com/copdash](https://github.com/mauikut-com/copdash) FastAPI service. This implementation deliberately focuses on the *existing* tools, rather than borrowing feature concepts from another project.
 
-**Status:** engineering preview. Real capacity verdicts and topology calculations are available through FastAPI. Release workflow, secure history, production calibration, and AI orchestration are staged capabilities, not represented as finished.
+## Source fidelity
 
-## Architecture
+The original Python engine registry, Pydantic schemas and FastAPI application are preserved under `backend/app/`.
 
-- **Frontend:** Next.js 16, React, TypeScript, enterprise-blue design system, interactive visualizations.
-- **Backend:** FastAPI with preserved copdash `app/` engines and versioned `/api/v1` endpoints.
-- **Deployment:** one Vercel Services project with Next.js and Python FastAPI.
-- **Data:** local browser history for the preview; optional private Neon PostgreSQL API behind `DATA_API_KEY`.
-- **Quality:** GitHub Actions for Pytest/coverage, Black, Ruff, TypeScript, and Next.js build.
+- **Rules engine:** deterministic resource-demand vs capacity calculations
+- **SimPy engine:** discrete-event CPU, RAM, and connection simulation using a repeatable seed
+- **Outputs:** `will_survive`, `at_risk`, `will_crash`, heuristic confidence, bottleneck, resource utilization, and human-readable reasons
+- **Native API:** `GET /health`, `GET /engines`, `POST /verdict`, `GET /docs`, `GET /openapi.json`
 
-## Routes
+The only additional Python endpoint is `GET /api/v1/quality`, for displaying a real GitHub Actions status (coverage is not fabricated).
 
-| UI route | Purpose |
+## Website features
+
+| Route | Purpose |
 | --- | --- |
-| `/` | Landing page and animated topology demo |
-| `/dashboard` | Workspace overview |
-| `/simulation` | Interactive Rules or SimPy capacity modeling and scenario comparison |
-| `/topology` | Multi-node traffic distribution & offline-node assessment |
-| `/incidents` | Synthetic incident diagnosis and mitigation comparison |
-| `/reports` | Browser-local simulation history and CSV export |
-| `/signoff` | Browser-local demonstration sign-off flow (not operational approval) |
-| `/developer` | Live JSON request playground |
-| `/quality` | GitHub Actions status and quality gate registry |
-| `/api/docs` | FastAPI Swagger UI |
-| `/api/openapi.json` | OpenAPI document |
+| `/` | Editorial landing page with a live example that calls the original `/verdict` API |
+| `/dashboard` | Live backend health and engine registry, plus latest local evaluation |
+| `/simulation` | Input editor for every original schema field, Rules/SimPy selection, verdict breakdown |
+| `/compare` | Three independent calls to `/verdict` with 1×, 2× and 3× demand |
+| `/reports` | Browser-local run history and CSV export (not a backend database) |
+| `/developer` | Original JSON endpoint explorer |
+| `/quality` | GitHub Actions workflow status, Pytest/Black/Ruff/TypeScript checks |
+| `/methodology` | The original model formulas, assumptions and known simplifications |
 
-## Local development
+**Not implemented by copdash or this site:** actual load generation against servers, Kubernetes/multi-node balancing, incident response orchestration, AI agents, Production telemetry, authenticated release sign-off, or persistent cloud history.
 
-Prerequisites: Node.js 22+, Python 3.12+.
+## Development
+
+Python 3.12+ and Node.js 22+.
 
 ```bash
-# Shell 1 — FastAPI
 cd backend
-pip install -r requirements.txt pytest httpx
+python -m pip install -r requirements.txt pytest httpx pytest-cov black ruff
 uvicorn main:app --port 8000 --reload
+```
 
-# Shell 2 — Next.js
+To run the frontend:
+
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-For local development using one origin and full Vercel Services routing, run `vercel dev -L` from the repository root instead. Next.js standalone mode assumes that `/api/` is routed to FastAPI by Vercel Services.
+The production routing is defined in `vercel.json`, using one Vercel Services project. The original API routes are sent to the FastAPI backend and all website pages to Next.js. For same-origin local routing, use `vercel dev` at the repository root or configure an equivalent development proxy.
 
-## Deployment on Vercel
-
-1. Create a Vercel project connected to this GitHub repository.
-2. Select **Services** as the project framework (not just Next.js).
-3. Keep the project root at the repository root; `vercel.json` defines both services.
-4. Vercel routes `/api/*` to FastAPI and other paths to Next.js on the same domain.
-5. Optionally attach a Neon PostgreSQL integration and set `DATABASE_URL`; `DATA_API_KEY` is required for private history access.
-
-`/api/v1/private/runs` is intentionally inaccessible without a private server credential. Do not place `DATA_API_KEY` in browser JavaScript or a `NEXT_PUBLIC_*` variable. Authentication and role-based access are required before enabling cloud history through the UI.
-
-## Original engine attribution
-
-The `backend/app/` core engine modules and `backend/tests/test_verdict.py`, `backend/tests/test_simpy.py` and `backend/tests/conftest.py` are copied from the [mauikut-com/copdash](https://github.com/mauikut-com/copdash) repository for adaptation with the source owner's permission. Check with the author regarding a redistribution license before publishing downstream copies.
-
-## Validation
+## Quality
 
 ```bash
 cd backend
@@ -73,8 +61,8 @@ npm run lint
 npm run build
 ```
 
-100% line and branch coverage are **targets**, not claims of currently achieved coverage. The Engineering Quality page does not fabricate coverage results.
+100% line and branch coverage remain goals. The UI will not display them as achieved without real reported measurements.
 
-## Scope and safety
+## Provenance
 
-All models are hypothetical. No production workload is generated. SimPy uses a fixed seed and finite arrival horizon. The multi-node API independently evaluates assigned traffic on identical node specifications; it is not yet a calibrated load balancer simulation. External LLM orchestration, ELK ingestion, sign-off role controls and immutable reports are future milestones mapped to the AKPSI system proposal.
+The copdash modules in `backend/app` and source engine tests in `backend/tests` are adapted with source attribution. Confirm redistribution permission/license from the repository author before public redistribution.

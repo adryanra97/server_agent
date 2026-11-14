@@ -13,6 +13,42 @@
   },
   "rewrites": [
     {
+      "source": "/health",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/engines",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/verdict",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/docs",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/openapi.json",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/redoc",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
       "source": "/api/:path*",
       "destination": {
         "service": "backend"

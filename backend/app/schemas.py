@@ -75,7 +75,10 @@ class Load(BaseModel):
         examples=[2.0],
     )
     concurrent_connections: int = Field(
-        ..., ge=0, description="Number of concurrent connections (drives RAM and connection pressure).", examples=[250]
+        ...,
+        ge=0,
+        description="Number of concurrent connections (drives RAM and connection pressure).",
+        examples=[250],
     )
     payload_kb: float = Field(
         ..., ge=0, description="Response payload size per request, in kilobytes.", examples=[20.0]
@@ -90,7 +93,9 @@ class Load(BaseModel):
 class VerdictRequest(BaseModel):
     """Body for ``POST /verdict``."""
 
-    engine: str = Field("rules", description="Engine to evaluate with. Defaults to 'rules'.", examples=["rules"])
+    engine: str = Field(
+        "rules", description="Engine to evaluate with. Defaults to 'rules'.", examples=["rules"]
+    )
     spec: ServerSpec
     load: Load
 
