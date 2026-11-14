@@ -1,7 +1,10 @@
 """SimPy inspection is faithful to the copdash engine, with explicit evidence."""
 
+import pytest
 from fastapi.testclient import TestClient
 
+from app.engines.simpy import SimPyEngine
+from app.schemas import EvaluationInput, Load, ServerSpec
 from main import app
 
 client = TestClient(app)
@@ -102,3 +105,12 @@ def test_simpy_inspection_exposes_offered_and_measured():
     assert body["simulation"]["offered_utilization"]["cpu"] == 1.5
     assert body["result"]["verdict"] == "will_crash"
     assert body["simulation"]["completed"] == body["simulation"]["arrived"]
+
+def test_simpy_direct_engine_blocks_unfulfillable_allocation():
+    """Protect direct engine callers, not only the FastAPI input boundary."""
+    model = EvaluationInput(
+        spec=ServerSpec.model_validate(SPEC),
+        load=Load.model_validate({**LOAD, "avg_mem_mb_per_req": 9000}),
+    )
+    with pytest.raises(ValueError, match="Memory per request"):
+        SimPyEngine().inspect(model)
