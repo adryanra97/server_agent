@@ -1,0 +1,30 @@
+name: Temporary formatting export
+on:
+  push:
+    branches: [feat/serveragent-platform]
+permissions:
+  contents: read
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install black ruff
+      - run: ruff check --fix app main.py tests || true
+      - run: black app main.py tests
+      - name: Export formatted source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          names = ['app/engines/rules.py', 'app/engines/simpy.py',
+                   'app/schemas.py', 'main.py', 'tests/test_platform.py']
+          payload = {'backend/' + name: Path(name).read_text() for name in names}
+          print('FORMATTED_PAYLOAD:' + json.dumps(payload, separators=(',', ':')))
+          PY
