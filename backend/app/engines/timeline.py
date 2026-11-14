@@ -33,8 +33,7 @@ class TimelineRecorder:
         end = min(float(MAX_TIMELINE_SECONDS), end)
         for second in range(math.floor(start), math.ceil(end)):
             overlap = min(end, second + 1.0) - max(start, float(second))
-            if overlap > 0:
-                self._data[key][second] += amount * overlap
+            self._data[key][second] += amount * overlap
 
     def finish(
         self,
