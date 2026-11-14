@@ -106,6 +106,7 @@ def test_simpy_inspection_exposes_offered_and_measured():
     assert body["result"]["verdict"] == "will_crash"
     assert body["simulation"]["completed"] == body["simulation"]["arrived"]
 
+
 def test_simpy_direct_engine_blocks_unfulfillable_allocation():
     """Protect direct engine callers, not only the FastAPI input boundary."""
     model = EvaluationInput(
