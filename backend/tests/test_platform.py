@@ -79,6 +79,7 @@ def test_quality_does_not_fabricate_coverage(monkeypatch):
 
 def test_quality_reports_latest_run(monkeypatch):
     import io
+
     import main
 
     class FakeResponse:
@@ -99,6 +100,7 @@ def test_quality_reports_latest_run(monkeypatch):
 
 def test_quality_empty_runs(monkeypatch):
     import io
+
     import main
 
     class FakeResponse:
