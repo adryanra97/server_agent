@@ -6,7 +6,7 @@ import { defaultSpec, defaultLoad, requestVerdict, type Engine, type VerdictResu
 import { Outcome, ResourceBars, SectionHead } from './ui';
 type Scenario={label:string;multiplier:number;load:number;result:VerdictResult};
 export default function Compare(){
-  const [engine,setEngine]=useState<Engine>('rules');
+  const [engine,setEngine]=useState<Engine>('simpy');
   const [base,setBase]=useState(100);
   const [results,setResults]=useState<Scenario[]>([]);
   const [loading,setLoading]=useState(false);

@@ -17,7 +17,7 @@ import Methodology from './methodology';
 
 const labels:Record<string,{title:string;description:string;eyebrow:string}>={
   dashboard:{title:'Capacity intelligence.',description:'Everything starts with the original copdash capacity evaluation engine.',eyebrow:'WORKSPACE / OVERVIEW'},
-  simulation:{title:'Server Evaluator',description:'Configure your server, describe its load and ask an engine for its verdict.',eyebrow:'WORKSPACE / EVALUATION'},
+  simulation:{title:'SimPy workbench.',description:'Run the original discrete-event engine, inspect execution evidence, and compare against deterministic rules.',eyebrow:'WORKSPACE / DISCRETE-EVENT SIMULATION'},
   compare:{title:'Compare workloads',description:'Run the original /verdict endpoint for three different load levels.',eyebrow:'WORKSPACE / COMPARISON'},
   reports:{title:'Run history',description:'Revisit completed evaluations stored locally in this browser.',eyebrow:'WORKSPACE / HISTORY'},
   developer:{title:'API Explorer',description:'Inspect the original copdash endpoints and send real JSON requests.',eyebrow:'ENGINEERING / API'},

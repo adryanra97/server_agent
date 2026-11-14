@@ -8,7 +8,7 @@ import type { VerdictResult, Verdict } from '../lib/model';
 
 export const navigation:{label:string;href:string;icon:LucideIcon;group:string}[] = [
   {label:'Overview',href:'/dashboard',icon:Activity,group:'WORKSPACE'},
-  {label:'Server Evaluator',href:'/simulation',icon:FlaskConical,group:'WORKSPACE'},
+  {label:'SimPy Workbench',href:'/simulation',icon:FlaskConical,group:'WORKSPACE'},
   {label:'Compare Loads',href:'/compare',icon:BarChart3,group:'WORKSPACE'},
   {label:'Run History',href:'/reports',icon:FileClock,group:'WORKSPACE'},
   {label:'API Explorer',href:'/developer',icon:Terminal,group:'ENGINEERING'},

@@ -11,7 +11,7 @@ The original Python engine registry, Pydantic schemas and FastAPI application ar
 - **Outputs:** `will_survive`, `at_risk`, `will_crash`, heuristic confidence, bottleneck, resource utilization, and human-readable reasons
 - **Native API:** `GET /health`, `GET /engines`, `POST /verdict`, `GET /docs`, `GET /openapi.json`
 
-The only additional Python endpoint is `GET /api/v1/quality`, for displaying a real GitHub Actions status (coverage is not fabricated).
+Two additive engineering endpoints extend the original API without changing its request/response contract:\n\n- `POST /api/v1/simpy/inspect`: execute the **same** SimPy model and return the original verdict plus structured arrival counts, measured/offered resource utilization, fixed-seed metadata, and execution time.\n- `GET /api/v1/quality`: live GitHub Actions status; never fabricated coverage.
 
 ## Website features
 
@@ -19,10 +19,10 @@ The only additional Python endpoint is `GET /api/v1/quality`, for displaying a r
 | --- | --- |
 | `/` | Editorial landing page with a live example that calls the original `/verdict` API |
 | `/dashboard` | Live backend health and engine registry, plus latest local evaluation |
-| `/simulation` | Input editor for every original schema field, Rules/SimPy selection, verdict breakdown |
+| `/simulation` | SimPy-first experiment workbench; all original schema fields, execution statistics, verdict breakdown and optional Rules comparison |
 | `/compare` | Three independent calls to `/verdict` with 1×, 2× and 3× demand |
 | `/reports` | Browser-local run history and CSV export (not a backend database) |
-| `/developer` | Original JSON endpoint explorer |
+| `/developer` | Original JSON endpoints and additive SimPy inspection explorer |
 | `/quality` | GitHub Actions workflow status, Pytest/Black/Ruff/TypeScript checks |
 | `/methodology` | The original model formulas, assumptions and known simplifications |
 
@@ -66,3 +66,17 @@ npm run build
 ## Provenance
 
 The copdash modules in `backend/app` and source engine tests in `backend/tests` are adapted with source attribution. Confirm redistribution permission/license from the repository author before public redistribution.
+
+## SimPy inspector (current development focus)
+
+```bash
+curl -s -X POST http://localhost:8000/api/v1/simpy/inspect \\
+  -H 'Content-Type: application/json' \\
+  -d '{"engine":"simpy","spec":{"cpu":{"cores":4,"clock_ghz":2.5},"ram":{"total_mb":8192},"network":{"bandwidth_mbps":1000,"max_connections":10000}},"load":{"rps":100,"avg_cpu_ms_per_req":10,"avg_mem_mb_per_req":5,"concurrent_connections":100,"payload_kb":10}}'
+```
+
+The additional endpoint invokes the same copdash `SimPyEngine` as `/verdict` and returns the identical `VerdictResponse`, plus actual arrived/completed counters, measured utilization, offered demand, fixed seed and simulated elapsed time. The original `/verdict`, `/engines`, `/health`, OpenAPI and all original tests are retained.
+
+Edge case: for any nonzero RPS, a single request's RAM allocation cannot exceed the configured server RAM; the API rejects that impossible reservation with a 422 response. Zero-memory requests are supported.
+
+UI design is editorial and information-first. The process-flow animation explains **model mechanics**, not per-request playback. Analyzed numbers and verdicts come from actual Python simulation, not generated frontend data.
