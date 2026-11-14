@@ -27,6 +27,29 @@ jobs:
           pip install -r requirements.txt pytest httpx pytest-cov black ruff
       - name: Run model and API tests with coverage
         run: pytest -q --cov=app --cov=main --cov-branch --cov-report=term-missing --cov-report=xml
+      - name: Extract measured coverage
+        id: coverage_metrics
+        if: always()
+        run: |
+          python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          report = Path("coverage.xml")
+          line = branch = "unavailable"
+          if report.exists():
+              root = ET.parse(report).getroot()
+              line = f"{float(root.attrib['line-rate']) * 100:.1f}"
+              branch = f"{float(root.attrib['branch-rate']) * 100:.1f}"
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              print(f"line={line}", file=output)
+              print(f"branch={branch}", file=output)
+          print(f"Measured coverage: line={line}% branch={branch}%")
+          PY
+      - name: "Coverage report: ${{ steps.coverage_metrics.outputs.line }}% line, ${{ steps.coverage_metrics.outputs.branch }}% branch"
+        if: always()
+        run: echo "Coverage values are taken from pytest's actual coverage.xml."
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
@@ -68,3 +91,51 @@ jobs:
         run: npm run lint
       - name: Build
         run: npm run build
+
+  python-security:
+    name: Bandit security analysis
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Bandit
+        run: python -m pip install "bandit>=1.8,<2"
+      - name: Generate security report
+        run: bandit -r app main.py --format json --output bandit-report.json --exit-zero
+      - name: Extract Bandit findings
+        id: bandit_metrics
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from collections import Counter
+          from pathlib import Path
+
+          report = Path("bandit-report.json")
+          counts = Counter()
+          if report.exists():
+              for finding in json.loads(report.read_text(encoding="utf-8")).get("results", []):
+                  counts[finding.get("issue_severity", "").upper()] += 1
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              for severity in ("HIGH", "MEDIUM", "LOW"):
+                  print(f"{severity.lower()}={counts[severity]}", file=output)
+          print(f"Bandit findings: HIGH={counts['HIGH']}, MEDIUM={counts['MEDIUM']}, LOW={counts['LOW']}")
+          PY
+      - name: "Bandit findings: H${{ steps.bandit_metrics.outputs.high }} M${{ steps.bandit_metrics.outputs.medium }} L${{ steps.bandit_metrics.outputs.low }}"
+        if: always()
+        run: echo "Severity counts are read from the Bandit JSON report."
+      - name: Enforce security gate (medium severity and confidence or higher)
+        run: bandit -r app main.py --severity-level medium --confidence-level medium
+      - name: Upload Bandit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-security-report
+          path: backend/bandit-report.json
+          if-no-files-found: ignore
