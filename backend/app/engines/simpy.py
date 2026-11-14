@@ -58,9 +58,7 @@ class SimPyEngine:
         result, _ = self.inspect(input)
         return result
 
-    def inspect(
-        self, input: EvaluationInput
-    ) -> tuple[VerdictResult, dict[str, object]]:
+    def inspect(self, input: EvaluationInput) -> tuple[VerdictResult, dict[str, object]]:
         """Run exactly the same simulation, returning explicit execution evidence."""
         spec = input.spec
         load = input.load

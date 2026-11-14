@@ -59,9 +59,7 @@ def test_simpy_idle_includes_zero_arrivals():
 
 def test_simpy_zero_memory_is_a_valid_workload():
     load = {**LOAD, "rps": 1, "avg_mem_mb_per_req": 0}
-    original = client.post(
-        "/verdict", json={"engine": "simpy", "spec": SPEC, "load": load}
-    )
+    original = client.post("/verdict", json={"engine": "simpy", "spec": SPEC, "load": load})
     observed = inspect(load=load)
     assert original.status_code == 200
     assert observed.status_code == 200
@@ -73,9 +71,7 @@ def test_oversized_memory_rejected_in_both_endpoints():
     load = {**LOAD, "avg_mem_mb_per_req": 9000}
     assert inspect(load=load).status_code == 422
     assert (
-        client.post(
-            "/verdict", json={"engine": "simpy", "spec": SPEC, "load": load}
-        ).status_code
+        client.post("/verdict", json={"engine": "simpy", "spec": SPEC, "load": load}).status_code
         == 422
     )
 

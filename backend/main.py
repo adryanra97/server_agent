@@ -56,6 +56,7 @@ def quality():
         pass
     return value
 
+
 class SimPyDiagnostics(BaseModel):
     """Structured evidence from the original copdash discrete-event engine."""
 
