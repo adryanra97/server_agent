@@ -49,7 +49,7 @@ function NumberInput({label,unit,value,onChange,min=0,step='any',note}:{
   return <label className="simpy-field">
     <span className="simpy-field-top"><strong>{label}</strong>{note&&<small>{note}</small>}</span>
     <span className="simpy-input"><input type="number" value={value} min={min} step={step}
-      onChange={e=>onChange(e.target.value===''?NaN:Number(e.target.value))}
+      onChange={e=>onChange(Number(e.target.value))}
       aria-label={label}/><span>{unit}</span></span>
   </label>;
 }
@@ -73,7 +73,6 @@ export default function Simulation(){
   const [error,setError]=useState('');
   const [comparisonError,setComparisonError]=useState('');
   const [rawOpen,setRawOpen]=useState(false);
-  const [runNumber,setRunNumber]=useState(0);
 
   function updateSpec(section:keyof ServerSpec,field:string,value:number){
     setBody(prev=>({
@@ -122,7 +121,7 @@ export default function Simulation(){
           `The SimPy service returned HTTP ${response.status}. Check your inputs.`);
       }
       const data=payload as SimPyInspection;
-      setReport(data);setRunNumber(n=>n+1);
+      setReport(data);
       saveRun({
         id:crypto.randomUUID(),created_at:new Date().toISOString(),
         label:`SimPy · ${body.load.rps} RPS · ${body.spec.cpu.cores} cores`,
