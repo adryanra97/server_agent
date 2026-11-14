@@ -137,6 +137,45 @@ def quality() -> dict:
     return value
 
 
+QUALITY_REPORT_ROOT = (
+    "https://raw.githubusercontent.com/adryanra97/server_agent/"
+    "quality-reports"
+)
+
+
+@app.get("/api/v1/quality/tests", tags=["Engineering"])
+def quality_tests(run_id: int | None = None) -> dict:
+    """Serve a sanitized JUnit-derived report published by GitHub Actions.
+
+    The report is tied to a specific run; its test statuses are not inferred
+    from the overall workflow conclusion.
+    """
+    if run_id is not None and run_id <= 0:
+        raise HTTPException(status_code=422, detail="Run ID must be positive.")
+    path = f"runs/{run_id}.json" if run_id is not None else "latest.json"
+    request = Request(
+        f"{QUALITY_REPORT_ROOT}/{path}",
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "ServerAgent-Test-Evidence",
+        },
+    )
+    try:
+        # Fixed HTTPS host and integer-only report path.
+        with urlopen(request, timeout=5) as response:  # nosec B310
+            payload = json.load(response)
+        if not isinstance(payload, dict) or payload.get("schema_version") != 1:
+            raise ValueError("Invalid test report format")
+        if run_id is not None and payload.get("run_id") != run_id:
+            raise ValueError("The report run does not match the selected execution")
+        return payload
+    except (URLError, OSError, ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Detailed test evidence is not yet available for this execution.",
+        ) from exc
+
+
 class TimelineSecond(BaseModel):
     """A one-second bucket derived from SimPy events, not synthetic chart points."""
 

@@ -9,10 +9,15 @@ on:
 permissions:
   contents: read
 
+# The backend report job publishes its measured JUnit summary to a public
+# reports-only branch. No credentials are stored in that report.
+
 jobs:
   backend-tests:
     name: Backend tests & coverage
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: backend
@@ -26,7 +31,54 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest httpx pytest-cov black ruff
       - name: Run model and API tests with coverage
-        run: pytest -q --cov=app --cov=main --cov-branch --cov-report=term-missing --cov-report=xml
+        id: pytest
+        run: pytest -q --cov=app --cov=main --cov-branch --cov-report=term-missing --cov-report=xml --junitxml=pytest-results.xml
+      - name: Build per-test report from JUnit XML
+        if: always()
+        run: |
+          if [ -s pytest-results.xml ]; then
+            python ../.github/scripts/pytest_report.py pytest-results.xml pytest-dashboard.json
+          else
+            echo "No JUnit test results to publish."
+          fi
+      - name: Upload full Pytest results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-detailed-results
+          path: |
+            backend/pytest-results.xml
+            backend/pytest-dashboard.json
+          if-no-files-found: ignore
+      - name: Publish browser-readable test evidence
+        if: always() && github.event_name != 'pull_request'
+        working-directory: .
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          if [ ! -s backend/pytest-dashboard.json ]; then
+            echo "No test report produced; skipping publication."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          report_dir="$(mktemp -d)"
+          if git fetch origin quality-reports:refs/remotes/origin/quality-reports 2>/dev/null; then
+            git worktree add -b quality-reports "$report_dir" origin/quality-reports
+          else
+            git worktree add --detach "$report_dir" HEAD
+            git -C "$report_dir" checkout --orphan quality-reports
+            git -C "$report_dir" rm -rf . >/dev/null
+          fi
+          mkdir -p "$report_dir/runs"
+          cp backend/pytest-dashboard.json "$report_dir/runs/$RUN_ID.json"
+          cp backend/pytest-dashboard.json "$report_dir/latest.json"
+          git -C "$report_dir" add "runs/$RUN_ID.json" latest.json
+          git -C "$report_dir" commit -m "Publish measured Pytest results for run $RUN_ID"
+          git -C "$report_dir" push origin HEAD:quality-reports
+      - name: Pytest detailed report published
+        if: always()
+        run: echo "JUnit is the source of truth; check the public quality-reports branch for per-test outcomes."
       - name: Extract measured coverage
         id: coverage_metrics
         if: always()

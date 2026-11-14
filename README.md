@@ -156,3 +156,13 @@ The **Engineering Quality** page now queries the latest `feat/serveragent-platfo
 - **Bandit** Python SAST: scan `backend/app` and `backend/main.py`, publish JSON report as an Actions artifact, and fail on findings of medium severity **and** medium confidence or higher (lower severity findings still appear in counts)
 
 Coverage is read from the real CI-generated `coverage.xml` and exposed as a labeled GitHub Actions step. Bandit JSON counts are likewise emitted as a labeled step, allowing status retrieval through the public GitHub Jobs API without a private token or a database. Counts are tied to the displayed commit SHA and CI run; neither a completed pipeline nor a zero issue count implies a security guarantee. The dashboard provides direct links to the run and jobs for verification.
+
+## Browser-based per-test Pytest reporting
+
+Engineering Quality now displays test cases, not only an overall workflow badge. In CI, Pytest creates `backend/pytest-results.xml` with `--junitxml`. A standard-library exporter converts the exact recorded cases into a privacy-minimized JSON report containing **test identifier, source module, outcome, execution time, aggregate counts, run ID and commit SHA**. Captured exception text and stdout are excluded.
+
+GitHub Actions uploads the JUnit XML and JSON as the `pytest-detailed-results` artifact, then on trusted push/dispatch executions publishes a compact report to the `quality-reports` branch as `runs/<run_id>.json` and `latest.json`. A dedicated `GET /api/v1/quality/tests?run_id=<integer>` endpoint reads the corresponding public report. The browser can retrieve the same published report directly if the app service cannot access it. A report must match the selected CI run and commit before it is displayed. Unavailable results are explicitly marked as pending; no test is presumed successful from a passing workflow badge.
+
+The UI supports per-status counts, outcome distribution, search, filter, expand-by-module, per-test execution duration, and links to the exact source file at the tested commit. Test details are expandable to keep the page readable. This is reporting on tests already run by CI, not arbitrary on-demand code execution from the website.
+
+The `quality-reports` branch is intended to contain only sanitized public test metadata. Repository owners must allow the backend CI job to push this report branch with its scoped `contents: write` GitHub Actions permission for publication to work. Full failures and their diagnostic traces remain in authenticated GitHub CI artifacts/logs.

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import QualityTestReport from './quality-test-report';
 import {
   Activity, ArrowUpRight, CheckCircle2, Clock3, Code2, GitBranch,
   GitCommitHorizontal, Info, LoaderCircle, RefreshCw, ShieldAlert,
@@ -162,9 +163,11 @@ export default function Quality(){
       <div className="eq-metric"><span>BANDIT HIGH + MEDIUM</span><strong>{security.status==='reported'?Number(security.high)+Number(security.medium):'—'}</strong><p>{security.status==='reported'?'Findings across both severities':'Security scan not reported yet'}</p></div>
     </div>
 
+    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null}/>
+
     <div className="eq-content">
       <section className="eq-checks">
-        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Six checks. Independently verified.</h3><p>Each result corresponds to a real step in the latest GitHub Actions run.</p></div><Workflow size={23}/></div>
+        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Six checks. Independently verified.</h3><p>Each result corresponds to a real step in the latest GitHub Actions run. The Pytest list above shows each executed case.</p></div><Workflow size={23}/></div>
         <div className="eq-check-list">{statuses.map((check,index)=><div className="eq-check" key={check.key}>
           <span className="eq-check-number">{String(index+1).padStart(2,'0')}</span>
           <div className="eq-check-text"><strong>{check.name}</strong><p>{check.description}</p><code>{check.command}</code></div>
@@ -176,7 +179,7 @@ export default function Quality(){
       </section>
 
       <section className="eq-security">
-        <div className="eq-section-head"><div><span>02 / SECURITY ANALYSIS</span><h3>Bandit Python scan.</h3><p>Source-code security findings grouped by severity.</p></div><ShieldCheck size={23}/></div>
+        <div className="eq-section-head"><div><span>03 / SECURITY ANALYSIS</span><h3>Bandit Python scan.</h3><p>Source-code security findings grouped by severity.</p></div><ShieldCheck size={23}/></div>
         <div className="eq-security-status"><div className={'eq-trust-indicator '+statusClass(securityJob?.conclusion)}>{securityJob?.conclusion==='success'?<CheckCircle2 size={23}/>:securityJob?.conclusion==='failure'?<ShieldAlert size={23}/>:<Clock3 size={23}/>}</div>
           <div><strong>{securityJob?labelStatus(securityJob.conclusion??securityJob.status):'Scan awaiting results'}</strong><small>CI gate: medium severity and confidence or higher</small></div></div>
         <div className="eq-security-counts">
@@ -187,8 +190,8 @@ export default function Quality(){
         <div className="eq-security-note"><Info size={18}/><p>Bandit performs static analysis of Python source. A clean result does not guarantee software security. The full JSON scan report is uploaded as an artifact with the CI execution.</p></div>
         <a className="eq-security-link" target="_blank" rel="noopener noreferrer" href={quality.url??workflow}>View security findings and report <ArrowUpRight size={16}/></a>
 
-        <div className="eq-evidence"><span>03 / EVIDENCE & METHODOLOGY</span><h4>Where these numbers come from</h4>
-          <p>Coverage percentages are extracted from the CI-generated coverage.xml. Check statuses are read from the corresponding workflow jobs. Bandit issue counts come from the exported JSON scan.</p>
+        <div className="eq-evidence"><span>04 / EVIDENCE & METHODOLOGY</span><h4>Where these numbers come from</h4>
+          <p>Coverage comes from coverage.xml. Individual test results and durations come from the JUnit XML published by CI. Check statuses are from workflow job steps, and Bandit counts from the security scan report.</p>
           <p>All metrics belong to the displayed commit and branch; they are not live production performance telemetry.</p>
         </div>
       </section>
