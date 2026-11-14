@@ -1,0 +1,10 @@
+import './globals.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'ServerAgent — Release intelligence, engineered',
+  description: 'Explore infrastructure capacity before production. Deterministic simulations, incident insights, release alignment, and transparent engineering quality.',
+};
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en"><body>{children}</body></html>;
+}

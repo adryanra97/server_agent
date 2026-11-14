@@ -1,0 +1,34 @@
+[project]
+name = "serveragent-platform"
+version = "0.1.0"
+description = "ServerAgent backend based on copdash deterministic and SimPy verdict engines"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "pydantic>=2.7,<3",
+    "simpy>=4.1.2,<5",
+    "uvicorn>=0.30,<1",
+    "psycopg[binary]>=3.2,<4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27",
+    "pytest>=8.2",
+    "pytest-cov>=6.0",
+    "black>=25.1",
+    "ruff>=0.11",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
