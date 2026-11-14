@@ -1780,3 +1780,229 @@ body,.sa-app{background:#f8fafd;color:var(--ink)}
 }
 
 .eq-detail-empty .eq-test-retry{background:#1957b9;color:white;padding:12px 17px;border:0;margin-top:17px;font-size:13px;font-weight:800}.eq-detail-empty .eq-test-retry:hover{background:#10458f}
+
+
+/* ==========================================================
+   MII-inspired daylight blue | November 2026 design refresh
+   Direction: bright enterprise blue, clean white, calm blue-
+   gray surfaces, one accessible primary action per view.
+   Contrast anchors: #096ba8 / white = 5.71:1;
+   #355d77 / #f0f9fe = 6.6:1 (WCAG AA normal text).
+   ========================================================== */
+:root{
+  --ink:#183D57;--ink-strong:#10334E;--muted:#42667C;
+  --blue:#096BA8;--blue-dark:#07527F;
+  --sky:#EAF6FD;--pale:#F5FAFE;--line:#CFE2EF;--line-dark:#B5D6E7;
+  --card:#fff;--shadow:0 18px 46px rgba(34,110,153,.075);
+  --sa-brand:#096BA8;--sa-brand-hover:#07527F;--sa-ink:#123F61;
+  --sa-subtle:#355D77;--sa-sky:#EAF6FD;--sa-sky-deep:#D8EDF8;
+  --sa-border:#CFE4F0;--sa-mist:#F6FBFF;
+}
+body,.sa-app{background:#F5FAFE;color:#183D57}
+.btn-primary,.sa-app .simpy-run-button,.sa-app .timeline-play,
+.sa-api-send button,.sa-api-reference a,.demo-login-submit,
+.sa-access-gate>a:first-of-type,.sa-access-denied>a:first-of-type{
+  background:#096BA8;color:#fff;border-color:#096BA8;
+}
+.btn-primary:hover,.sa-app .simpy-run-button:hover,.sa-app .timeline-play:hover,
+.sa-api-send button:hover,.demo-login-submit:hover{
+  background:#07527F;border-color:#07527F;
+}
+:focus-visible{outline:3px solid #298FD1;outline-offset:3px}
+
+/* Light corporate header, drawing from the reference site's clarity. */
+.home .home-header,.sa-header,.demo-login-header{
+  background:#fff;color:#173D59;border-bottom:1px solid #CAE0EC;
+  box-shadow:0 3px 15px rgba(25,85,125,.035);
+}
+.home .home-header{border-top:3px solid #40A4CC}
+.home .home-header .brand-word,.sa-header .brand-word,
+.sa-app .sa-header .brand-word,.demo-login-header .brand-word{
+  color:#173D59;
+}
+.home .home-header .brand-word>span,.sa-header .brand-word>span,
+.sa-app .sa-header .brand-word>span,.demo-login-header .brand-word>span{
+  color:#0A78B4;
+}
+.home .home-header .brand-word small,.sa-header .brand-word small,
+.sa-app .sa-header .brand-word small,.demo-login-header .brand-word small{
+  color:#4B7188;
+}
+.home .home-header nav a,.sa-app .sa-main-nav>a,
+.sa-app .sa-main-nav .sa-more>button,.sa-app .sa-more>button,
+.sa-header .sa-role-name strong,.demo-login-back{
+  color:#254B65;
+}
+.home .home-header nav a:hover,.sa-app .sa-main-nav>a:hover,
+.sa-app .sa-main-nav>a.current,.sa-app .sa-more>button:hover,
+.sa-app .sa-more>button.current,.demo-login-back:hover{
+  color:#075C93;
+}
+.sa-app .sa-header .sa-main-nav>a.current:after{background:#168BC2}
+.sa-role-name small,.sa-app .sa-role-name small{color:#4C738E}
+.sa-role-identity{border-left-color:#D5E6F0}
+.sa-switch-role{color:#155F94;border-bottom-color:#8FBCD8}
+.sa-switch-role:hover{color:#07527F}
+.sa-logout{background:#EAF6FD;color:#125F94;border-color:#BFD9E9}
+.sa-logout:hover{background:#D7EEF9;color:#07527F;border-color:#82BAD8}
+.sa-mobile-nav{background:#fff;color:#16496D;border-color:#D4E6F1;box-shadow:0 20px 45px rgba(23,80,120,.12)}
+.sa-mobile-nav a,.sa-mobile-nav button{color:#184F73}
+.sa-mobile-nav a[aria-current=page]{background:#E4F3FC;color:#075B93}
+
+/* Homepage: daytime blue gradient instead of full-bleed navy. */
+.home .truth-hero{
+  background:
+    radial-gradient(ellipse at 95% 3%,rgba(70,171,221,.16),transparent 53%),
+    linear-gradient(116deg,#FCFEFF 0%,#EFF8FD 49%,#DEEFF9 100%);
+  color:#143D5A;
+}
+.home .truth-hero:before{
+  background:
+    radial-gradient(ellipse 42% 55% at 93% 34%,rgba(63,151,203,.14),transparent 72%);
+}
+.home .truth-copy .eyebrow{color:#096BA8}
+.home .truth-copy .eyebrow-dot{background:#198DBF;box-shadow:0 0 0 4px #DCEFFA}
+.home .truth-copy h1{color:#103A5A}
+.home .truth-copy h1 em{color:#0A76B1}
+.home .truth-copy>p{color:#355D77}
+.home .truth-actions .btn-primary,.home .truth-run{
+  background:#096BA8;color:#fff;border-color:#096BA8;
+}
+.home .truth-actions .btn-primary:hover,.home .truth-run:hover{background:#07527F}
+.home .truth-actions .text-button{color:#095C91}
+.home .truth-facts{color:#426A83}
+.home .truth-facts span:not(:last-child){border-color:#BBD5E5}
+.home .truth-console{
+  background:#FFFFFF;color:#194562;border:1px solid #B8D9E9;
+  box-shadow:0 27px 68px rgba(26,102,155,.12);
+}
+.home .truth-console-top .kicker,.home .truth-result-head .kicker{color:#376585}
+.home .truth-indicator{color:#17618B}
+.home .truth-console-title{border-color:#DBEAF2}
+.home .truth-console-title h3,.home .truth-request>strong{color:#134E78}
+.home .truth-console-title small,.home .truth-console-title span,
+.home .truth-request>p,.home .truth-request>strong small{color:#416981}
+.home .truth-console-title svg{color:#0E7DAD}
+.home .truth-request{background:#EFF8FE;border-color:#D3E7F2}
+.home .truth-request>span,.home .truth-choice>span{color:#3C6A86}
+.home .truth-choice>div{background:#EAF5FC;border:1px solid #C4DEEC}
+.home .truth-choice button{color:#275C7A}
+.home .truth-choice button.active{background:#096BA8;color:#fff}
+.home .truth-choice button:not(.active):hover{background:#D3E9F6}
+.home .truth-await{color:#426B83;border-top-color:#D9EAF3}
+.home .truth-result{background:#F5FAFF;border-color:#D6E8F3}
+.home .truth-result .resource-header{color:#43677F}
+.home .truth-result .resource-header strong{color:#173F5A}
+.home .truth-result>p{color:#426982}
+.home .truth-result>p strong{color:#164C75}
+.home .truth-strip{
+  background:#DDEFFA;color:#153E5D;
+  border-top:1px solid #C4E3F1;border-bottom:1px solid #C4E3F1;
+}
+.home .truth-strip span{color:#0D649A}
+.home .truth-strip strong{color:#123F61}
+.home .truth-strip p{color:#446A83}
+.home .truth-strip>div{border-color:#B8D6E6}
+.home .truth-how{background:#E8F5FB}
+.home .truth-how h2 em{color:#096BA8}
+.home .truth-process>div>span{color:#096BA8}
+.home .truth-process p{color:#3E677F}
+.home .home-footer{
+  background:#E4F3FA;color:#355D77;border-top:1px solid #C5DFED;
+}
+.home .home-footer .brand-word{color:#153F5B}
+.home .home-footer .brand-word>span{color:#0A77AD}
+.home .home-footer .brand-word small,.home .home-footer>span{color:#426981}
+
+/* Login: readable left-story column with air, not a navy wall. */
+.demo-login-story{
+  background:
+    radial-gradient(ellipse at 96% 15%,rgba(79,181,218,.22),transparent 56%),
+    linear-gradient(128deg,#E6F5FC 0%,#F3FAFE 68%,#DEEFF8 100%);
+  color:#153E5D;
+}
+.demo-login-story h1{color:#123C5B}
+.demo-login-story h1 em{color:#0B73AD}
+.demo-login-story>p{color:#355F7A}
+.demo-login-overline,.demo-login-path>div>span{color:#086AA5}
+.demo-login-overline span{background:#148AC3}
+.demo-login-path,.demo-login-path>div{border-color:#C6DFED}
+.demo-login-path strong{color:#164461}
+.demo-login-path small{color:#426B84}
+.demo-login-back{color:#155B88}
+
+/* Role workspace and model introduction: subtle gradients, strong headings. */
+.role-hero,.sa-app .simpy-intro,.sa-api-hero,.eq-hero{
+  background:
+    radial-gradient(ellipse at 90% 12%,rgba(74,166,213,.18),transparent 62%),
+    linear-gradient(120deg,#E5F4FC 0%,#F7FCFF 63%,#DCEEF9 100%);
+  color:#143F5E;border:1px solid #C6E1EE;
+}
+.role-hero h2,.sa-app .simpy-intro h2,.sa-api-hero h2,.eq-hero h2{
+  color:#12415F;
+}
+.role-hero h2 em,.sa-app .simpy-intro h2 em,
+.sa-app .simpy-deepdive h3 em,.eq-hero h2 em{
+  color:#0B74AF;
+}
+.role-hero-eyebrow,.sa-api-hero .role-eyebrow,.eq-eyebrow{
+  color:#096BA8;
+}
+.role-hero-eyebrow span{background:#118BC3}
+.role-hero-copy>p,.sa-app .simpy-intro p,.sa-api-hero p,.eq-hero p{
+  color:#355D77;
+}
+.role-hero-brief,.sa-api-status{
+  background:rgba(255,255,255,.85);border:1px solid #C5DEEB;
+  box-shadow:0 14px 36px rgba(52,123,165,.06);
+}
+.role-hero-brief>span,.role-hero-brief p,.sa-api-status small{
+  color:#426B84;
+}
+.role-hero-brief>strong,.sa-api-status strong{color:#153F5F}
+.role-hero-brief>div{color:#355D77;border-top-color:#CEE4EF}
+.sa-app .simpy-intro:before{
+  background:radial-gradient(ellipse at 78% 40%,rgba(80,171,217,.16),transparent 63%);
+}
+.sa-app .simpy-intro-facts{color:#37647F}
+.sa-app .simpy-intro-facts span+span{border-color:#BFDDEB}
+.sa-app .simpy-intro-graphic{
+  background:#FFFFFF;border:1px solid #C6DFEC;color:#1D506F;
+}
+.sa-app .flow-visual{background:#15577F;border-color:#7AB2D0;color:#F6FBFF}
+
+/* All main feature pages use the same bright, restrained surfaces. */
+.sa-app .sa-footer{
+  background:#E6F4FB;border-top:1px solid #C5DFEC;color:#426982;
+}
+.sa-app .sa-footer .brand-word{color:#174461}
+.sa-app .sa-footer .brand-word>span{color:#0A76AD}
+.sa-app .sa-footer .brand-word small,.sa-footer p,.sa-footer>div:last-child{
+  color:#436B83;
+}
+.sa-api-editor textarea,.sa-api-response pre{
+  background:#193F61;color:#F0FAFF;border-color:#4D83A6;
+}
+.sa-api-editor textarea:focus{outline-color:#168FC6}
+.eq-hero-actions button{
+  background:#096BA8;border-color:#096BA8;color:#fff;
+}
+.eq-hero-actions button:hover{background:#07527F}
+.eq-hero-actions a{
+  background:#FFF;color:#095B8A;border:1px solid #A7D1E6;
+}
+.eq-hero-actions a:hover{background:#DDF0FA}
+.eq-hero-meta>span{color:#416A81}
+.eq-metric,.eq-checks,.eq-security,.eq-detail,.eq-trust{
+  border-color:#D0E4F0;
+}
+.eq-metric>strong,.eq-section-head h3,.eq-test-summary>div>strong{color:#145A88}
+.eq-section-head p,.eq-metric>p,.eq-evidence p{color:#426A82}
+.eq-test-filters button.active{background:#DDF1FB;color:#075E92;border-bottom-color:#1389BD}
+.eq-test-filters button.active span{color:#075E92}
+.eq-test-search{border-color:#BAD8E8}
+@media(prefers-reduced-motion:reduce){
+  .home .truth-console,.role-hero,.eq-hero,.sa-api-hero,.demo-login-story{
+    scroll-behavior:auto;
+  }
+}
