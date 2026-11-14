@@ -54,8 +54,18 @@ class SimPyEngine:
     name = "simpy"
 
     def evaluate(self, input: EvaluationInput) -> VerdictResult:
+        """Preserve the original copdash VerdictEngine contract."""
+        result, _ = self.inspect(input)
+        return result
+
+    def inspect(
+        self, input: EvaluationInput
+    ) -> tuple[VerdictResult, dict[str, object]]:
+        """Run exactly the same simulation, returning explicit execution evidence."""
         spec = input.spec
         load = input.load
+        if load.rps > 0 and load.avg_mem_mb_per_req > spec.ram.total_mb:
+            raise ValueError("Memory per request cannot exceed server RAM capacity.")
 
         env = simpy.Environment()
 
@@ -83,7 +93,8 @@ class SimPyEngine:
             with net.request() as conn_req:
                 yield conn_req
                 conn_acquired = env.now
-                yield ram.get(mem_hold)
+                if mem_hold > 0:
+                    yield ram.get(mem_hold)
                 mem_acquired = env.now
                 try:
                     with cpu.request() as cpu_req:
@@ -93,7 +104,8 @@ class SimPyEngine:
                     # Wire transfer: connection + memory still held, core released.
                     yield env.timeout(wire_time)
                 finally:
-                    yield ram.put(mem_hold)
+                    if mem_hold > 0:
+                        yield ram.put(mem_hold)
                 stats["ram_busy"] += mem_hold * (env.now - mem_acquired)
             stats["net_busy"] += env.now - conn_acquired
             stats["bytes"] += load.payload_kb
@@ -171,13 +183,37 @@ class SimPyEngine:
         else:
             reasons.append(f"Peak utilization {peak:.1%} on {bottleneck}; verdict {verdict}.")
 
-        return VerdictResult(
+        result = VerdictResult(
             verdict=verdict,
             confidence=_confidence(peak, verdict),
             bottleneck=bottleneck,
             resources=resources,
             reasons=reasons,
         )
+        details = {
+            "arrival_process": "Poisson (exponential interarrival times)",
+            "seed": SEED,
+            "arrival_window_seconds": HORIZON,
+            "arrival_cap": MAX_ARRIVALS,
+            "planned_arrivals": arrivals_count,
+            "arrived": stats["arrived"],
+            "completed": stats["completed"],
+            "simulated_elapsed_seconds": round(env.now, 4),
+            "cpu_slots": cpu_capacity,
+            "measured_utilization": {
+                "cpu": round(cpu_measured, 5),
+                "ram": round(ram_measured, 5),
+                "bandwidth": round(bw_measured, 5),
+                "connections": round(conn_measured, 5),
+            },
+            "offered_utilization": {
+                "cpu": round(offered_cpu, 5),
+                "ram": round(offered_ram, 5),
+                "bandwidth": round(offered_bw, 5),
+                "connections": round(offered_conn, 5),
+            },
+        }
+        return result, details
 
 
 def _util(measured: float, offered: float) -> float:

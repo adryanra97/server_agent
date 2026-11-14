@@ -73,5 +73,11 @@ def verdict(request: VerdictRequest) -> VerdictResponse:
             status_code=422,
             detail=f"Unknown engine {request.engine!r}; available: {', '.join(ENGINES)}",
         )
+    if request.engine == "simpy" and request.load.rps > 0:
+        if request.load.avg_mem_mb_per_req > request.spec.ram.total_mb:
+            raise HTTPException(
+                status_code=422,
+                detail="SimPy cannot allocate more RAM to a request than the server has.",
+            )
     result = engine.evaluate(EvaluationInput(spec=request.spec, load=request.load))
     return VerdictResponse(**result.model_dump(), engine=engine.name)
