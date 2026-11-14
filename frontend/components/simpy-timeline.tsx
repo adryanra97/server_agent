@@ -86,7 +86,7 @@ export default function SimulationTimeline({
 
   useEffect(()=>{
     setIndex(0);
-    setPlaying(trace.length>1);
+    setPlaying(trace.length>1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   },[trace]);
 
   useEffect(()=>{
@@ -189,7 +189,10 @@ export default function SimulationTimeline({
             <div className="sa-stage-component">
               <div className="sa-stage-component-name"><HardDrive size={20}/><div><strong>Memory</strong><small>Allocated to requests</small></div><b>{hasTrace?round(point?.ram_percent??0)+'%':'—'}</b></div>
               <div className="sa-stage-memory-graphic">
-                <div className="sa-stage-memory-banks">{Array.from({length:12},(_,i)=><i key={i} className={point&&point.ram_percent>(i/12*100)?'is-filled':''}/>)}</div>
+                <div className="sa-stage-memory-banks">{Array.from({length:12},(_,i)=>{
+                  const fill=Math.max(0,Math.min(100,(point?.ram_percent??0)*12-i*100));
+                  return <i key={i} style={{background:`linear-gradient(90deg,#63b9ba ${fill}%,#dce8f5 ${fill}%)`}}/>;
+                })}</div>
                 <div className="sa-stage-hardware-meter sa-stage-memory-meter"><span style={{width:Math.min(100,Math.max(0,point?.ram_percent??0))+'%'}}/></div>
               </div>
             </div>

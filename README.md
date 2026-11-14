@@ -125,3 +125,18 @@ Role switching persists the workflow records in browser `localStorage`; the sele
 **Important:** This login and these role-based menu restrictions are a *UX prototype only*: the shared password is intentionally visible in client-side code, no server-issued session exists, and the original FastAPI endpoints are not protected by this role selector. It is not safe for real customer data or authorization. Before deploying a production version, replace this with server-side authentication and authorization, per-role API permissions, a central database, real immutable approval/audit records, and document-level access control. The demo sign-off does not trigger real deployment.
 
 The original copdash API and SimPy calculations remain source-compatible. Features specified in AKPSI such as ELK ingestion, LLM orchestration, calibrated four-state verdicts, PDF sign-off, and shared audit trails remain future work; the UI never presents these as implemented.
+
+## QA workbench redesign (current feature branch)
+
+The updated QA experience includes:
+
+- Desktop-first, single-viewport role selection and password entry when the available viewport height allows it; small viewports scroll normally so fields remain reachable.
+- A simplified SimPy configuration layout: aligned editable fields for CPU, RAM, network, and workload; `clock_ghz` is displayed as a fixed, unused model attribute rather than a misleading tuning knob.
+- Full-width, event-driven replay that visually separates the network path and server chassis. CPU and RAM occupancy bars and the memory-bank graphic reflect time-integrated SimPy samples. There is no GPU resource in the current model.
+- Four focused time-series views (compute, network, request activity, queue), with thresholds and a short evidence-based interpretation.
+- Three independently configurable what-if profiles (request multiplier plus CPU, RAM, bandwidth and connection limits); the common workload can also be edited. Comparison requests execute the selected original model and are saved in the QA's browser-local evaluation history for alignment submissions.
+- An API directory with **all five original copdash routes** (`/health`, `/engines`, `/verdict`, `/docs`, `/openapi.json`) plus two ServerAgent additions (`/api/v1/simpy/inspect`, `/api/v1/quality`). Documentation pages are opened as references, not falsely presented as JSON responses.
+
+The UI uses professional copy such as *Engine Online*, *Capacity Planning*, *Evaluation Result*, and *API Reference*. Backend implementation names remain in source code and technical documentation only.
+
+Usability checks follow the Nielsen Norman Group's principles: show status and feedback, match users' real-world concepts, give them control, use consistent visual hierarchy, prevent errors, reduce memorization, and present only essential information first. This is a qualitative, code-based pass and **not a substitute for observational usability testing on browsers and viewports**.
