@@ -8,6 +8,7 @@ Only engineering-quality metadata is added for the optional UI panel.
 from __future__ import annotations
 
 import json
+import re
 import time
 from urllib.error import URLError
 from urllib.request import Request, urlopen
@@ -20,40 +21,120 @@ from app.main import app, require_api_key
 from app.schemas import EvaluationInput, VerdictRequest, VerdictResponse
 
 
+QUALITY_REPO = "adryanra97/server_agent"
+QUALITY_BRANCH = "feat/serveragent-platform"
+QUALITY_ROOT = f"https://api.github.com/repos/{QUALITY_REPO}"
+
+
+def _fetch_github_json(url: str) -> dict:
+    """Fetch only the fixed GitHub API host; never accept a user-supplied URL."""
+    if not url.startswith(QUALITY_ROOT + "/actions/"):
+        raise ValueError("Unexpected quality API URL")
+    request = Request(
+        url,
+        headers={
+            "Accept": "application/vnd.github+json",
+            "User-Agent": "ServerAgent-Quality",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
+    )
+    # nosec B310 - fixed https://api.github.com host; URL never comes from user input.
+    with urlopen(request, timeout=4) as response:
+        return json.load(response)
+
+
 @app.get("/api/v1/quality", tags=["Engineering"])
-def quality():
-    """Latest reported GitHub workflow state, not an invented test result."""
+def quality() -> dict:
+    """Current GitHub Actions evidence; absent metrics remain null, never 0."""
     value = {
         "source": "GitHub Actions",
-        "repository": "adryanra97/server_agent",
+        "repository": QUALITY_REPO,
+        "branch": QUALITY_BRANCH,
         "status": "unavailable",
         "conclusion": None,
-        "url": "https://github.com/adryanra97/server_agent/actions",
+        "url": f"https://github.com/{QUALITY_REPO}/actions/workflows/quality.yml",
         "run_id": None,
+        "commit_sha": None,
+        "run_started_at": None,
+        "run_updated_at": None,
         "coverage": None,
+        "coverage_line": None,
+        "coverage_branch": None,
         "coverage_status": "not-reported",
+        "bandit": {"high": None, "medium": None, "low": None, "status": "not-reported"},
+        "jobs": [],
+        "data_status": "unavailable",
     }
     try:
-        request = Request(
-            "https://api.github.com/repos/adryanra97/server_agent/actions/"
-            "workflows/quality.yml/runs?per_page=1",
-            headers={"Accept": "application/vnd.github+json", "User-Agent": "ServerAgent"},
+        payload = _fetch_github_json(
+            f"{QUALITY_ROOT}/actions/workflows/quality.yml/runs"
+            f"?branch={QUALITY_BRANCH}&per_page=1"
         )
-        with urlopen(request, timeout=3) as response:
-            payload = json.load(response)
         runs = payload.get("workflow_runs", [])
-        if runs:
-            run = runs[0]
-            value.update(
-                status=run.get("status"),
-                conclusion=run.get("conclusion"),
-                run_id=run.get("id"),
-                url=run.get("html_url"),
+        if not runs:
+            value.update(status="not-run", data_status="no-runs")
+            return value
+
+        run = runs[0]
+        run_id = int(run["id"])
+        value.update(
+            status=run.get("status", "unknown"),
+            conclusion=run.get("conclusion"),
+            run_id=run_id,
+            commit_sha=run.get("head_sha"),
+            run_started_at=run.get("run_started_at"),
+            run_updated_at=run.get("updated_at"),
+            url=f"https://github.com/{QUALITY_REPO}/actions/runs/{run_id}",
+            data_status="run-only",
+        )
+        try:
+            jobs_payload = _fetch_github_json(
+                f"{QUALITY_ROOT}/actions/runs/{run_id}/jobs?per_page=100"
             )
-        else:
-            value["status"] = "not-run"
-    except (URLError, OSError, ValueError, KeyError):
-        pass
+            value["jobs"] = [
+                {
+                    "name": job.get("name", ""),
+                    "status": job.get("status", "unknown"),
+                    "conclusion": job.get("conclusion"),
+                    "url": job.get("html_url"),
+                    "steps": [
+                        {
+                            "name": step.get("name", ""),
+                            "status": step.get("status", "unknown"),
+                            "conclusion": step.get("conclusion"),
+                        }
+                        for step in job.get("steps", [])
+                    ],
+                }
+                for job in jobs_payload.get("jobs", [])
+            ]
+            value["data_status"] = "live"
+            for job in value["jobs"]:
+                for step in job["steps"]:
+                    coverage_match = re.search(
+                        r"Coverage report:\s*([0-9.]+)% line,\s*([0-9.]+)% branch",
+                        step["name"],
+                    )
+                    if coverage_match:
+                        value["coverage_line"] = float(coverage_match.group(1))
+                        value["coverage_branch"] = float(coverage_match.group(2))
+                        value["coverage"] = value["coverage_line"]
+                        value["coverage_status"] = "reported"
+                    bandit_match = re.search(
+                        r"Bandit findings:\s*H(\d+)\s+M(\d+)\s+L(\d+)",
+                        step["name"],
+                    )
+                    if bandit_match:
+                        value["bandit"] = {
+                            "high": int(bandit_match.group(1)),
+                            "medium": int(bandit_match.group(2)),
+                            "low": int(bandit_match.group(3)),
+                            "status": "reported",
+                        }
+        except (URLError, OSError, ValueError, KeyError, TypeError):
+            value["data_status"] = "run-only"
+    except (URLError, OSError, ValueError, KeyError, TypeError):
+        value["data_status"] = "unavailable"
     return value
 
 

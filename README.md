@@ -140,3 +140,19 @@ The updated QA experience includes:
 The UI uses professional copy such as *Engine Online*, *Capacity Planning*, *Evaluation Result*, and *API Reference*. Backend implementation names remain in source code and technical documentation only.
 
 Usability checks follow the Nielsen Norman Group's principles: show status and feedback, match users' real-world concepts, give them control, use consistent visual hierarchy, prevent errors, reduce memorization, and present only essential information first. This is a qualitative, code-based pass and **not a substitute for observational usability testing on browsers and viewports**.
+
+
+## Verified engineering quality dashboard and Bandit
+
+The **Engineering Quality** page now queries the latest `feat/serveragent-platform` GitHub Actions run, including individual step outcomes rather than static "CI CHECK" labels. `/api/v1/quality` returns workflow metadata, job/step statuses, measured line and branch coverage, and Bandit severity counts. If the hosted backend cannot reach GitHub, the browser attempts the public GitHub Actions API directly; when neither source is available, the UI shows "Not reported" instead of fabricated values.
+
+`.github/workflows/quality.yml` runs these six quality checks:
+
+- Pytest, including branch-aware coverage
+- Black formatting
+- Ruff lint
+- TypeScript typecheck
+- Next.js production build
+- **Bandit** Python SAST: scan `backend/app` and `backend/main.py`, publish JSON report as an Actions artifact, and fail on findings of medium severity **and** medium confidence or higher (lower severity findings still appear in counts)
+
+Coverage is read from the real CI-generated `coverage.xml` and exposed as a labeled GitHub Actions step. Bandit JSON counts are likewise emitted as a labeled step, allowing status retrieval through the public GitHub Jobs API without a private token or a database. Counts are tied to the displayed commit SHA and CI run; neither a completed pipeline nor a zero issue count implies a security guarantee. The dashboard provides direct links to the run and jobs for verification.
