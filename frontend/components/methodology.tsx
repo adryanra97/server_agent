@@ -15,6 +15,6 @@ export default function Methodology(){
       <div><span>03</span><div><strong>SimPy is reproducible for the same input.</strong><p>The engine fixes its random seed and simulation settings. It is not a calibrated measurement of a specific Production server.</p></div></div>
       <div><span>04</span><div><strong>Both engines are single-server capacity models.</strong><p>They do not currently model load balancers, multiple server nodes, real-world timeouts, database latency or observed service failures.</p></div></div>
     </div></section>
-    <div className="insight-bar"><span className="insight-symbol"><Braces size={18}/></span><div><strong>Explore the exact JSON contract.</strong><span>The original FastAPI app provides Swagger and OpenAPI documentation for every supported endpoint, including the input constraints defined with Pydantic.</span><Link href="/developer" className="inline-link">Open API Explorer <ArrowUpRight size={15}/></Link></div></div>
+    <div className="insight-bar"><span className="insight-symbol"><Braces size={18}/></span><div><strong>Explore the exact JSON contract.</strong><span>The original evaluation service app provides Swagger and OpenAPI documentation for every supported endpoint, including the input constraints defined with Pydantic.</span><Link href="/developer" className="inline-link">Open API Explorer <ArrowUpRight size={15}/></Link></div></div>
   </div>;
 }

@@ -32,7 +32,7 @@ export default function DemoLogin(){
     </header>
     <main className="demo-login-main">
       <div className="demo-login-story">
-        <div className="demo-login-overline"><span/> SERVERAGENT / INTERACTIVE ROLE DEMO</div>
+        <div className="demo-login-overline"><span/> SERVERAGENT / ROLE-BASED WORKSPACE</div>
         <h1>One platform.<br/><em>Different decisions.</em></h1>
         <p>Experience a capacity assessment as five people across one release workflow. Select a user to see how their responsibilities, permissions and decisions differ.</p>
         <div className="demo-login-path">
@@ -41,13 +41,13 @@ export default function DemoLogin(){
           <div><span>03</span><div><strong>Manager signs off</strong><small>Accept or reject the recommendation</small></div></div>
           <div><span>04</span><div><strong>Support & Engineer investigate</strong><small>Escalate incidents and compare mitigation options</small></div></div>
         </div>
-        <div className="demo-login-bottom"><ShieldCheck size={18}/><span>Demonstration environment · Synthetic identities and browser-local workflow data · Original SimPy calculation engine</span></div>
+        <div className="demo-login-bottom"><ShieldCheck size={18}/><span>Evaluation workspace · Scenario-based decisions, no production access</span></div>
       </div>
       <div className="demo-login-side">
         <section className="demo-login-panel" aria-labelledby="demo-login-title">
-          <div className="demo-login-panel-head"><span>WORKSPACE ACCESS</span><span className="demo-login-environment"><i/> DEMO MODE</span></div>
+          <div className="demo-login-panel-head"><span>WORKSPACE ACCESS</span><span className="demo-login-environment"><i/> GUIDED ACCESS</span></div>
           <h2 id="demo-login-title">Choose your perspective.</h2>
-          <p>No account creation needed. These are five fictional demo users mapped to roles in the AKPSI functional model.</p>
+          <p>Choose one of five guided roles. Each has its own workspace, responsibilities and decisions.</p>
           <form onSubmit={submit}>
             <label className="demo-login-label" htmlFor="demo-role">DEMO USER</label>
             <div className="demo-login-picker">
@@ -61,17 +61,17 @@ export default function DemoLogin(){
               <div className="demo-persona-avatar">{persona.initial}</div>
               <div><span>YOUR DEMO ROLE</span><strong>{persona.role}</strong><p>{persona.mission}</p></div>
             </div>
-            <label className="demo-login-label" htmlFor="demo-password">SHARED DEMO PASSWORD</label>
+            <label className="demo-login-label" htmlFor="demo-password">ACCESS PASSWORD</label>
             <div className="demo-login-password"><LockKeyhole size={18}/>
               <input id="demo-password" autoComplete="off" type={showPassword?'text':'password'} value={password}
                 onChange={event=>{setPassword(event.target.value);setError('');}} placeholder="Enter shared demo password" required/>
               <button type="button" aria-label={showPassword?'Hide password':'Show password'} onClick={()=>setShowPassword(x=>!x)}>{showPassword?<EyeOff size={18}/>:<Eye size={18}/>}</button>
             </div>
-            <div className="demo-login-hint"><span>Password for every demo user: <strong>{DEMO_PASSWORD}</strong></span><button type="button" onClick={()=>setPassword(DEMO_PASSWORD)}>Use demo password</button></div>
+            <div className="demo-login-hint"><span>Shared presentation access: <strong>{DEMO_PASSWORD}</strong></span><button type="button" onClick={()=>setPassword(DEMO_PASSWORD)}>Use demo password</button></div>
             {error&&<p className="demo-login-error" role="alert">{error}</p>}
-            <button className="demo-login-submit" type="submit">Enter as {persona.shortRole}<ArrowRight size={19}/></button>
+            <button className="demo-login-submit" type="submit">Continue as {persona.shortRole}<ArrowRight size={19}/></button>
           </form>
-          <div className="demo-login-foot"><Waves size={18}/><span>The original FastAPI /verdict and SimPy model remain unchanged. Role-based permissions here are for showcasing the proposed workflow, not production authentication.</span></div>
+          <div className="demo-login-foot"><Waves size={18}/><span>Role views reflect the defined release workflow. Simulation calculations use the same validated evaluation engine.</span></div>
         </section>
         <div className="demo-login-help"><CheckCircle2 size={17}/><span>Switch users at any time. Records from this browser remain available when you change roles.</span></div>
       </div>

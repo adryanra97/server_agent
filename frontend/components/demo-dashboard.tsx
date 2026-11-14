@@ -44,7 +44,7 @@ export default function DemoRoleDashboard({role}:{role:DemoRole}){
     update();
     window.addEventListener('serveragent-demo-records',update);
     window.addEventListener('serveragent-history',update);
-    fetch('/health').then(r=>r.json()).then(d=>setEngineStatus(d.status==='ok'?'Available':'Unavailable')).catch(()=>setEngineStatus('Unavailable'));
+    fetch('/health').then(r=>r.json()).then(d=>setEngineStatus(d.status==='ok'?'Online':'Offline')).catch(()=>setEngineStatus('Offline'));
     return()=>{
       window.removeEventListener('serveragent-demo-records',update);
       window.removeEventListener('serveragent-history',update);
@@ -67,7 +67,7 @@ export default function DemoRoleDashboard({role}:{role:DemoRole}){
     </section>
     <div className="role-stat-grid">
       <div><span>YOUR WORK QUEUE</span><strong>{queue}</strong><small>{queueLabel}</small></div>
-      <div><span>SIMPY ENGINE</span><strong className="role-stat-word">{engineStatus}</strong><small>Original copdash FastAPI /health</small></div>
+      <div><span>EVALUATION ENGINE</span><strong className="role-stat-word">{engineStatus}</strong><small>Service health check</small></div>
       <div><span>RELEASE RECORDS</span><strong>{records.alignments.length}</strong><small>Saved in this browser</small></div>
       <div><span>INCIDENT RECORDS</span><strong>{records.incidents.length}</strong><small>Saved in this browser</small></div>
     </div>

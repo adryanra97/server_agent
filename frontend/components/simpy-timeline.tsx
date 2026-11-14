@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Activity, ArrowDownToLine, ChevronLeft, ChevronRight, Cpu, Database,
-  Info, Network, Pause, Play, RotateCcw, Waves,
+  Info, Network, Pause, Play, RotateCcw, Waves, Server, HardDrive, Router, CircleCheck, Gauge,
 } from 'lucide-react';
 
 export type TimelinePoint = {
@@ -21,25 +21,27 @@ export type TimelinePoint = {
   cpu_queue_avg: number;
 };
 
-type Mode = 'pressure' | 'traffic' | 'queue';
+type Mode = 'compute' | 'network' | 'traffic' | 'queue';
 type ValueKey = keyof Pick<TimelinePoint,
   'cpu_percent' | 'ram_percent' | 'network_percent' | 'connection_percent' |
   'arrivals' | 'completed' | 'queue_avg' | 'in_flight'>;
-type Series = {key: ValueKey;label: string;color: string};
-const modes: Record<Mode,{label:string;unit:string;series:Series[]}> = {
-  pressure:{label:'Resource pressure',unit:'%',series:[
-    {key:'cpu_percent',label:'CPU',color:'#205d9b'},
-    {key:'ram_percent',label:'RAM',color:'#1eac98'},
-    {key:'network_percent',label:'Bandwidth',color:'#d89a3b'},
-    {key:'connection_percent',label:'Connections',color:'#8b8cb0'},
+type Series = {key:ValueKey;label:string;color:string};
+const modes:Record<Mode,{label:string;unit:string;series:Series[]}> = {
+  compute:{label:'CPU & memory',unit:'%',series:[
+    {key:'cpu_percent',label:'CPU occupancy',color:'#2563d9'},
+    {key:'ram_percent',label:'Memory occupancy',color:'#11a69d'},
   ]},
-  traffic:{label:'Request activity',unit:'requests / bucket',series:[
-    {key:'arrivals',label:'Arrivals',color:'#2466af'},
-    {key:'completed',label:'Completed',color:'#12a08f'},
+  network:{label:'Network & connections',unit:'%',series:[
+    {key:'network_percent',label:'Delivered bandwidth',color:'#2563d9'},
+    {key:'connection_percent',label:'Connection occupancy',color:'#d9893b'},
   ]},
-  queue:{label:'Backlog & waiting',unit:'requests',series:[
-    {key:'queue_avg',label:'Waiting (avg)',color:'#d58b3c'},
-    {key:'in_flight',label:'In flight (end)',color:'#2876ba'},
+  traffic:{label:'Requests',unit:'requests / second',series:[
+    {key:'arrivals',label:'Arrived',color:'#2563d9'},
+    {key:'completed',label:'Completed',color:'#10a48a'},
+  ]},
+  queue:{label:'Waiting & in flight',unit:'requests',series:[
+    {key:'queue_avg',label:'Queued (time average)',color:'#d38b35'},
+    {key:'in_flight',label:'Not completed (end)',color:'#2563d9'},
   ]},
 };
 
@@ -75,7 +77,7 @@ export default function SimulationTimeline({
   trace:TimelinePoint[];running:boolean;truncated:boolean;limit:number;
 }){
   const [index,setIndex]=useState(0);
-  const [mode,setMode]=useState<Mode>('pressure');
+  const [mode,setMode]=useState<Mode>('compute');
   const [playing,setPlaying]=useState(false);
   const [speed,setSpeed]=useState(1);
   const hasTrace=trace.length>0;
@@ -105,7 +107,7 @@ export default function SimulationTimeline({
   const maxValue=useMemo(()=>{
     if(!hasTrace)return 100;
     const maximum=Math.max(0,...trace.flatMap(p=>selected.series.map(s=>Number(p[s.key])||0)));
-    return mode==='pressure'?Math.max(100,Math.ceil(maximum/20)*20):
+    return (mode==='compute'||mode==='network')?Math.max(100,Math.ceil(maximum/20)*20):
       Math.max(1,Math.ceil(maximum/5)*5);
   },[trace,hasTrace,selected,mode]);
 
@@ -123,7 +125,11 @@ export default function SimulationTimeline({
     const first80=trace.find(p=>p.cpu_percent>=80);
     const highest=trace.reduce((a,b)=>a.queue_avg>=b.queue_avg?a:b);
     const peak=trace.reduce((a,b)=>a.cpu_percent>=b.cpu_percent?a:b);
-    return {first80,highest,peak};
+    const totalArrivals=trace.reduce((n,p)=>n+p.arrivals,0);
+    const totalCompleted=trace.reduce((n,p)=>n+p.completed,0);
+    const delivered=trace.reduce((n,p)=>n+p.completed,0);
+    const firstBacklog=trace.find(p=>p.in_flight>0);
+    return {first80,highest,peak,totalArrivals,totalCompleted,delivered,firstBacklog};
   },[trace,hasTrace]);
 
   function chooseSecond(value:number){
@@ -147,45 +153,56 @@ export default function SimulationTimeline({
       <div className="timeline-source"><span className="timeline-source-dot"/> {running?'COMPUTING MODEL':hasTrace?'RECORDED ENGINE DATA':'AWAITING SIMULATION'}</div>
     </header>
 
-    <div className="flow-visual" aria-label="Simulation resource path">
-      <div className="flow-topline"><span>DISCRETE EVENT MODEL</span><span>{hasTrace?'SECOND '+String(point?.second??0).padStart(2,'0'):'MODEL SCHEMATIC'}</span></div>
-      <div className={'flow-rail '+((running||playing)?'flow-rail-playing':'')}>
-        <div className="flow-station">
-          <span className="flow-icon"><Activity size={25}/></span>
-          <strong>Arrivals</strong>
-          <small>{hasTrace?String(point?.arrivals??0)+' requests':'Poisson stream'}</small>
+
+    <div className={'sa-visual-stage '+((running||playing)?'sa-stage-animated':'')} aria-label="Illustrated request journey with measured resource occupancy">
+      <div className="sa-stage-top">
+        <div><span className="sa-stage-kicker">NETWORK TO SERVER</span><h4>Follow the workload, not just the numbers.</h4></div>
+        <span className="sa-stage-time">{hasTrace?'T + '+String(point?.second??0).padStart(2,'0')+' SEC':'READY TO RECORD'}</span>
+      </div>
+      <div className="sa-stage-hardware">
+        <div className="sa-stage-arrivals">
+          <span className="sa-stage-icon"><Activity size={28}/></span>
+          <span>INCOMING TRAFFIC</span>
+          <strong>{hasTrace?round(point?.arrivals??0):'—'}</strong>
+          <small>requests entering</small>
+          <div className="sa-stage-arrival-dots"><i/><i/><i/><i/><i/></div>
         </div>
-        <div className="flow-connector"><span className="flow-packet"/></div>
-        <div className="flow-station">
-          <span className="flow-icon"><Network size={25}/></span>
-          <strong>Connection</strong>
-          <small>{hasTrace?round(point?.connection_percent??0)+'%':'Resource slot'}</small>
+        <div className="sa-stage-network">
+          <div className="sa-stage-wire-label"><Router size={18}/><span>NETWORK LINK</span></div>
+          <div className="sa-stage-wire"><span className="sa-stage-wire-track"/><b className="sa-stage-packet"/><b className="sa-stage-packet"/><b className="sa-stage-packet"/></div>
+          <div className="sa-stage-traffic-meter">
+            <div><span>Delivered bandwidth</span><strong>{hasTrace?round(point?.network_percent??0)+'%':'—'}</strong></div>
+            <div className="sa-stage-mini-rail"><span style={{width:Math.min(100,Math.max(0,point?.network_percent??0))+'%'}}/></div>
+            <small>Connection occupancy {hasTrace?round(point?.connection_percent??0)+'%':'—'}</small>
+          </div>
         </div>
-        <div className="flow-connector"><span className="flow-packet"/></div>
-        <div className="flow-station">
-          <span className="flow-icon"><Database size={25}/></span>
-          <strong>Memory</strong>
-          <small>{hasTrace?round(point?.ram_percent??0)+'%':'Container'}</small>
-        </div>
-        <div className="flow-connector"><span className="flow-packet"/></div>
-        <div className={'flow-station '+((point?.cpu_percent??0)>=80?'flow-hot':'')}>
-          <span className="flow-icon"><Cpu size={25}/></span>
-          <strong>CPU</strong>
-          <small>{hasTrace?round(point?.cpu_percent??0)+'%':'Core processing'}</small>
-        </div>
-        <div className="flow-connector"><span className="flow-packet"/></div>
-        <div className="flow-station">
-          <span className="flow-icon"><Waves size={25}/></span>
-          <strong>Response</strong>
-          <small>{hasTrace?String(point?.completed??0)+' completed':'Payload exit'}</small>
+        <div className="sa-stage-server">
+          <div className="sa-stage-server-head"><Server size={22}/><span>APPLICATION SERVER</span><span className="sa-stage-server-led"/></div>
+          <div className="sa-stage-server-body">
+            <div className="sa-stage-component">
+              <div className="sa-stage-component-name"><Cpu size={20}/><div><strong>CPU</strong><small>Processing capacity</small></div><b>{hasTrace?round(point?.cpu_percent??0)+'%':'—'}</b></div>
+              <div className="sa-stage-chip-graphic">
+                <div className="sa-stage-chip"><span/><span/><span/><span/></div>
+                <div className="sa-stage-hardware-meter"><span style={{width:Math.min(100,Math.max(0,point?.cpu_percent??0))+'%'}}/></div>
+              </div>
+            </div>
+            <div className="sa-stage-component">
+              <div className="sa-stage-component-name"><HardDrive size={20}/><div><strong>Memory</strong><small>Allocated to requests</small></div><b>{hasTrace?round(point?.ram_percent??0)+'%':'—'}</b></div>
+              <div className="sa-stage-memory-graphic">
+                <div className="sa-stage-memory-banks">{Array.from({length:12},(_,i)=><i key={i} className={point&&point.ram_percent>(i/12*100)?'is-filled':''}/>)}</div>
+                <div className="sa-stage-hardware-meter sa-stage-memory-meter"><span style={{width:Math.min(100,Math.max(0,point?.ram_percent??0))+'%'}}/></div>
+              </div>
+            </div>
+          </div>
+          <div className="sa-stage-server-foot"><span>SimPy model: CPU · RAM · connections</span><small>GPU not modeled</small></div>
         </div>
       </div>
-      <div className="flow-activity">
-        <div><span>QUEUED (SECOND AVG)</span><strong>{hasTrace?round(point?.queue_avg??0):'—'}</strong></div>
-        <div><span>IN FLIGHT (END)</span><strong>{hasTrace?round(point?.in_flight??0):'—'}</strong></div>
-        <div><span>DELIVERED PAYLOAD</span><strong>{hasTrace?round(point?.network_mbps??0)+' Mbps':'—'}</strong></div>
-        <p>The flowing dots visualize the pipeline concept. Metrics are the selected second's actual aggregate, not individual request playback.</p>
+      <div className="sa-stage-outputs">
+        <div><CircleCheck size={19}/><span>COMPLETED</span><strong>{hasTrace?round(point?.completed??0):'—'}</strong><small>this second</small></div>
+        <div><Waves size={19}/><span>IN FLIGHT</span><strong>{hasTrace?round(point?.in_flight??0):'—'}</strong><small>end of second</small></div>
+        <div><Gauge size={19}/><span>WAITING</span><strong>{hasTrace?round(point?.queue_avg??0):'—'}</strong><small>second average</small></div>
       </div>
+      <p className="sa-stage-explain">The hardware illustration shows aggregate occupancy from the selected simulation second. Moving particles illustrate the request path; they are not tracked individual requests.</p>
     </div>
 
     <div className="timeline-controls">
@@ -205,12 +222,12 @@ export default function SimulationTimeline({
     <input type="range" className="timeline-scrubber" min={0} max={last} step={1} disabled={!hasTrace} value={Math.min(index,last)} onChange={e=>chooseSecond(Number(e.target.value))} aria-label="Simulation second" />
     <div className="timeline-axis-text"><span>0 seconds</span><span>{hasTrace?last+' seconds':'Awaiting simulation'}</span></div>
 
-    <div className="timeline-chart-header"><div><span className="simpy-section-number">03 / TIME-SERIES ANALYTICS</span><h3>See the inflection point.</h3></div>
+    <div className="timeline-chart-header"><div><span className="simpy-section-number">03 / TIME-SERIES ANALYTICS</span><h3>What changes each second?</h3><p className="sa-chart-subtitle">One question at a time. Select a metric group, then drag the timeline or click the chart.</p></div>
       {hasTrace&&<button type="button" className="timeline-export" onClick={()=>exportTrace(trace)}><ArrowDownToLine size={16}/> Export per-second CSV</button>}
     </div>
 
     <div className="timeline-tabs" role="group" aria-label="Chart metrics">
-      {(['pressure','traffic','queue'] as const).map(tab=><button type="button" key={tab} className={mode===tab?'active':''} onClick={()=>setMode(tab)} aria-pressed={mode===tab}>{modes[tab].label}</button>)}
+      {(['compute','network','traffic','queue'] as const).map(tab=><button type="button" key={tab} className={mode===tab?'active':''} onClick={()=>setMode(tab)} aria-pressed={mode===tab}>{modes[tab].label}</button>)}
     </div>
 
     <div className="timeline-chart-wrap">
@@ -219,6 +236,10 @@ export default function SimulationTimeline({
         {[0,.25,.5,.75,1].map(v=>{
           const y=PAD_T+plotH*(1-v);
           return <g key={v}><line x1={PAD_L} y1={y} x2={W-PAD_R} y2={y} stroke="#e1e8ed" strokeDasharray={v===0?'0':'4 5'}/><text x={PAD_L-11} y={y+4} fontSize={12} fill="#667f91" textAnchor="end">{round(v*maxValue)}</text></g>;
+        })}
+        {(mode==='compute'||mode==='network')&&[80,100].map(threshold=>{
+          const y=PAD_T+plotH*(1-threshold/maxValue);
+          return <g key={'threshold-'+threshold}><line x1={PAD_L} y1={y} x2={W-PAD_R} y2={y} stroke={threshold===80?'#cd9851':'#dc6b78'} strokeWidth={1} strokeDasharray="5 6"/><text x={W-PAD_R-3} y={y-5} fill={threshold===80?'#aa7332':'#b34958'} textAnchor="end" fontSize={11}>{threshold===80?'Risk 80%':'Capacity 100%'}</text></g>;
         })}
         {chartLines.map(line=><polyline key={line.key} points={line.points} fill="none" stroke={line.color} strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>)}
         {[0,.25,.5,.75,1].map(v=><text key={v} x={PAD_L+plotW*v} y={H-13} fontSize={12} fill="#718a9c" textAnchor="middle">{Math.round(v*last)+'s'}</text>)}
@@ -232,12 +253,14 @@ export default function SimulationTimeline({
     </div>
 
     <div className="timeline-legend">
-      {selected.series.map(series=><div key={series.key}><i style={{background:series.color}}/><span>{series.label}</span><strong>{hasTrace?round(Number(point?.[series.key]??0))+(mode==='pressure'?'%':''):'—'}</strong></div>)}
+      {selected.series.map(series=><div key={series.key}><i style={{background:series.color}}/><span>{series.label}</span><strong>{hasTrace?round(Number(point?.[series.key]??0))+(mode==='compute'||mode==='network'?'%':''):'—'}</strong></div>)}
     </div>
-    {hasTrace&&<div className="timeline-insights">
-      <div><span>HIGHEST SAMPLED CPU PRESSURE</span><strong>{round(insight?.peak.cpu_percent??0)}%</strong><small>Second {insight?.peak.second??0}</small></div>
-      <div><span>FIRST SAMPLED CPU ≥ 80%</span><strong>{insight?.first80?'T + '+insight.first80.second+'s':'Not reached'}</strong><small>Based on sampled utilization</small></div>
-      <div><span>HIGHEST QUEUE AVERAGE</span><strong>{round(insight?.highest.queue_avg??0)}</strong><small>Second {insight?.highest.second??0}</small></div>
+    {hasTrace&&insight&&<div className="sa-chart-story">
+      <div className="sa-chart-story-main"><span className="simpy-section-number">WHAT THE MODEL RECORDED</span>
+        <h4>{insight.first80?'CPU reached the 80% risk threshold at T + '+insight.first80.second+'s.':'CPU stayed below the 80% sampled risk threshold.'}</h4>
+        <p>The highest sampled CPU occupancy was <strong>{round(insight.peak.cpu_percent)}%</strong> at second <strong>{insight.peak.second}</strong>. {insight.highest.queue_avg>0?'The average waiting queue peaked at '+round(insight.highest.queue_avg)+' requests at second '+insight.highest.second+'.':'No waiting queue developed in the recorded intervals.'} These are simulated time samples, not live server measurements.</p>
+      </div>
+      <div className="sa-chart-story-stat"><span>RECORDED REQUESTS</span><strong>{insight.totalCompleted.toLocaleString()} <small>/ {insight.totalArrivals.toLocaleString()}</small></strong><p>completed / arrived in displayed range</p></div>
     </div>}
     <p className="timeline-disclaimer"><Info size={15}/>{truncated?'The simulated run exceeded '+limit+' seconds, so the chart shows only the first '+limit+' one-second buckets. ':''}Elapsed time includes draining queued requests. Plotted CPU/RAM and connection pressure are time-integrated sampled occupancy; bandwidth is completed payload per bucket. The original engine verdict can use offered demand for overloaded resources.</p>
   </section>;

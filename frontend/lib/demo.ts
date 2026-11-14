@@ -37,7 +37,7 @@ export const allDemoRoutes = [
   {href:'/quality',label:'Engineering Quality'},
 ] as const;
 const allowed: Record<DemoRole, string[]> = {
-  qa:['/dashboard','/simulation','/compare','/alignment','/reports','/methodology'],
+  qa:['/dashboard','/simulation','/compare','/alignment','/reports','/methodology','/developer','/quality'],
   lead:['/dashboard','/alignment','/incident','/reports','/methodology','/quality'],
   engineer:['/dashboard','/incident','/simulation','/compare','/reports','/developer','/methodology','/quality'],
   manager:['/dashboard','/signoff','/reports','/methodology'],

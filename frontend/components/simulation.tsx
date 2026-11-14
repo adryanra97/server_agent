@@ -73,7 +73,7 @@ export default function Simulation(){
   });
   const [report,setReport]=useState<SimPyInspection|null>(null);
   const [rules,setRules]=useState<VerdictResult|null>(null);
-  const [compare,setCompare]=useState(true);
+  const [compare,setCompare]=useState(false);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
   const [comparisonError,setComparisonError]=useState('');
@@ -154,17 +154,9 @@ export default function Simulation(){
   return <div className="simpy-page">
     <section className="simpy-intro" aria-labelledby="simpy-intro-title">
       <div className="simpy-intro-copy"><span className="simpy-overline"><span/> MODEL / 02 — DISCRETE-EVENT</span>
-        <h2 id="simpy-intro-title">See what a server does <em>under pressure.</em></h2>
-        <p>Requests arrive. Resources are acquired. Work gets queued. The original copdash SimPy engine calculates how the system responds—without generating production traffic.</p>
-        <div className="simpy-intro-facts"><span>SimPy 4</span><span>Fixed seed · 0</span><span>Up to 20,000 arrivals</span></div>
-      </div>
-      <div className="simpy-intro-graphic" aria-hidden="true">
-        <div className="simpy-graphic-head"><span>SIMULATION SEQUENCE</span><span>NOT LIVE TELEMETRY</span></div>
-        <div className="simpy-graphic-nodes">
-          <span className="simpy-graphic-node"><Network size={20}/><small>NETWORK</small></span><span className="simpy-graphic-link"><i/></span>
-          <span className="simpy-graphic-node"><Database size={20}/><small>RAM</small></span><span className="simpy-graphic-link"><i/></span>
-          <span className="simpy-graphic-node"><Cpu size={20}/><small>CPU</small></span>
-        </div><div className="simpy-graphic-bottom"><span>POISSON ARRIVALS</span><span>RESOURCE QUEUES</span><span>VERDICT</span></div>
+        <h2 id="simpy-intro-title">Understand how your server responds <em>to demand.</em></h2>
+        <p>Configure your server and request traffic. Then watch network activity, CPU processing, memory occupancy, and response delivery — backed by recorded simulation events.</p>
+        <div className="simpy-intro-facts"><span>DISCRETE EVENT MODEL</span><span>REPRODUCIBLE SCENARIOS</span><span>NO PRODUCTION TRAFFIC</span></div>
       </div>
     </section>
 
@@ -174,23 +166,23 @@ export default function Simulation(){
       <a href="#simpy-results">03 / Verdict</a>
       <a href="#simpy-deepdive">04 / Model evidence</a>
     </nav>
-    <div className="simpy-process-caption"><span>01 <b>/ Define workload</b></span><span>02 <b>/ Replay events</b></span><span>03 <b>/ Inspect real measurements</b></span></div>
 
-    <div className="simpy-columns">
+
+    <div className="simpy-columns qa-simpy-main">
       <section id="simpy-scenario" className="simpy-config" aria-label="Simulation configuration">
-        <div className="simpy-config-head"><div><span className="simpy-section-number">01 / INPUT</span><h3>Build your scenario.</h3><p>Every field maps directly to the original copdash request schema.</p></div><Server size={23}/></div>
+        <div className="simpy-config-head"><div><span className="simpy-section-number">01 / INPUT</span><h3>Build your scenario.</h3><p>Adjust capacity and traffic before you run. All active inputs affect the evaluation.</p></div><Server size={23}/></div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>SERVER CAPACITY</span><span>WHAT IS AVAILABLE</span></div>
-          <div className="simpy-fields">
+          <div className="simpy-fields simpy-fields-capacity">
             <NumberInput label="CPU cores" unit="cores" min={0.01} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
-            <NumberInput label="Clock speed" unit="GHz" min={0.01} value={body.spec.cpu.clock_ghz} onChange={v=>updateSpec('cpu','clock_ghz',v)} note="Reserved — not used in calculations"/>
             <NumberInput label="Total RAM" unit="MB" min={0.01} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
             <NumberInput label="Network bandwidth" unit="Mbps" min={0.01} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
             <NumberInput label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
           </div>
+          <div className="simpy-reserved-info"><Info size={15}/> Clock speed ({body.spec.cpu.clock_ghz} GHz) is a fixed model attribute; this model does not use it to calculate capacity.</div>
         </div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>REQUEST WORKLOAD</span><span>WHAT IS DEMANDED</span></div>
           <div className="simpy-preset-row"><span>Request-rate examples</span>{[{rps:100,label:'Normal'},{rps:360,label:'Peak'},{rps:900,label:'Stress'}].map(p=><button type="button" key={p.rps} className={body.load.rps===p.rps?'active':''} onClick={()=>preset(p.rps)}>{p.label} <small>{p.rps} RPS</small></button>)}</div>
-          <div className="simpy-fields">
+          <div className="simpy-fields simpy-fields-workload">
             <NumberInput label="Arrival rate" unit="RPS" value={body.load.rps} onChange={v=>updateLoad('rps',v)}/>
             <NumberInput label="CPU time / request" unit="ms" value={body.load.avg_cpu_ms_per_req} onChange={v=>updateLoad('avg_cpu_ms_per_req',v)}/>
             <NumberInput label="RAM / request" unit="MB" value={body.load.avg_mem_mb_per_req} onChange={v=>updateLoad('avg_mem_mb_per_req',v)}/>
@@ -200,13 +192,13 @@ export default function Simulation(){
           <p className="simpy-preset-note">Presets adjust arrival rate only. Other workload assumptions stay as you entered them.</p>
         </div>
         <div className="simpy-run-options">
-          <label className="simpy-compare-toggle"><input type="checkbox" checked={compare} onChange={e=>{setCompare(e.target.checked);setRules(null)}}/><span className="simpy-compare-box"/><span><strong>Cross-check against Rules Engine</strong><small>Compare outputs from the original deterministic model.</small></span></label>
+          <label className="simpy-compare-toggle"><input type="checkbox" checked={compare} onChange={e=>{setCompare(e.target.checked);setRules(null)}}/><span className="simpy-compare-box"/><span><strong>Cross-check against Rules Engine</strong><small>Optional secondary model evaluation for engineering review.</small></span></label>
         </div>
         <button className="simpy-run-button" disabled={busy} onClick={run}>
-          {busy?<><LoaderCircle className="spin" size={18}/>Executing SimPy…</>:<><Play size={17} fill="currentColor"/>Run discrete-event simulation</>}
+          {busy?<><LoaderCircle className="spin" size={18}/>Executing SimPy…</>:<><Play size={17} fill="currentColor"/>Run simulation & view replay</>}
           <ArrowRight size={18}/>
         </button>
-        <div className="simpy-reset-row"><span><ShieldCheck size={15}/> Computation only · No production traffic</span><button onClick={reset}><RotateCcw size={14}/> Reset</button></div>
+        <div className="simpy-reset-row"><span><ShieldCheck size={15}/> Model-based evaluation · No production traffic</span><button onClick={reset}><RotateCcw size={14}/> Reset</button></div>
         {error&&<div role="alert" className="simpy-error"><CircleAlert size={18}/><span>{error}</span></div>}
       </section>
 
@@ -218,7 +210,7 @@ export default function Simulation(){
           limit={details?.timeline_limit_seconds ?? 240}
         />
         <section id="simpy-results" className="simpy-result-card" aria-labelledby="result-title" aria-live="polite">
-          <div className="simpy-card-header"><div><span className="simpy-section-number">04 / CAPACITY VERDICT</span><h3 id="result-title">What did the model find?</h3></div><span className="simpy-card-aside">{report?'ACTUAL ENGINE RESPONSE':'READY TO SIMULATE'}</span></div>
+          <div className="simpy-card-header"><div><span className="simpy-section-number">04 / EVALUATION RESULT</span><h3 id="result-title">Capacity outcome.</h3></div><span className="simpy-card-aside">{report?'ENGINE RESULTS AVAILABLE':'AWAITING EVALUATION'}</span></div>
           {verdict?<div className="simpy-result-content">
             <div className="simpy-verdict-overview"><div><Outcome verdict={verdict.verdict}/><h4>{verdict.verdict==='will_survive'?'Capacity remains within the defined envelope.':verdict.verdict==='at_risk'?'The server is approaching its operating limit.':'The modeled demand exceeds available capacity.'}</h4></div><div className="simpy-bottleneck"><span>LIMITING RESOURCE</span><strong>{affected?.toUpperCase()??'NONE'}</strong></div></div>
             <div className="simpy-evidence-stats">
@@ -228,25 +220,25 @@ export default function Simulation(){
               <div><span>EXECUTION</span><strong>{format(report.execution_ms)}<small> ms</small></strong><small>server compute time</small></div>
             </div>
             <div className="simpy-utilization"><div className="simpy-subheading"><span>REPORTED RESOURCE PRESSURE</span><span>SIMPY VERDICT VALUES</span></div><ResourceBars result={verdict}/></div>
-            <div className="simpy-explanations"><span className="simpy-subheading"><span>WHY THIS VERDICT</span></span>{verdict.reasons.map((reason,i)=><div key={i}><span>{String(i+1).padStart(2,'0')}</span><p>{reason}</p></div>)}</div>
+            <details className="simpy-explanations qa-simpy-reasons"><summary><Info size={16}/> View calculation rationale and engine notes <span>{verdict.reasons.length} findings</span></summary><div className="qa-simpy-reason-list">{verdict.reasons.map((reason,i)=><div key={i}><span>{String(i+1).padStart(2,'0')}</span><p>{reason}</p></div>)}</div></details>
           </div>:<div className="simpy-awaiting">
             <div className="simpy-await-icon"><Waves size={34}/></div>
-            <strong>A scenario is ready to be tested.</strong>
-            <p>Run the SimPy model to reveal actual request counts, utilization, bottlenecks, and the reasoning behind its verdict.</p>
-            <span>RESULTS ARE NEVER FABRICATED</span>
+            <strong>Your evaluation will appear here.</strong>
+            <p>Configure capacity and workload, run the model, then explore the visual replay and evidence.</p>
+            <span>BASED ON COMPUTED SIMULATION OUTPUT</span>
           </div>}
         </section>
       </div>
     </div>
 
-    {report&&details&&<div className="simpy-deepdive" id="simpy-deepdive">
-      <div className="simpy-deepdive-head"><span className="simpy-section-number">05 / MODEL TRANSPARENCY</span><h3>What was measured? <em>What was assumed?</em></h3><p>SimPy exposes two kinds of capacity figures: observed utilization inside the simulation and offered demand from the original rules formulas. Offered demand is used to show overload beyond 100%.</p></div>
+    {report&&details&&<details className="simpy-deepdive qa-simpy-evidence" id="simpy-deepdive">
+      <summary><span><span className="simpy-section-number">05 / ADVANCED EVIDENCE</span><strong>Measured occupancy vs. offered demand</strong><small>See detailed resource ratios and simulation configuration</small></span><span>Expand <ChevronsRight size={17}/></span></summary><p>Measured occupancy is the time average inside SimPy. Offered demand estimates pressure on the configured capacity. When demand exceeds 100%, the reported verdict value uses the offered ratio.</p>
       <div className="simpy-metrics-table" role="table" aria-label="SimPy model metrics">
         <div role="row" className="simpy-metrics-heading"><span role="columnheader">Resource</span><span role="columnheader">Simulated mean</span><span role="columnheader">Offered demand</span></div>
         {labels.map(row=><div role="row" key={row.key} className="simpy-metrics-row"><strong role="cell">{row.label}</strong><span role="cell">{pct(details.measured_utilization[row.key])}</span><span role="cell">{pct(details.offered_utilization[row.key])}</span></div>)}
       </div>
-      <div className="simpy-method-notes"><div><span>RANDOM SEED</span><strong>{details.seed}</strong></div><div><span>ARRIVAL WINDOW</span><strong>{details.arrival_window_seconds}s <small>nominal</small></strong></div><div><span>ARRIVAL LIMIT</span><strong>{format(details.arrival_cap)}</strong></div><div><span>ENGINE</span><strong>SimPy / copdash</strong></div></div>
-    </div>}
+      <div className="simpy-method-notes"><div><span>RANDOM SEED</span><strong>{details.seed}</strong></div><div><span>ARRIVAL WINDOW</span><strong>{details.arrival_window_seconds}s <small>nominal</small></strong></div><div><span>ARRIVAL LIMIT</span><strong>{format(details.arrival_cap)}</strong></div><div><span>ENGINE</span><strong>SimPy discrete-event</strong></div></div>
+    </details>}
 
     {report&&compare&&<section className="simpy-compare-card" aria-label="Engine parity comparison">
       <div className="simpy-card-header"><div><span className="simpy-section-number">06 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Exactly the same server specification and workload sent to both original engines.</p></div><GitCompareArrows size={22}/></div>
@@ -258,6 +250,6 @@ export default function Simulation(){
 
     {report&&<details className="simpy-raw" open={rawOpen} onToggle={e=>setRawOpen(e.currentTarget.open)}><summary><Terminal size={17}/> Inspect the complete model JSON <span>OPEN SOURCE OUTPUT</span></summary><pre><code>{JSON.stringify(report,null,2)}</code></pre></details>}
 
-    <div className="simpy-bottom-notes"><div><Info size={18}/><p><strong>Model limitations.</strong> A fixed-seed simulation and closed-form demand estimates are useful for exploring capacity assumptions. The original model does not use clock speed in its formulas and does not incorporate real production traces or calibrated probabilities.</p></div><Link href="/methodology">Read the original model assumptions <ArrowUpRight size={16}/></Link></div>
+    <div className="simpy-bottom-notes"><div><Info size={18}/><p><strong>Model limitations.</strong> A fixed-seed simulation and closed-form demand estimates are useful for exploring capacity assumptions. The original model does not use clock speed in its formulas and does not incorporate real production traces or calibrated probabilities.</p></div><Link href="/methodology">Understand how the model works <ArrowUpRight size={16}/></Link></div>
   </div>;
 }

@@ -27,7 +27,7 @@ const titles:Record<string,{title:string;description:string;eyebrow:string}>={
   incident:{title:'Incident response.',description:'Record escalation, reproduce model conditions, and compare a mitigation scenario.',eyebrow:'UC-02 / INCIDENT HANDLING'},
   signoff:{title:'Release sign-off.',description:'Approve or reject the technical recommendation with a recorded decision.',eyebrow:'UC-04 / SIGN-OFF'},
   reports:{title:'Reports & history.',description:'Explore saved evaluations and role-workflow decisions from this browser.',eyebrow:'UC-03 / REPORTING'},
-  developer:{title:'API explorer.',description:'Inspect live endpoint responses from the original copdash FastAPI service.',eyebrow:'ENGINEERING / API'},
+  developer:{title:'API explorer.',description:'Explore all seven registered evaluation and operational endpoints.',eyebrow:'ENGINEERING / API'},
   quality:{title:'Engineering quality.',description:'Review real GitHub Actions checks, coverage, and build status.',eyebrow:'ENGINEERING / CI'},
   methodology:{title:'About the engines.',description:'Understand assumptions, thresholds, and limitations of the current model.',eyebrow:'ENGINEERING / METHODOLOGY'},
 };
@@ -49,7 +49,7 @@ function NotSignedIn(){
     <h1>Select a demo account to continue.</h1>
     <p>Different roles see different menus, tasks, and decisions. No database or account registration is needed for this prototype.</p>
     <Link href="/login">Choose demo user <ArrowRight size={18}/></Link>
-    <small>Client-side demonstration only · Not production authentication</small>
+    <small>Guided access · Role-based experience</small>
   </div>;
 }
 export default function Workspace(){
@@ -117,9 +117,9 @@ export default function Workspace(){
         <button type="button" onClick={leave}><LogOut size={18}/>Sign out</button>
       </nav>}
     </header>
-    <main className="sa-main">
+    <main className={'sa-main sa-section-'+section}>
       <div className="sa-breadcrumb"><Link href="/" aria-label="ServerAgent website">ServerAgent</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
-      {allowed?<><div className="page-header sa-page-header"><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ROLE DEMONSTRATION</span></div>
+      {allowed?<><div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>
         {section==='dashboard'?<DemoRoleDashboard role={role}/>:
           section==='simulation'?<Simulation/>:
           section==='compare'?<Compare/>:
@@ -136,7 +136,7 @@ export default function Workspace(){
         <Link href="/dashboard">Return to your dashboard <ArrowRight size={16}/></Link>
         <Link href="/login">Switch demo persona <ArrowUpRight size={16}/></Link></div>}
       <footer className="sa-footer"><div><Brand dark/><p>Capacity evidence meets role-based decision making.</p></div>
-        <div><span>Educational workflow demonstration · browser-local records</span><span>SimPy core from copdash · not production authentication or deployment approval</span></div></footer>
+        <div><span>Role-based evaluation workspace · browser-local records</span><span>Simulation-based evaluation · release workflow decision support</span></div></footer>
     </main>
   </div>;
 }
