@@ -87,9 +87,7 @@ class TimelineRecorder:
                         / sample_duration,
                         2,
                     ),
-                    "cpu_queue_avg": round(
-                        self._data["cpu_wait"][second] / sample_duration, 2
-                    ),
+                    "cpu_queue_avg": round(self._data["cpu_wait"][second] / sample_duration, 2),
                 }
             )
         return points, elapsed > MAX_TIMELINE_SECONDS

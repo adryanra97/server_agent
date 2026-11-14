@@ -215,8 +215,11 @@ class SimPyEngine:
         )
         if timeline is not None:
             second_samples, timeline_truncated = timeline.finish(
-                env.now, cpu_capacity, spec.ram.total_mb,
-                spec.network.max_connections, spec.network.bandwidth_mbps,
+                env.now,
+                cpu_capacity,
+                spec.ram.total_mb,
+                spec.network.max_connections,
+                spec.network.bandwidth_mbps,
             )
         else:
             second_samples, timeline_truncated = [], False
