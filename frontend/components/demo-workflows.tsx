@@ -52,7 +52,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
   const [symptom,setSymptom]=useState('Increased response times during traffic peak');
   const [incidentRps,setIncidentRps]=useState(900);
   const [incidentService,setIncidentService]=useState('Integration Gateway');
-  const [mitigationCores,setMitigationCores]=useState(8);
+  const [mitigationCores,setMitigationCores]=useState(12);
   const [selectedIncident,setSelectedIncident]=useState<string|null>(null);
   useEffect(()=>{
     setRuns(history());
@@ -65,6 +65,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
   function submitAlignment(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setMessage('');
     if(role!=='qa'||!selectedRun){setMessage('Run a real SimPy evaluation first, then select its result.');return;}
+    if(!note.trim()){setMessage('Add a brief QA test summary before submitting the release candidate.');return;}
     const stamp=now();
     saveAlignment({
       id:crypto.randomUUID(),type:'alignment',createdAt:stamp,updatedAt:stamp,
@@ -77,6 +78,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
   }
   function decideAlignment(item:DemoAlignment,status:'returned'|'pending-signoff'){
     if(role!=='lead'||item.status!=='review')return;
+    if(!note.trim()){setMessage('Add a Technical Lead review note before recording your decision.');return;}
     if(status==='pending-signoff'&&item.result.verdict==='will_crash'){
       setMessage('This modeled scenario exceeds capacity. Return it to Dev for another cycle.');return;
     }
@@ -86,6 +88,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
   }
   function signOff(item:DemoAlignment,status:'approved'|'rejected'){
     if(role!=='manager'||item.status!=='pending-signoff')return;
+    if(!note.trim()){setMessage('Add the manager sign-off decision rationale before submitting.');return;}
     const stamp=now();
     saveAlignment({...item,status,signoffNote:note.trim(),signedAt:stamp,
       signedVersion:status==='approved'?'v1.0':undefined,updatedAt:stamp});
@@ -132,7 +135,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
       <div className="role-workflow-owner"><span>YOUR RESPONSIBILITY</span><strong>{getPersona(role).shortRole}</strong><small>{section==='incident'&&role==='support'?'Record & escalate':section==='incident'&&role==='engineer'?'Reproduce & test':section==='alignment'&&role==='qa'?'Prepare evidence':section==='alignment'&&role==='lead'?'Review & decide':section==='signoff'?'Approve or reject':'Read-only oversight'}</small></div>
     </div>
     <div className="role-workflow-banner"><Info size={18}/><p><strong>Interactive local prototype.</strong> Role-based workflow records are stored in this browser. Capacity verdicts come from the real copdash SimPy engine. This does not authorize production deployment or replace SIT/UAT.</p></div>
-    {message&&<div className="role-workflow-message" role="status"><CheckCircle2 size={18}/>{message}</div>}
+    {message&&<div className="role-workflow-message" role="status"><Info size={18}/>{message}</div>}
 
     {section==='alignment'&&<>
       {role==='qa'&&<section className="role-form-panel">
@@ -145,7 +148,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
           <label>SimPy evidence<select aria-label="Select saved simulation" value={selectedRun?.id??''} onChange={e=>setRunId(e.target.value)} disabled={!runs.length}>
             {runs.length?runs.map(item=><option key={item.id} value={item.id}>{item.result.engine.toUpperCase()} · {item.request.load.rps} RPS · {item.result.verdict}</option>):<option value="">No simulation available</option>}
           </select></label>
-          <label className="role-form-wide">QA testing notes<textarea rows={3} placeholder="Summary of Dev test, changes, and acceptance context" value={note} onChange={e=>setNote(e.target.value)}/></label>
+          <label className="role-form-wide">QA testing notes<textarea rows={3} required placeholder="Summary of Dev test, changes, and acceptance context" value={note} onChange={e=>setNote(e.target.value)}/></label>
           <div className="role-form-wide role-form-footer"><Link href="/simulation">Open SimPy simulator <ArrowUpRight size={16}/></Link><button type="submit" disabled={!selectedRun}>Submit for Technical Lead review <ArrowRight size={16}/></button></div>
         </form>
       </section>}

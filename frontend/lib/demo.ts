@@ -38,8 +38,8 @@ export const allDemoRoutes = [
 ] as const;
 const allowed: Record<DemoRole, string[]> = {
   qa:['/dashboard','/simulation','/compare','/alignment','/reports','/methodology'],
-  lead:['/dashboard','/alignment','/incident','/reports','/methodology'],
-  engineer:['/dashboard','/incident','/simulation','/compare','/reports','/developer','/methodology'],
+  lead:['/dashboard','/alignment','/incident','/reports','/methodology','/quality'],
+  engineer:['/dashboard','/incident','/simulation','/compare','/reports','/developer','/methodology','/quality'],
   manager:['/dashboard','/signoff','/reports','/methodology'],
   support:['/dashboard','/incident','/reports','/methodology'],
 };

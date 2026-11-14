@@ -97,3 +97,31 @@ The UI exposes interactive replay, chart tabs, per-second seeking, speed control
 ### Interface layout
 
 The workspace uses top navigation rather than a sidebar, with enlarged editorial typography, a responsive menu, and direct access to the SimPy Workbench. Future user roles and application workflows will be addressed separately.
+
+## Demo login and AKPSI role workflow (browser-local prototype)
+
+Open `/login`, select a **fictional** persona from the dropdown, and enter the shared demo password `demo123`. No cloud database or account registration is required.
+
+The role names and user responsibilities are sourced from the **Functional Model, section 8.1.2 / Table 8.2** of `AKPSI.docx`, and the four primary use cases from **Table 8.3**. Persona *names* are fictional examples, not names from the document.
+
+| Demo user | Responsibility in this prototype |
+|---|---|
+| Nadia Putri / QA-Performance Tester | Run SimPy, compare workloads, submit real model evidence into a release alignment record |
+| Raka Pratama / Technical Lead | Review QA evidence and decide to progress toward manager sign-off or return to Dev |
+| Dina Maharani / Integration Engineer | Evaluate incident reproduction and a CPU mitigation using the original SimPy model |
+| Alya Wibowo / Project-Technical Manager | Approve or reject sign-off and record a version/date in demo history |
+| Bima Santoso / Support-Monitoring | Log an incident escalation and export demo workflow history as CSV |
+
+Try the handoff by following these steps **in the same browser**:
+
+1. Sign in as QA, execute a SimPy scenario, then submit an Alignment record.
+2. Switch to Technical Lead, review the submission and forward for sign-off.
+3. Switch to Project Manager to approve/reject the sign-off.
+4. Switch to Support, create a synthetic incident, then switch to Integration Engineer to run SimPy reproduction and a CPU mitigation comparison.
+5. Switch back to Support to view records and export CSV.
+
+Role switching persists the workflow records in browser `localStorage`; the selected account is in tab-scoped `sessionStorage`. Existing SimPy model history is also browser-local. A fresh browser/device will not see these demo records.
+
+**Important:** This login and these role-based menu restrictions are a *UX prototype only*: the shared password is intentionally visible in client-side code, no server-issued session exists, and the original FastAPI endpoints are not protected by this role selector. It is not safe for real customer data or authorization. Before deploying a production version, replace this with server-side authentication and authorization, per-role API permissions, a central database, real immutable approval/audit records, and document-level access control. The demo sign-off does not trigger real deployment.
+
+The original copdash API and SimPy calculations remain source-compatible. Features specified in AKPSI such as ELK ingestion, LLM orchestration, calibrated four-state verdicts, PDF sign-off, and shared audit trails remain future work; the UI never presents these as implemented.
