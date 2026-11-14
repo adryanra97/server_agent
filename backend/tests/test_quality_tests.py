@@ -41,13 +41,7 @@ def test_quality_tests_delivers_real_report(monkeypatch):
     assert result.status_code == 200
     assert result.json()["summary"]["total"] == 2
     assert result.json()["tests"][1]["status"] == "failed"
-    assert requested == [
-        (
-            "https://raw.githubusercontent.com/adryanra97/server_agent/"
-            "quality-reports/runs/123.json",
-            5,
-        )
-    ]
+    assert requested == [(main.QUALITY_REPORT_ROOT + "/runs/123.json", 5)]
 
 
 def test_quality_tests_default_reads_latest(monkeypatch):
