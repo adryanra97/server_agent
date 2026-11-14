@@ -38,8 +38,8 @@ def _fetch_github_json(url: str) -> dict:
             "X-GitHub-Api-Version": "2022-11-28",
         },
     )
-    # nosec B310 - fixed https://api.github.com host; URL never comes from user input.
-    with urlopen(request, timeout=4) as response:
+    # This request is restricted to the fixed HTTPS GitHub API host above.
+    with urlopen(request, timeout=4) as response:  # nosec B310
         return json.load(response)
 
 

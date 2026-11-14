@@ -71,7 +71,7 @@ jobs:
       - name: Install quality tools
         run: pip install black ruff
       - name: Black
-        run: black --check app main.py tests
+        run: black --check --diff app main.py tests
       - name: Ruff
         run: ruff check app main.py tests
   frontend:
