@@ -32,14 +32,14 @@ test.describe('TwinPeak role-based demo',()=>{
 test.describe('role boundary journeys across the five personas',()=>{
   const cases=[
     {index:0,role:'qa',allowed:'/alignment',denied:'/signoff'},
-    {index:1,role:'lead',allowed:'/signoff',denied:'/compare'},
+    {index:1,role:'lead',allowed:'/signoff',denied:null},
     {index:2,role:'engineer',allowed:'/incident',denied:'/alignment'},
-    {index:3,role:'manager',allowed:'/signoff',denied:'/simulation'},
+    {index:3,role:'manager',allowed:'/signoff',denied:'/incident'},
     {index:4,role:'support',allowed:'/incident',denied:'/signoff'},
   ] as const;
 
   for (const scenario of cases) {
-    test(scenario.role+' can open its own page but cannot view a forbidden role page',async({page})=>{
+    test(scenario.role+' sees the shared showcase and retains workflow boundaries',async({page})=>{
       await page.goto('/demo',{waitUntil:'domcontentloaded'});
       await page.locator('.tp-persona-card').nth(scenario.index).click();
       await expect(page).toHaveURL(/\/dashboard/);
@@ -49,10 +49,23 @@ test.describe('role boundary journeys across the five personas',()=>{
       await expect(page.locator('.sa-page-header')).toBeVisible();
       await expect(page.locator('.sa-access-denied')).toHaveCount(0);
 
-      await page.goto(scenario.denied,{waitUntil:'domcontentloaded'});
-      await expect(page.locator('.sa-access-denied')).toBeVisible();
-      await expect(page.getByText('This page is not part of your demo role.')).toBeVisible();
-      await expect(page.locator('.sa-page-header')).toHaveCount(0);
+      const primary=page.getByRole('navigation',{name:'Role-based primary navigation'});
+      await expect(primary.getByRole('link',{name:'Showcase'})).toBeVisible();
+      await primary.getByRole('link',{name:'Showcase'}).click();
+      await expect(page).toHaveURL(/\/showcase/);
+      await expect(page.getByRole('heading',{name:/See what powers every release decision/i})).toBeVisible();
+      await expect(page.getByRole('link',{name:/Review CI\/CD evidence/})).toBeVisible();
+      for(const shared of ['/simulation','/compare','/methodology','/developer','/quality','/settings']){
+        await page.goto(shared,{waitUntil:'domcontentloaded'});
+        await expect(page.locator('.sa-page-header')).toBeVisible();
+        await expect(page.locator('.sa-access-denied')).toHaveCount(0);
+      }
+      if(scenario.denied){
+        await page.goto(scenario.denied,{waitUntil:'domcontentloaded'});
+        await expect(page.locator('.sa-access-denied')).toBeVisible();
+        await expect(page.getByText('This page is not part of your demo role.')).toBeVisible();
+        await expect(page.locator('.sa-page-header')).toHaveCount(0);
+      }
     });
   }
 
@@ -66,7 +79,8 @@ test.describe('role boundary journeys across the five personas',()=>{
     await expect(page).toHaveURL(/\/dashboard/);
     expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBe('manager');
     await page.goto('/simulation',{waitUntil:'domcontentloaded'});
-    await expect(page.locator('.sa-access-denied')).toBeVisible();
+    await expect(page.locator('.sa-page-header')).toBeVisible();
+    await expect(page.locator('.sa-access-denied')).toHaveCount(0);
   });
 
   test('mobile users can open the navigation and sign out of the guided session',async({page})=>{
@@ -80,6 +94,7 @@ test.describe('role boundary journeys across the five personas',()=>{
     const mobileNav=page.getByRole('navigation',{name:'Mobile role navigation'});
     await expect(mobileNav).toBeVisible();
     await expect(mobileNav.getByRole('link',{name:/Release Alignment/})).toBeVisible();
+    await expect(mobileNav.getByRole('link',{name:/Platform Showcase/})).toBeVisible();
     // Never allow a session-scoped provider key to remain after sign out.
     await page.evaluate(()=>sessionStorage.setItem('twinpeak-llm-session-v1','temporary-test-secret'));
     await mobileNav.getByRole('button',{name:/Sign out/}).click();
@@ -87,4 +102,17 @@ test.describe('role boundary journeys across the five personas',()=>{
     expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBeNull();
     expect(await page.evaluate(()=>sessionStorage.getItem('twinpeak-llm-session-v1'))).toBeNull();
   });
+});
+
+test('Showcase links expose original CI configuration and API reference',async({page})=>{
+  await page.goto('/demo',{waitUntil:'domcontentloaded'});
+  await page.locator('.tp-persona-card').nth(4).click();
+  await page.goto('/showcase',{waitUntil:'domcontentloaded'});
+  await expect(page.locator('.tp-showcase-card')).toHaveCount(6);
+  await expect(page.getByRole('link',{name:/CI\/CD execution history/})).toHaveAttribute('href',/actions\/workflows\/quality.yml/);
+  await expect(page.getByRole('link',{name:/CI pipeline definition/})).toHaveAttribute('href',/blob\/main\/\.github\/workflows\/quality.yml/);
+  await expect(page.getByRole('link',{name:/Test evidence JSON/})).toHaveAttribute('href',/quality-reports\/latest.json/);
+  await expect(page.getByRole('link',{name:/OpenAPI specification/})).toHaveAttribute('href','/openapi.json');
+  await expect(page.getByRole('link',{name:/Swagger API documentation/})).toHaveAttribute('href','/docs');
+  await expect(page.getByRole('link',{name:/Backend quality JSON/})).toHaveAttribute('href','/api/v1/quality');
 });
