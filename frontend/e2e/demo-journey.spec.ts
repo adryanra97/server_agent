@@ -117,3 +117,34 @@ test('Showcase links expose original CI configuration and API reference',async({
   await expect(page.getByRole('link',{name:/Swagger API documentation/})).toHaveAttribute('href','/docs');
   await expect(page.getByRole('link',{name:/Backend quality JSON/})).toHaveAttribute('href','/api/v1/quality');
 });
+
+test('Quality checks show their purpose and reveal the real CI command on demand',async({page})=>{
+  await page.goto('/demo',{waitUntil:'domcontentloaded'});
+  await page.locator('.tp-persona-card').first().click();
+  await page.goto('/quality',{waitUntil:'domcontentloaded'});
+  await expect(page.getByRole('heading',{name:/Ten quality checks\. One verifiable pipeline\./})).toBeVisible();
+  const checks=page.locator('.eq-check-list .eq-check');
+  await expect(checks).toHaveCount(10);
+  const pytest=checks.first();
+  await expect(pytest.locator('summary')).toContainText('Pytest');
+  await expect(pytest.locator('summary')).toContainText('Backend & API testing');
+  await expect(pytest.locator('.eq-check-detail')).toBeHidden();
+  await pytest.locator('summary').click();
+  await expect(pytest).toHaveAttribute('open','');
+  await expect(pytest.locator('.eq-check-detail')).toBeVisible();
+  await expect(pytest.locator('.eq-check-detail code')).toContainText('pytest --cov');
+  await expect(checks.nth(7).locator('summary')).toContainText('Python security scanning');
+  await pytest.locator('summary').click();
+  await expect(pytest.locator('.eq-check-detail')).toBeHidden();
+});
+
+test('Homepage keeps readable copy and uses green only as a small accent',async({page})=>{
+  await page.goto('/',{waitUntil:'domcontentloaded'});
+  await expect(page.getByRole('heading',{name:/What if your infrastructure had a Digital Twin/i})).toBeVisible();
+  const copy=page.locator('.truth-copy>p');
+  await expect(copy).toBeVisible();
+  expect(await copy.evaluate(el=>getComputedStyle(el).color)).toBe('rgb(51, 65, 85)');
+  const accent=await page.locator('.truth-facts span').first()
+    .evaluate(el=>getComputedStyle(el,'::before').backgroundColor);
+  expect(accent).toBe('rgb(120, 190, 67)');
+});

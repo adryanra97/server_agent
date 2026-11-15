@@ -1,0 +1,125 @@
+/* Contrast and small brand accents: keep TwinPeak's blue as the primary color. */
+.home .truth-copy>p,
+.home .home-roles-head>p,
+.home .truth-section-intro p,
+.home .truth-engine-card p,
+.home .truth-process p,
+.home .truth-strip p{
+  color:#334155;
+}
+.home .truth-facts,
+.home .home-role-row small,
+.home .truth-console-title span,
+.home .truth-console-title small,
+.home .truth-request>p,
+.home .truth-request>strong small,
+.home .truth-await{
+  color:#40566B;
+}
+.home .truth-facts span:first-child::before{
+  content:"";display:inline-block;
+  width:6px;height:6px;margin-right:10px;
+  background:#78BE43;border-radius:50%;
+  vertical-align:2px;
+}
+/* Keep supporting copy legible on the light workspace surfaces. */
+.sa-app .sa-page-header p,
+.sa-app .eq-hero p,
+.sa-app .eq-section-head p,
+.sa-app .eq-metric>p,
+.sa-app .eq-suite-tabs>button>span,
+.sa-app .eq-footnote{
+  color:#334155;
+}
+/* Green is reserved for real success states, not a second CTA color. */
+.sa-app .eq-check-pill.passed{
+  color:#2D6E3C;background:#ECF6E8;
+}
+/* Compact, keyboard-friendly CI check disclosures. */
+.sa-app .eq-content-pipeline .eq-check-list{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;align-items:start;
+}
+.sa-app .eq-content-pipeline .eq-check{
+  display:block;min-width:0;padding:0;
+  border:1px solid #CEDFEA;border-radius:8px;
+  background:#fff;overflow:hidden;
+}
+.sa-app .eq-content-pipeline .eq-check[open]{
+  border-color:#9CC5DB;background:#FCFEFF;
+}
+.sa-app .eq-check-summary{
+  display:grid;grid-template-columns:23px minmax(0,1fr) auto 17px;
+  align-items:center;gap:11px;min-height:79px;
+  padding:15px 16px;cursor:pointer;list-style:none;
+}
+.sa-app .eq-check-summary::-webkit-details-marker{display:none}
+.sa-app .eq-check-summary::marker{content:""}
+.sa-app .eq-check-summary:hover{background:#F1F8FC}
+.sa-app .eq-check-summary:focus-visible{
+  outline:3px solid #147DAD;outline-offset:-4px;
+}
+.sa-app .eq-check-summary .eq-check-text{
+  min-width:0;line-height:1.55;
+}
+.sa-app .eq-check-summary .eq-check-text>strong{
+  color:#173F5F;font-size:13px;font-weight:800;
+}
+.sa-app .eq-check-short{
+  color:#40566B;font-size:12px;font-weight:500;
+}
+.sa-app .eq-check-summary .eq-check-number{
+  font-size:11px;color:#276A94;min-width:0;
+}
+.sa-app .eq-check-summary .eq-check-pill{
+  display:inline-flex;white-space:nowrap;align-items:center;
+  font-size:10px;padding:6px 8px;
+}
+.sa-app .eq-check-chevron{
+  color:#457B9C;transition:transform .15s ease;
+}
+.sa-app .eq-check[open] .eq-check-chevron{transform:rotate(180deg)}
+.sa-app .eq-check-detail{
+  padding:0 18px 18px 50px;
+  border-top:1px solid #E2ECF2;color:#334155;
+}
+.sa-app .eq-check-detail>p{
+  color:#334155;font-size:12px;line-height:1.65;
+  margin:14px 0 13px;
+}
+.sa-app .eq-check-detail-meta{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:9px;font-size:11px;color:#41576C;line-height:1.5;
+}
+.sa-app .eq-check-detail-meta strong{color:#214A66}
+.sa-app .eq-check-detail-meta code{
+  display:inline-block;max-width:100%;
+  padding:5px 7px;border-radius:4px;
+  color:#244B68;background:#EDF5FA;
+  font:11px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;
+  overflow-wrap:anywhere;
+}
+.sa-app .eq-check-detail>a{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-top:15px;color:#075E94;font-size:12px;font-weight:750;
+}
+.sa-app .eq-check-detail>a:hover{text-decoration:underline}
+.sa-app .eq-check-unavailable{
+  display:block;margin-top:12px;color:#566B7D;font-size:11px;
+}
+@media(max-width:1000px){
+  .sa-app .eq-content-pipeline .eq-check-list{grid-template-columns:1fr}
+}
+@media(max-width:570px){
+  .sa-app .eq-check-summary{
+    grid-template-columns:18px minmax(0,1fr) auto 15px;
+    gap:7px;padding:14px 10px;
+  }
+  .sa-app .eq-check-summary .eq-check-text>strong,
+  .sa-app .eq-check-short{font-size:11px}
+  .sa-app .eq-check-summary .eq-check-pill{padding:5px}
+  .sa-app .eq-check-detail{padding:0 13px 16px 35px}
+}
+@media(prefers-reduced-motion:reduce){
+  .sa-app .eq-check-chevron{transition:none}
+}
