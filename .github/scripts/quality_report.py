@@ -74,15 +74,18 @@ def backend_cases(path: Path) -> list[dict]:
 
 
 def frontend_coverage(path: Path) -> dict:
-    result = {"line": None, "branch": None, "functions": None, "status": "unavailable"}
+    result = {"line": None, "branch": None, "functions": None, "statements": None, "modules": None, "status": "unavailable"}
     if not path.is_file():
         return result
-    data = json.loads(path.read_text(encoding="utf-8")).get("total", {})
+    report = json.loads(path.read_text(encoding="utf-8"))
+    data = report.get("total", {})
     try:
         result.update(
             line=round(float(data["lines"]["pct"]), 1),
             branch=round(float(data["branches"]["pct"]), 1),
             functions=round(float(data["functions"]["pct"]), 1),
+            statements=round(float(data["statements"]["pct"]), 1),
+            modules=max(0, len(report) - 1),
             status="reported",
         )
     except (KeyError, ValueError, TypeError):

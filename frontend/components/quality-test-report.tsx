@@ -16,7 +16,7 @@ type TestReport={
   summary:{total:number;passed:number;failed:number;skipped:number;errors:number;duration_seconds:number};
   tests:TestCase[];
   suites?:Record<string,{total:number;passed:number;failed:number;skipped:number;errors:number;duration_seconds:number;status:string}>;
-  frontend_coverage?:{line:number|null;branch:number|null;functions:number|null;status:string};
+  frontend_coverage?:{line:number|null;branch:number|null;functions:number|null;statements?:number|null;modules?:number|null;status:string};
   security?:{
     npm?:{critical:number|null;high:number|null;moderate:number|null;low:number|null;total:number|null;status:string};
     pip?:{vulnerabilities:number|null;packages_with_findings:number|null;status:string};
@@ -135,7 +135,8 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
           <div><span>FRONTEND LINE COVERAGE</span><strong>{report.frontend_coverage.line?.toFixed(1)??'—'}%</strong></div>
           <div><span>FRONTEND BRANCH COVERAGE</span><strong>{report.frontend_coverage.branch?.toFixed(1)??'—'}%</strong></div>
           <div><span>FRONTEND FUNCTION COVERAGE</span><strong>{report.frontend_coverage.functions?.toFixed(1)??'—'}%</strong></div>
-          <p>Measured from Vitest V8 coverage for targeted frontend modules, not the entire Next.js application.</p>
+          <div><span>FRONTEND STATEMENT COVERAGE</span><strong>{report.frontend_coverage.statements?.toFixed(1)??'—'}%</strong></div>
+          <p>Measured by Vitest V8 across {report.frontend_coverage.modules??'selected'} targeted production modules. Each included module must individually satisfy the 100% coverage gate. This is not whole-application coverage.</p>
         </div>}
         <div className="eq-test-toolbar">
           <div className="eq-test-filters" role="group" aria-label="Filter test results">

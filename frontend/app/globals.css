@@ -2897,3 +2897,8 @@ body,.sa-app{background:#F5FAFE;color:#183D57}
   .eq-security-stack-title{align-items:flex-start}
   .eq-suite-tabs>button{padding:12px}
 }
+
+/* Four independently measured frontend coverage dimensions on Engineering Quality. */
+.eq-frontend-coverage{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:850px){.eq-frontend-coverage{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.eq-frontend-coverage{grid-template-columns:1fr}}

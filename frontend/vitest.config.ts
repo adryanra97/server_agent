@@ -16,6 +16,9 @@ export default defineConfig({
         'app/api/reasoning/route.ts',
       ],
       exclude: ['**/*.test.ts', '**/*.test.tsx'],
+      // Enforce 100% on each included production module, not only the aggregate.
+      // Coverage files are explicitly listed above; do not confuse with whole-app coverage.
+      thresholds: { perFile: true, lines: 100, statements: 100, branches: 100, functions: 100 },
     },
   },
 });
