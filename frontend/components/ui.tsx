@@ -16,18 +16,18 @@ export const navigation:{label:string;href:string;icon:LucideIcon;group:string}[
   {label:'About the Engines',href:'/methodology',icon:BookOpenText,group:'ENGINEERING'},
 ];
 export function Brand({dark=false}:{dark?:boolean}){
-  return <Link href="/" className={`brand ${dark?'brand-inverse':''}`} aria-label="ServerAgent home">
+  return <Link href="/" className={`brand ${dark?'brand-inverse':''}`} aria-label="TwinPeak home">
     <span className="brand-symbol"><span/><span/><span/><span/></span>
-    <span className="brand-word">server<span>agent</span><small>CAPACITY INTELLIGENCE</small></span>
+    <span className="brand-word">twin<span>peak</span><small>POWERED BY SERVERAGENT</small></span>
   </Link>;
 }
 export function Eyebrow({children}:{children:React.ReactNode}){
   return <span className="eyebrow"><span className="eyebrow-dot"/>{children}</span>;
 }
 export function Outcome({verdict}:{verdict:Verdict}){
-  return <span className={`status-pill ${verdict==='will_survive'?'good':verdict==='at_risk'?'warn':'bad'}`}>
+  return <span className={`status-pill ${verdict==='not_assessable'?'neutral':verdict==='will_survive'?'good':verdict==='at_risk'?'warn':'bad'}`}>
     <span className="status-dot"/>
-    {verdict==='will_survive'?'Will survive':verdict==='at_risk'?'At risk':'Will crash'}
+    {verdict==='not_assessable'?'? Tidak Dapat Dinilai':verdict==='will_survive'?'✓ Lolos':verdict==='at_risk'?'▲ Lolos Bersyarat':'✕ Tidak Lolos'}
   </span>;
 }
 export function ResourceBars({result}:{result:VerdictResult}){

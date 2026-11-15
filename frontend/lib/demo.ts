@@ -1,4 +1,4 @@
-import type { ServerSpec, Load, VerdictResult } from './model';
+import { defaultLoad, defaultSpec, requestVerdict, saveRun, history, type ServerSpec, type Load, type VerdictResult } from './model';
 
 /**
  * Educational role-play ONLY. These identities and client-side permissions are
@@ -26,22 +26,23 @@ export const demoPersonas: DemoPersona[] = [
 ];
 export const allDemoRoutes = [
   {href:'/dashboard',label:'Overview'},
-  {href:'/simulation',label:'SimPy Workbench'},
-  {href:'/compare',label:'Compare Loads'},
   {href:'/alignment',label:'Release Alignment'},
   {href:'/incident',label:'Incident Response'},
   {href:'/signoff',label:'Sign-Off'},
-  {href:'/reports',label:'Reports & History'},
+  {href:'/reports',label:'Report'},
+  {href:'/access',label:'Access & Roles'},
+  {href:'/simulation',label:'SimPy Workbench'},
+  {href:'/compare',label:'Compare Loads'},
   {href:'/methodology',label:'Model Methodology'},
   {href:'/developer',label:'API Explorer'},
   {href:'/quality',label:'Engineering Quality'},
 ] as const;
 const allowed: Record<DemoRole, string[]> = {
-  qa:['/dashboard','/simulation','/compare','/alignment','/reports','/methodology','/developer','/quality'],
-  lead:['/dashboard','/alignment','/incident','/reports','/methodology','/quality'],
-  engineer:['/dashboard','/incident','/simulation','/compare','/reports','/developer','/methodology','/quality'],
-  manager:['/dashboard','/signoff','/reports','/methodology'],
-  support:['/dashboard','/incident','/reports','/methodology'],
+  qa:['/dashboard','/alignment','/access','/simulation','/compare','/reports','/methodology','/developer','/quality'],
+  lead:['/dashboard','/alignment','/incident','/signoff','/reports','/access','/methodology','/quality'],
+  engineer:['/dashboard','/incident','/access','/simulation','/compare','/developer','/methodology','/quality'],
+  manager:['/dashboard','/alignment','/signoff','/reports','/access','/methodology'],
+  support:['/dashboard','/incident','/reports','/access','/methodology'],
 };
 export function allowedPages(role:DemoRole){return allDemoRoutes.filter(page=>allowed[role].includes(page.href));}
 export function canVisit(role:DemoRole,path:string){return allowed[role].includes(path);}
@@ -139,4 +140,51 @@ export function demoCsv(records:DemoRecords){
   const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
   const link=document.createElement('a');link.href=url;link.download='serveragent-demo-workflow.csv';link.click();
   URL.revokeObjectURL(url);
+}
+
+/** Select a guided role. This browser-only demo is not account authorization. */
+export function selectDemoPersona(role:DemoRole){
+  if(typeof window==='undefined'||!demoPersonas.some(person=>person.id===role))return;
+  window.sessionStorage.setItem(DEMO_SESSION_KEY,role);
+  window.dispatchEvent(new Event('serveragent-demo-user'));
+}
+const STARTER_KEY='twinpeak-starter-qris-v1';
+let starterPromise:Promise<boolean>|null=null;
+/** Populate example evidence from a real engine call; never fabricate a verdict. */
+export function ensureDemoStarter():Promise<boolean>{
+  if(typeof window==='undefined')return Promise.resolve(false);
+  if(window.localStorage.getItem(STARTER_KEY))return Promise.resolve(true);
+  if(starterPromise)return starterPromise;
+  starterPromise=(async()=>{
+    if(demoRecords().alignments.length||history().length){
+      window.localStorage.setItem(STARTER_KEY,'existing');
+      return true;
+    }
+    const spec:ServerSpec={
+      ...structuredClone(defaultSpec),
+      cpu:{cores:4,clock_ghz:2.5},
+      ram:{total_mb:16384},
+    };
+    const load:Load={...defaultLoad,rps:45,avg_cpu_ms_per_req:15};
+    const request={engine:'simpy' as const,spec,load};
+    const result=await requestVerdict(request);
+    const stamp=new Date().toISOString();
+    const runId='starter-qris-cycle03-simpy';
+    saveRun({id:runId,created_at:stamp,label:'QRIS Payment · Cycle 03 · baseline 45 RPS',request,result});
+    saveAlignment({
+      id:'starter-qris-cycle03',type:'alignment',createdAt:stamp,updatedAt:stamp,
+      release:'QRIS-RC03',cycle:3,service:'QRIS Payment',
+      qaNotes:'Baseline performance scenario for the release alignment demo. Review the measured model evidence before deciding the next cycle.',
+      createdBy:'qa',status:'review',runId,result,rps:45,
+    });
+    saveIncident({
+      id:'starter-qris-incident',type:'incident',createdAt:stamp,updatedAt:stamp,
+      service:'QRIS Payment',symptom:'Response times increased during peak payment traffic. Reproduce the workload and evaluate CPU mitigation.',
+      incidentType:'Response timeout',peakRps:135,detectedAt:stamp,createdBy:'support',status:'open',
+      spec,load:{...load,rps:135},
+    });
+    window.localStorage.setItem(STARTER_KEY,'generated');
+    return true;
+  })().catch(()=>false).finally(()=>{starterPromise=null;});
+  return starterPromise;
 }

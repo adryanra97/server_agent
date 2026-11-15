@@ -28,11 +28,11 @@ export default function DemoLogin(){
   return <div className="demo-login">
     <header className="demo-login-header">
       <Brand dark/>
-      <Link href="/" className="demo-login-back">Back to website <ArrowUpRight size={16}/></Link>
+      <Link href="/demo" className="demo-login-back">Guided demo <ArrowUpRight size={16}/></Link>
     </header>
     <main className="demo-login-main">
       <div className="demo-login-story">
-        <div className="demo-login-overline"><span/> SERVERAGENT / ROLE-BASED WORKSPACE</div>
+        <div className="demo-login-overline"><span/> TWINPEAK / ROLE-BASED WORKSPACE</div>
         <h1>One platform.<br/><em>Different decisions.</em></h1>
         <p>Experience a capacity assessment as five people across one release workflow. Select a user to see how their responsibilities, permissions and decisions differ.</p>
         <div className="demo-login-path">

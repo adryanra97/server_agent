@@ -1,5 +1,5 @@
 export type Engine = 'rules' | 'simpy';
-export type Verdict = 'will_survive' | 'at_risk' | 'will_crash';
+export type Verdict = 'will_survive' | 'at_risk' | 'will_crash' | 'not_assessable';
 
 export interface ServerSpec {
   cpu: { cores: number; clock_ghz: number };
@@ -28,12 +28,13 @@ export const defaultLoad:Load = {
   concurrent_connections:100,payload_kb:10,
 };
 export const verdictLabels:Record<Verdict,string> = {
-  will_survive:'Will survive',at_risk:'At risk',will_crash:'Will crash',
+  will_survive:'Lolos',at_risk:'Lolos Bersyarat',will_crash:'Tidak Lolos',not_assessable:'Tidak Dapat Dinilai',
 };
 export const verdictNotes:Record<Verdict,string> = {
   will_survive:'All modeled resources remain below 80% utilization.',
   at_risk:'At least one resource is between 80% and 100% utilization.',
   will_crash:'At least one resource exceeds modeled capacity.',
+  not_assessable:'This scenario lies outside the defined assessment range; no model verdict is inferred.',
 };
 export function history():HistoryItem[]{
   if(typeof window==='undefined')return [];

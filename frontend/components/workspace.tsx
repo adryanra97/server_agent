@@ -18,6 +18,8 @@ import Reports from './reports';
 import Developer from './developer';
 import Quality from './quality';
 import Methodology from './methodology';
+import AccessRoles from './access-roles';
+import { ensureDemoStarter } from '../lib/demo';
 
 const titles:Record<string,{title:string;description:string;eyebrow:string}>={
   dashboard:{title:'Your workspace.',description:'Role-specific decisions and the latest SimPy evaluation evidence.',eyebrow:'ROLE WORKSPACE / OVERVIEW'},
@@ -30,17 +32,18 @@ const titles:Record<string,{title:string;description:string;eyebrow:string}>={
   developer:{title:'API explorer.',description:'Explore all seven registered evaluation and operational endpoints.',eyebrow:'ENGINEERING / API'},
   quality:{title:'Engineering quality.',description:'Review real GitHub Actions checks, coverage, and build status.',eyebrow:'ENGINEERING / CI'},
   methodology:{title:'About the engines.',description:'Understand assumptions, thresholds, and limitations of the current model.',eyebrow:'ENGINEERING / METHODOLOGY'},
+  access:{title:'Access & roles.',description:'Explore responsibilities and available actions for each of the five roles.',eyebrow:'WORKSPACE / ROLE ACCESS'},
 };
 
 const navIcons:Record<string,typeof Activity>={
   '/dashboard':Activity,'/simulation':FlaskConical,'/compare':BarChart3,
   '/alignment':ClipboardCheck,'/incident':Waves,'/signoff':FileSignature,
-  '/reports':FileClock,'/methodology':BookOpenText,
+  '/reports':FileClock,'/access':ShieldCheck,'/methodology':BookOpenText,
   '/developer':Terminal,'/quality':ShieldCheck,
 };
 const navShort:Record<string,string>={
   '/dashboard':'Overview','/simulation':'Simulation','/compare':'Compare',
-  '/alignment':'Alignment','/incident':'Incidents','/signoff':'Sign-Off','/reports':'Reports',
+  '/alignment':'Alignment','/incident':'Incidents','/signoff':'Sign-Off','/reports':'Report','/access':'Access',
 };
 function NotSignedIn(){
   return <div className="sa-access-gate">
@@ -65,6 +68,7 @@ export default function Workspace(){
   useEffect(()=>{
     const update=()=>{setRole(getDemoRole());setLoaded(true);};
     update();
+    if(getDemoRole())void ensureDemoStarter();
     window.addEventListener('serveragent-demo-user',update);
     return()=>window.removeEventListener('serveragent-demo-user',update);
   },[]);
@@ -76,7 +80,7 @@ export default function Workspace(){
     }
   },[pathname]);
   const pages=role?allowedPages(role):[];
-  const primary=pages.filter(x=>['/dashboard','/simulation','/compare','/alignment','/incident','/signoff','/reports'].includes(x.href));
+  const primary=pages.filter(x=>['/dashboard','/alignment','/incident','/signoff','/reports','/access'].includes(x.href));
   const secondary=pages.filter(x=>!primary.some(p=>p.href===x.href));
   const currentUser=role?getPersona(role):null;
   const allowed=role?canVisit(role,pathname):false;
@@ -108,7 +112,7 @@ export default function Workspace(){
         </nav>
         <div className="sa-header-actions">
           <span className="sa-role-identity" title={currentUser?.role}><span className="sa-role-avatar">{currentUser?.initial}</span><span className="sa-role-name"><strong>{currentUser?.name}</strong><small>{currentUser?.shortRole}</small></span></span>
-          <Link className="sa-switch-role" href="/login" title="Switch demo persona">Switch user</Link>
+          <Link className="sa-switch-role" href="/demo" title="Switch demo persona">Switch role</Link>
           <button type="button" className="sa-logout" onClick={leave} title="Sign out" aria-label="Sign out"><LogOut size={19}/></button>
           <button type="button" className="sa-mobile-toggle" onClick={()=>setMobileOpen(v=>!v)}
             aria-expanded={mobileOpen} aria-controls="sa-mobile-navigation" aria-label={mobileOpen?'Close menu':'Open menu'}>{mobileOpen?<X size={24}/>:<Menu size={24}/>}</button>
@@ -120,12 +124,12 @@ export default function Workspace(){
           return <Link key={page.href} href={page.href} onClick={closeMenu} aria-current={pathname===page.href?'page':undefined}>
             <Icon size={18}/>{page.label}<ArrowUpRight size={16}/></Link>;
         })}
-        <Link href="/login" onClick={closeMenu}><UserRound size={18}/>Switch demo user<ArrowUpRight size={16}/></Link>
+        <Link href="/demo" onClick={closeMenu}><UserRound size={18}/>Switch demo user<ArrowUpRight size={16}/></Link>
         <button type="button" onClick={leave}><LogOut size={18}/>Sign out</button>
       </nav>}
     </header>
     <main className={'sa-main sa-section-'+section}>
-      <div className="sa-breadcrumb"><Link href="/" aria-label="ServerAgent website">ServerAgent</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
+      <div className="sa-breadcrumb"><Link href="/demo" aria-label="TwinPeak demo">TwinPeak</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
       {allowed?<><div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>
         {section==='dashboard'?<DemoRoleDashboard role={role}/>:
           section==='simulation'?<Simulation/>:
@@ -136,7 +140,8 @@ export default function Workspace(){
           section==='reports'?<Reports/>:
           section==='developer'?<Developer/>:
           section==='quality'?<Quality/>:
-          section==='methodology'?<Methodology/>:<DemoRoleDashboard role={role}/>}
+          section==='methodology'?<Methodology/>:
+          section==='access'?<AccessRoles role={role}/>:<DemoRoleDashboard role={role}/>}
       </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>
         <h2>This page is not part of your demo role.</h2>
         <p><strong>{currentUser?.shortRole}</strong> has a different responsibility in the proposed AKPSI workflow. Switch accounts to explore this menu.</p>
