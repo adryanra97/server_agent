@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText, ChevronDown,
-  ClipboardCheck, FileClock, FileSignature, FlaskConical, GitBranch,
+  Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText,
+  ClipboardCheck, FileClock, FileSignature, FlaskConical, Layers3,
   LogOut, Menu, Settings2, ShieldCheck, Terminal, UserRound, Waves, X,
 } from 'lucide-react';
 import { Brand, Eyebrow } from './ui';
@@ -20,6 +20,7 @@ import Quality from './quality';
 import Methodology from './methodology';
 import AccessRoles from './access-roles';
 import LLMSettings from './llm-settings';
+import PlatformShowcase from './platform-showcase';
 import { ensureDemoStarter } from '../lib/demo';
 
 const titles:Record<string,{title:string;description:string;eyebrow:string}>={
@@ -34,14 +35,15 @@ const titles:Record<string,{title:string;description:string;eyebrow:string}>={
   quality:{title:'Engineering quality.',description:'Review real GitHub Actions checks, coverage, and build status.',eyebrow:'ENGINEERING / CI'},
   methodology:{title:'About the engines.',description:'Understand assumptions, thresholds, and limitations of the current model.',eyebrow:'ENGINEERING / METHODOLOGY'},
   access:{title:'Access & roles.',description:'Explore responsibilities and available actions for each of the five roles.',eyebrow:'WORKSPACE / ROLE ACCESS'},
-  settings:{title:'LLM settings.',description:'Connect a temporary model provider for explanations and report narratives.',eyebrow:'EXPLORE / SESSION SETTINGS'},
+  settings:{title:'LLM settings.',description:'Connect a temporary model provider for explanations and report narratives.',eyebrow:'PLATFORM SHOWCASE / SESSION SETTINGS'},
+  showcase:{title:'Platform Showcase',description:'Technical demonstrations and verifiable engineering evidence for every demo role.',eyebrow:'PLATFORM / DEMO REFERENCE'},
 };
 
 const navIcons:Record<string,typeof Activity>={
   '/dashboard':Activity,'/simulation':FlaskConical,'/compare':BarChart3,
   '/alignment':ClipboardCheck,'/incident':Waves,'/signoff':FileSignature,
   '/reports':FileClock,'/access':ShieldCheck,'/methodology':BookOpenText,
-  '/developer':Terminal,'/quality':ShieldCheck,'/settings':Settings2,
+  '/developer':Terminal,'/quality':ShieldCheck,'/settings':Settings2,'/showcase':Layers3,
 };
 const navShort:Record<string,string>={
   '/dashboard':'Overview','/simulation':'Simulation','/compare':'Compare',
@@ -65,7 +67,6 @@ export default function Workspace(){
   const [role,setRole]=useState<DemoRole|null>(null);
   const [loaded,setLoaded]=useState(false);
   const [mobileOpen,setMobileOpen]=useState(false);
-  const [moreOpen,setMoreOpen]=useState(false);
 
   useEffect(()=>{
     const update=()=>{setRole(getDemoRole());setLoaded(true);};
@@ -83,13 +84,13 @@ export default function Workspace(){
   },[pathname]);
   const pages=role?allowedPages(role):[];
   const primary=pages.filter(x=>['/dashboard','/alignment','/incident','/signoff','/reports','/access'].includes(x.href));
-  const secondary=pages.filter(x=>!primary.some(p=>p.href===x.href));
+  const showcaseActive=['/showcase','/simulation','/compare','/methodology','/developer','/quality','/settings'].includes(pathname);
   const currentUser=role?getPersona(role):null;
   const allowed=role?canVisit(role,pathname):false;
   function leave(){
-    demoLogout();setMobileOpen(false);setMoreOpen(false);router.push('/login');
+    demoLogout();setMobileOpen(false);router.push('/login');
   }
-  function closeMenu(){setMobileOpen(false);setMoreOpen(false);}
+  function closeMenu(){setMobileOpen(false);}
   if(!loaded){
     return <div className="sa-app"><div className="sa-loading-demo" aria-label="Preparing role workspace"><Waves size={34}/><span>Loading role workspace…</span></div></div>;
   }
@@ -103,14 +104,11 @@ export default function Workspace(){
         <nav className="sa-main-nav" aria-label="Role-based primary navigation">
           {primary.map(page=><Link key={page.href} href={page.href} aria-current={pathname===page.href?'page':undefined}
             className={pathname===page.href?'current':''}>{navShort[page.href]??page.label}</Link>)}
-          {secondary.length>0&&<div className="sa-more">
-            <button type="button" className={secondary.some(p=>p.href===pathname)?'current':''}
-              aria-expanded={moreOpen} onClick={()=>setMoreOpen(v=>!v)}>Explore <ChevronDown size={15}/></button>
-            {moreOpen&&<div className="sa-more-menu">{secondary.map(page=>{
-              const Icon=navIcons[page.href]??Activity;
-              return <Link key={page.href} href={page.href} onClick={closeMenu}><Icon size={17}/>{page.label}</Link>;
-            })}</div>}
-          </div>}
+          <Link href="/showcase" className={'sa-showcase-nav '+(showcaseActive?'current':'')}
+            aria-current={pathname==='/showcase'?'page':undefined}
+            title="Simulation, CI/CD, API documentation and platform architecture">
+            <Layers3 size={16}/> Showcase
+          </Link>
         </nav>
         <div className="sa-header-actions">
           <span className="sa-role-identity" title={currentUser?.role}><span className="sa-role-avatar">{currentUser?.initial}</span><span className="sa-role-name"><strong>{currentUser?.name}</strong><small>{currentUser?.shortRole}</small></span></span>
@@ -121,19 +119,23 @@ export default function Workspace(){
         </div>
       </div>
       {mobileOpen&&<nav id="sa-mobile-navigation" className="sa-mobile-nav" aria-label="Mobile role navigation">
-        {pages.map(page=>{
+        {primary.map(page=>{
           const Icon=navIcons[page.href]??Activity;
           return <Link key={page.href} href={page.href} onClick={closeMenu} aria-current={pathname===page.href?'page':undefined}>
             <Icon size={18}/>{page.label}<ArrowUpRight size={16}/></Link>;
         })}
+        <Link href="/showcase" className="sa-showcase-mobile" onClick={closeMenu} aria-current={pathname==='/showcase'?'page':undefined}>
+          <Layers3 size={18}/>Platform Showcase<ArrowUpRight size={16}/>
+        </Link>
         <Link href="/demo" onClick={closeMenu}><UserRound size={18}/>Switch demo user<ArrowUpRight size={16}/></Link>
         <button type="button" onClick={leave}><LogOut size={18}/>Sign out</button>
       </nav>}
     </header>
     <main className={'sa-main sa-section-'+section}>
       <div className="sa-breadcrumb"><Link href="/demo" aria-label="TwinPeak demo">TwinPeak</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
-      {allowed?<><div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>
-        {section==='dashboard'?<DemoRoleDashboard role={role}/>:
+      {allowed?<>{section!=='showcase'&&<div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>}
+        {section==='showcase'?<PlatformShowcase/>:
+          section==='dashboard'?<DemoRoleDashboard role={role}/>:
           section==='simulation'?<Simulation/>:
           section==='compare'?<Compare/>:
           section==='alignment'?<DemoWorkflows role={role} section="alignment"/>:
