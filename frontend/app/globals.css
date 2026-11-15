@@ -2852,3 +2852,48 @@ body,.sa-app{background:#F5FAFE;color:#183D57}
 @media(prefers-reduced-motion:reduce){
   .tp-replay-tabs>button,.tp-replay-panel .timeline-shell{transition:none}
 }
+
+
+/* Cross-stack Engineering Quality: real suite selectors and security audit cards. */
+.eq-suite-tabs{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;margin:19px 0;
+}
+.eq-suite-tabs>button{
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;
+  background:#f7fbfe;border:1px solid #d1e5f0;color:#315f7e;
+  padding:15px;text-align:left;cursor:pointer;min-width:0;
+}
+.eq-suite-tabs>button strong{font-size:12px;color:#245976;line-height:1.5}
+.eq-suite-tabs>button>span{font-size:12px;color:#6a8597}
+.eq-suite-tabs>button:hover{background:#eaf5fb;border-color:#75b3d4}
+.eq-suite-tabs>button.active{
+  background:#e3f2fb;border:1px solid #147dad;box-shadow:inset 0 0 0 1px #147dad;
+}
+.eq-suite-tabs>button.active strong{color:#095d93}
+.eq-suite-tabs>button:focus-visible{outline:3px solid #147dad;outline-offset:2px}
+.eq-frontend-coverage{
+  margin:16px 0;padding:17px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px;border:1px solid #cde6f1;background:#eff8fd;
+}
+.eq-frontend-coverage>div{display:flex;flex-direction:column;gap:9px}
+.eq-frontend-coverage span{font-size:10px;letter-spacing:.07em;font-weight:800;color:#3d7091}
+.eq-frontend-coverage strong{font-size:clamp(23px,2.1vw,33px);color:#164f78}
+.eq-frontend-coverage>p{grid-column:1/-1;font-size:11px;line-height:1.5;color:#527892;margin:0}
+.eq-security-stack{display:grid;gap:14px;margin:23px 0}
+.eq-security-stack>article{
+  min-width:0;border:1px solid #d1e4ef;background:#f8fcff;padding:clamp(17px,2vw,23px);
+}
+.eq-security-stack-title{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:15px}
+.eq-security-stack-title strong{font-size:15px;color:#194c6c}
+.eq-security-stack .eq-security-counts{margin:0}
+.eq-security-stack>article>p{margin:15px 0 0;font-size:12px;color:#4c7188;line-height:1.7}
+@media(max-width:850px){
+  .eq-suite-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:580px){
+  .eq-suite-tabs,.eq-frontend-coverage{grid-template-columns:1fr}
+  .eq-security-stack-title{align-items:flex-start}
+  .eq-suite-tabs>button{padding:12px}
+}

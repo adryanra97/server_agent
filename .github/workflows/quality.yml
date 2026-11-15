@@ -9,8 +9,7 @@ on:
 permissions:
   contents: read
 
-# The backend report job publishes its measured JUnit summary to a public
-# reports-only branch. No credentials are stored in that report.
+# Consolidate sanitized JUnit/Vitest/Playwright and dependency evidence from each\n# job. Never publish test logs or API credentials.
 
 jobs:
   backend-tests:
@@ -45,40 +44,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-detailed-results
+          name: backend
           path: |
             backend/pytest-results.xml
             backend/pytest-dashboard.json
           if-no-files-found: ignore
-      - name: Publish browser-readable test evidence
-        if: always() && github.event_name != 'pull_request'
-        working-directory: .
-        env:
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          if [ ! -s backend/pytest-dashboard.json ]; then
-            echo "No test report produced; skipping publication."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          report_dir="$(mktemp -d)"
-          if git fetch origin quality-reports:refs/remotes/origin/quality-reports 2>/dev/null; then
-            git worktree add -b quality-reports "$report_dir" origin/quality-reports
-          else
-            git worktree add --detach "$report_dir" HEAD
-            git -C "$report_dir" checkout --orphan quality-reports
-            git -C "$report_dir" rm -rf . >/dev/null
-          fi
-          mkdir -p "$report_dir/runs"
-          cp backend/pytest-dashboard.json "$report_dir/runs/$RUN_ID.json"
-          cp backend/pytest-dashboard.json "$report_dir/latest.json"
-          git -C "$report_dir" add "runs/$RUN_ID.json" latest.json
-          git -C "$report_dir" commit -m "Publish measured Pytest results for run $RUN_ID"
-          git -C "$report_dir" push origin HEAD:quality-reports
-      - name: Pytest detailed report published
-        if: always()
-        run: echo "JUnit is the source of truth; check the public quality-reports branch for per-test outcomes."
       - name: Extract measured coverage
         id: coverage_metrics
         if: always()
@@ -191,3 +161,170 @@ jobs:
           name: bandit-security-report
           path: backend/bandit-report.json
           if-no-files-found: ignore
+
+  frontend-tests:
+    name: Frontend unit & component tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend test tooling
+        run: npm install --no-audit --no-fund
+      - name: Run Vitest component, contract and security regression tests
+        run: npm run test:coverage
+      - name: Upload measured Vitest evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-unit
+          path: |
+            frontend/vitest-results.xml
+            frontend/coverage/coverage-summary.json
+            frontend/coverage/lcov.info
+          if-no-files-found: ignore
+
+  frontend-e2e:
+    name: Browser end-to-end tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium test browser
+        run: npx playwright install --with-deps chromium
+      - name: Build Next.js for browser tests
+        run: npm run build
+      - name: Run real Chromium user journeys
+        run: npm run test:e2e
+      - name: Upload browser test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-e2e
+          path: |
+            frontend/playwright-results.xml
+            frontend/test-results
+          if-no-files-found: ignore
+
+  frontend-security:
+    name: Frontend dependency audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies for audit resolution
+        run: npm install --no-audit --no-fund
+      - name: Scan production dependencies (npm audit)
+        run: |
+          npm audit --omit=dev --json > npm-audit.json || true
+      - name: Read severity counts and enforce high/critical gate
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const report=JSON.parse(fs.readFileSync('npm-audit.json','utf8'));
+          const n=report.metadata?.vulnerabilities;
+          if(!n||report.error){
+            console.error('npm audit evidence unavailable; failing closed');
+            process.exit(1);
+          }
+          console.log('npm audit production findings:',JSON.stringify(n));
+          if((n.high??0)+(n.critical??0)>0){
+            console.error('High/critical production dependency vulnerabilities require review');
+            process.exit(1);
+          }
+          NODE
+      - name: Upload dependency audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit
+          path: frontend/npm-audit.json
+          if-no-files-found: ignore
+
+  python-dependency-security:
+    name: Python dependency audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install vulnerability scanner
+        run: pip install "pip-audit>=2.7,<3"
+      - name: Audit declared Python dependencies
+        run: pip-audit -r requirements.txt -f json -o pip-audit.json
+      - name: Upload dependency audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-audit
+          path: backend/pip-audit.json
+          if-no-files-found: ignore
+
+  publish-evidence:
+    name: Publish verified quality evidence
+    if: always() && github.event_name != 'pull_request'
+    needs:
+      - backend-tests
+      - python-style
+      - frontend
+      - frontend-tests
+      - frontend-e2e
+      - frontend-security
+      - python-security
+      - python-dependency-security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download sanitized test and audit artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: evidence
+          pattern: '*'
+          merge-multiple: false
+      - name: Merge measured test suites, coverage and security summaries
+        run: python .github/scripts/quality_report.py evidence consolidated-quality.json
+      - name: Publish per-run browser-readable evidence
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          report_dir="$(mktemp -d)"
+          if git fetch origin quality-reports:refs/remotes/origin/quality-reports 2>/dev/null; then
+            git worktree add -b quality-reports "$report_dir" origin/quality-reports
+          else
+            git worktree add --detach "$report_dir" HEAD
+            git -C "$report_dir" checkout --orphan quality-reports
+            git -C "$report_dir" rm -rf . >/dev/null
+          fi
+          mkdir -p "$report_dir/runs"
+          cp consolidated-quality.json "$report_dir/runs/$RUN_ID.json"
+          cp consolidated-quality.json "$report_dir/latest.json"
+          git -C "$report_dir" add "runs/$RUN_ID.json" latest.json
+          git -C "$report_dir" commit -m "Publish CI quality evidence for run $RUN_ID"
+          git -C "$report_dir" push origin HEAD:quality-reports
