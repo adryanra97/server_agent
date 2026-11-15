@@ -38,6 +38,10 @@ def junit_cases(path: Path, suite: str) -> list[dict]:
         if not file:
             file = classname if classname.endswith((".test.ts", ".test.tsx", ".spec.ts")) else ""
         file = file.replace("\\", "/").removeprefix("./")
+        # Playwright JUnit uses the basename. Restore the repository folder
+        # so the displayed source link opens the real browser test.
+        if suite == "e2e" and file and not file.startswith(("e2e/", "frontend/e2e/")):
+            file = "e2e/" + file
         if file and not file.startswith("frontend/"):
             file = "frontend/" + file
         group = file.removeprefix("frontend/") if file else classname or suite

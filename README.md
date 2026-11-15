@@ -206,3 +206,22 @@ Release Alignment keeps the main inputs (CPU cores, RAM, RPS) concise. **Advance
 The Release Alignment, Incident Response, Sign-Off, and Report record lists use native accessible `<details>/<summary>` disclosures: users can open a record to inspect the full verdict, CPU/RAM/network evidence, QA and review notes, incident mitigation, sign-off status, and a real SimPy time-series preview when available. Report history remains searchable and its rows show an explicit expand icon. The Overview workflow list navigates when the whole row is clicked. Each workflow record also provides an individual case PDF.
 
 Report PDFs use jsPDF to render an executive summary, recorded model verdicts and decisions, and up to three line charts per saved real SimPy scenario: **CPU / RAM / network occupancy**, **request arrivals vs completions**, and **average queue length** versus simulated seconds. Chart points come only from recorded SimPy `/api/v1/simpy/inspect` event buckets; browser storage retains at most 150 evenly selected **existing** points for each trace, without interpolating metrics. Both the Workbench and Release Alignment now save compact real timelines alongside the computed verdict. Incident before/after inspections save their separate timelines. An older QRIS sample attempts to backfill the original timeline using the saved request while preserving previously recorded decisions and original verdict, only if the model still returns the same verdict. Older cases with no compatible trace show an explicit note instead of a synthetic plot.
+
+## Cross-stack Engineering Quality (CI)
+
+The production build, Python simulation, frontend behavior, browser journeys and source/dependency security checks are measured by `.github/workflows/quality.yml`. The Engineering Quality page displays actual job outcomes and loads its detailed evidence by commit/run ID from `quality-reports`.
+
+| Quality layer | Tool | Measured evidence |
+| --- | --- | --- |
+| Simulation and API | Pytest + pytest-cov | Individual tests, durations, line/branch coverage |
+| React/TypeScript behavior | Vitest + React Testing Library | Per-case unit/component/API contract outcomes |
+| Frontend coverage | Vitest V8 | Lines, branches, functions (targeted modules only) |
+| Browser journey | Playwright Chromium | Real UI navigation and response-header checks |
+| Frontend typing/build | TypeScript + Next.js | Production build and typecheck status |
+| Python quality | Black + Ruff | Formatting and lint gates |
+| Python SAST | Bandit | Severity totals and medium+ gate |
+| JavaScript dependencies | npm audit | Production dependency findings; high/critical gate |
+| Python dependencies | pip-audit | Known dependency vulnerabilities; failing gate |
+| Temporary LLM credentials | Vitest regression suite | Session clearing, allowlisted hosts, error redaction, SSRF checks |
+
+The frontend has `npm run test:unit`, `npm run test:coverage`, and `npm run test:e2e`. Vitest uses a browser-like jsdom test environment while Playwright drives a real Chromium browser. CI publishes sanitized JUnit summaries and audit counts without captured secrets or failure log bodies. The displayed count is not synthetic; unreported results remain unavailable, never '0 passed'. Unreviewed application code, runtime authorization, and external penetration testing remain outside these automated tests; passing does not prove complete security.
