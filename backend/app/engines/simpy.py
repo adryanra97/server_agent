@@ -132,9 +132,14 @@ class SimPyEngine:
                 timeline.event("payload_kb", env.now, load.payload_kb)
                 timeline.event("completed", env.now)
 
-        # Number of arrivals to simulate: enough to fill a HORIZON-second
-        # arrival window, capped so a single verdict stays fast at high rps.
-        arrivals_count = min(MAX_ARRIVALS, max(1, int(load.rps * HORIZON))) if load.rps > 0 else 0
+        # Count arrivals in the nominal window. Below one expected arrival, do
+        # not invent a request: at tiny positive rates, expovariate() can even
+        # overflow to infinity and produce NaN in time-averaged utilization.
+        # Check the cap first to avoid overflowing rps * HORIZON for huge rates.
+        if load.rps >= MAX_ARRIVALS / HORIZON:
+            arrivals_count = MAX_ARRIVALS
+        else:
+            arrivals_count = int(load.rps * HORIZON)
 
         def arrivals() -> None:
             rng = random.Random(SEED)
