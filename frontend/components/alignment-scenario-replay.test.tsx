@@ -43,7 +43,7 @@ describe('QA/Technical Lead simulation visualization',()=>{
     await waitFor(()=>expect(fetchReplay).toHaveBeenCalledWith(3));
     expect(await screen.findByTestId('animation')).toBeInTheDocument();
   });
-  it('does not trigger a network replay without the user's click',()=>{
+  it("does not trigger a network replay without the user's click",()=>{
     const fetchReplay=vi.fn();
     render(<AlignmentScenarioReplay cases={cases} sectionId="test-replay" onLoadReplay={fetchReplay}/>);
     fireEvent.click(screen.getByRole('button',{name:/3× DEMAND/}));
