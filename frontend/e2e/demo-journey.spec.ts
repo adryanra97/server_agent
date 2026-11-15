@@ -80,8 +80,11 @@ test.describe('role boundary journeys across the five personas',()=>{
     const mobileNav=page.getByRole('navigation',{name:'Mobile role navigation'});
     await expect(mobileNav).toBeVisible();
     await expect(mobileNav.getByRole('link',{name:/Release Alignment/})).toBeVisible();
+    // Never allow a session-scoped provider key to remain after sign out.
+    await page.evaluate(()=>sessionStorage.setItem('twinpeak-llm-session-v1','temporary-test-secret'));
     await mobileNav.getByRole('button',{name:/Sign out/}).click();
     await expect(page).toHaveURL(/\/login/);
     expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBeNull();
+    expect(await page.evaluate(()=>sessionStorage.getItem('twinpeak-llm-session-v1'))).toBeNull();
   });
 });
