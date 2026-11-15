@@ -166,3 +166,21 @@ GitHub Actions uploads the JUnit XML and JSON as the `pytest-detailed-results` a
 The UI supports per-status counts, outcome distribution, search, filter, expand-by-module, per-test execution duration, and links to the exact source file at the tested commit. Test details are expandable to keep the page readable. This is reporting on tests already run by CI, not arbitrary on-demand code execution from the website.
 
 The `quality-reports` branch is intended to contain only sanitized public test metadata. Repository owners must allow the backend CI job to push this report branch with its scoped `contents: write` GitHub Actions permission for publication to work. Full failures and their diagnostic traces remain in authenticated GitHub CI artifacts/logs.
+
+
+## TwinPeak guided dashboard (C6, Nov 2026)
+
+The public-facing **TwinPeak** dashboard uses the ServerAgent simulation engine under the hood. Product branding changes do **not** rename existing backend modules, endpoints or Git repository.
+
+- **`/demo`**: guided role entry without a shared password. A first-time **QRIS Payment / Cycle 03** alignment case and related incident are seeded using an **actual SimPy `POST /verdict` response**. Existing reports/decisions are retained; the system never invents a passing result when the endpoint fails. `/login` remains available.
+- **Six primary workspace menus**: Overview, Release Alignment, Incident Response, Sign-Off, Report, Access & Roles. Only permitted role-specific menus appear. Additional tools (SimPy Workbench, Compare Loads, Model Methodology, API Explorer, Engineering Quality) are retained in **Explore**.
+- **Alignment**: editable server inputs and a Normal / 2x / 3x what-if evaluation, each in the same session. Valid cases are executed using the unchanged SimPy engine; details are expandable so verdict and the limiting resource appear first.
+- **Fourth verdict**: **Tidak Dapat Dinilai** means the requested comparison exceeds the **1–150 RPS guided-demo assessment window**. This is a UI/business demonstration boundary, **not a measured calibration guarantee by the original copdash backend**. No fake resource numbers, pass/fail result, or artificial LLM verdict is generated for an unassessable scenario.
+- **Technical Lead**: one decision control (Return to Dev / Forward for sign-off), mandatory follow-up notes, and confirmation before saving. A high-risk scenario is highlighted, not silently blocked by a new business rule. Manager signs off or rejects the *same* candidate with a reason and timestamp.
+- **Incident flow**: Support creates incidents; Integration Engineer evaluates before-and-after SimPy mitigation using the saved case.
+- **Reports**: filter records by category, service, cycle and date; download actual browser-generated **PDF** or CSV. PDF creation uses `jspdf`, and includes relevant evaluation evidence, decisions and the interpretation when available.
+- **Optional explanation service**: `POST /api/reasoning` is routed to the frontend Next.js handler before the backend's `/api/:path*` rewrite. It can add explanatory text to unassessable scenarios or report summaries. In the default unconfigured state, the output is explicit **model-based guidance**, *not called AI-generated*. Actual LLM reasoning requires both `OPENAI_API_KEY` and `OPENAI_REASONING_ENABLED=true`, plus optional `OPENAI_REASONING_MODEL`. It calls OpenAI's Responses API, constrains response length and does not override the original engine verdict. **Do not enable on an unrestricted public demo without server-side authentication, rate limiting and a spend budget**.
+
+Nothing sends load to Production. Guided role permissions and saved release records are browser-local demonstration behavior; they do not constitute backend authorization or shared audit storage. Avoid presenting them as production-ready security controls.
+
+This implementation adapts the C6 PPT's user flows and layout without copying unsupported thread-pool, p95, error-rate, calibration-date or LLM-cost metrics. No domain purchase, DNS change, or engine API contract change was performed.

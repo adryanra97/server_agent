@@ -13,10 +13,12 @@ export async function POST(request:NextRequest){
     const outOfScope=body.kind==='indeterminate';
     if(outOfScope&&(!Number.isFinite(rps)||rps<=scope||scope<1))return NextResponse.json({error:'Invalid assessment context'},{status:422});
     const fallback=outOfScope
-      ? 'Cannot assess '+service+' at '+rps+' RPS: the scenario exceeds the '+scope+' RPS demo evaluation boundary. No capacity result is inferred. Run a calibrated performance test, review CPU and memory capacity, and retry with a verified workload profile.'
-      : 'Review the recorded capacity verdict, limiting resource, and simulation evidence before approving a release. Attach test details and next-cycle actions to the report.';
+      ? 'Tidak Dapat Dinilai: '+service+' pada '+rps+' RPS berada di atas batas skenario '+scope+' RPS. Tidak ada angka utilisasi atau verdict kelayakan yang dapat disimpulkan. Lakukan uji beban tambahan, validasi konfigurasi server dan jalankan ulang analisis dalam rentang yang terukur.'
+      : 'Untuk '+service+', hasil evaluasi tercatat sebagai '+String(body.verdict||'belum tersedia')+
+        '. Dasar penilaian: '+String(body.summary||'bukti simulasi belum dipilih').slice(0,550)+
+        '. Tindak lanjut: periksa sumber daya pembatas, catat keputusan Technical Lead, lalu lampirkan bukti sebelum sign-off.';
     const key=process.env.OPENAI_API_KEY;
-    if(!key){
+    if(!key||process.env.OPENAI_REASONING_ENABLED!=='true'){
       const item:Explanation={text:fallback,generated:false,source:'model'};
       return NextResponse.json(item);
     }

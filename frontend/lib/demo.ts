@@ -1,4 +1,4 @@
-import { defaultLoad, defaultSpec, requestVerdict, saveRun, history, type ServerSpec, type Load, type VerdictResult } from './model';
+import { defaultLoad, defaultSpec, requestVerdict, saveRun, type ServerSpec, type Load, type VerdictResult } from './model';
 
 /**
  * Educational role-play ONLY. These identities and client-side permissions are
@@ -158,13 +158,12 @@ let starterPromise:Promise<boolean>|null=null;
 /** Populate example evidence from a real engine call; never fabricate a verdict. */
 export function ensureDemoStarter():Promise<boolean>{
   if(typeof window==='undefined')return Promise.resolve(false);
-  if(window.localStorage.getItem(STARTER_KEY))return Promise.resolve(true);
+  if(demoRecords().alignments.some(item=>item.id==='starter-qris-cycle03')){
+    window.localStorage.setItem(STARTER_KEY,'generated');
+    return Promise.resolve(true);
+  }
   if(starterPromise)return starterPromise;
   starterPromise=(async()=>{
-    if(demoRecords().alignments.length||history().length){
-      window.localStorage.setItem(STARTER_KEY,'existing');
-      return true;
-    }
     const spec:ServerSpec={
       ...structuredClone(defaultSpec),
       cpu:{cores:4,clock_ghz:2.5},
