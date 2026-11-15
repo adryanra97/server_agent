@@ -33,6 +33,7 @@ export const allDemoRoutes = [
   {href:'/signoff',label:'Sign-Off'},
   {href:'/reports',label:'Report'},
   {href:'/access',label:'Access & Roles'},
+  {href:'/showcase',label:'Platform Showcase'},
   {href:'/simulation',label:'SimPy Workbench'},
   {href:'/compare',label:'Compare Loads'},
   {href:'/methodology',label:'Model Methodology'},
@@ -47,8 +48,20 @@ const allowed: Record<DemoRole, string[]> = {
   manager:['/dashboard','/alignment','/signoff','/reports','/access','/methodology','/settings'],
   support:['/dashboard','/incident','/reports','/access','/methodology','/settings'],
 };
-export function allowedPages(role:DemoRole){return allDemoRoutes.filter(page=>allowed[role].includes(page.href));}
-export function canVisit(role:DemoRole,path:string){return allowed[role].includes(path);}
+/** Publicly shared technical demonstrations, independent of the workflow persona.
+ * This is navigation for a browser-local demo, not server-side authorization.
+ */
+export const showcasePages = [
+  '/showcase','/simulation','/compare','/methodology',
+  '/developer','/quality','/settings',
+] as const;
+function isShowcasePage(path:string){return showcasePages.some(page=>page===path);}
+export function allowedPages(role:DemoRole){
+  return allDemoRoutes.filter(page=>allowed[role].includes(page.href)||isShowcasePage(page.href));
+}
+export function canVisit(role:DemoRole,path:string){
+  return allowed[role].includes(path)||isShowcasePage(path);
+}
 export function getPersona(role:DemoRole){return demoPersonas.find(p=>p.id===role)??demoPersonas[0];}
 export function getDemoRole(): DemoRole|null {
   if(typeof window==='undefined')return null;

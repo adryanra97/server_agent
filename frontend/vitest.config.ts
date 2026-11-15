@@ -14,6 +14,7 @@ export default defineConfig({
         'lib/trace.ts', 'lib/llm-session.ts', 'lib/demo.ts', 'lib/model.ts',
         'components/alignment-decision.tsx', 'components/alignment-scenario-replay.tsx',
         'components/access-roles.tsx', 'components/trace-preview.tsx',
+        'components/platform-showcase.tsx',
         'components/demo-login.tsx',
         'app/api/reasoning/route.ts',
       ],

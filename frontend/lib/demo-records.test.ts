@@ -110,7 +110,9 @@ describe('Demo role and workflow data robustness',()=>{
     selectDemoPersona('manager');
     expect(getDemoRole()).toBe('manager');
     expect(canVisit('manager','/signoff')).toBe(true);
-    expect(canVisit('manager','/developer')).toBe(false);
+    expect(canVisit('manager','/developer')).toBe(true);
+    expect(canVisit('manager','/showcase')).toBe(true);
+    expect(canVisit('manager','/incident')).toBe(false);
   });
 });
 
