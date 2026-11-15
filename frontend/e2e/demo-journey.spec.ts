@@ -53,7 +53,7 @@ test.describe('role boundary journeys across the five personas',()=>{
       await expect(primary.getByRole('link',{name:'Showcase'})).toBeVisible();
       await primary.getByRole('link',{name:'Showcase'}).click();
       await expect(page).toHaveURL(/\/showcase/);
-      await expect(page.getByRole('heading',{name:/From simulation\\s+to evidence/i})).toBeVisible();
+      await expect(page.getByRole('heading',{name:/From simulation\s+to evidence/i})).toBeVisible();
       await expect(page.getByRole('link',{name:/View engineering evidence/})).toBeVisible();
       for(const shared of ['/simulation','/developer','/quality']){
         await page.goto(shared,{waitUntil:'domcontentloaded'});
