@@ -229,3 +229,14 @@ The frontend has `npm run test:unit`, `npm run test:coverage`, and `npm run test
 ### Frontend coverage policy (100% targeted gate)
 
 The frontend unit suite now measures **100% lines, statements, branches and functions** in each of the **seven existing explicitly included modules** (`frontend/vitest.config.ts`). Vitest enforces all four metrics at **100% per file** in CI, so new untested paths in those modules fail the quality gate. No source modules or files were removed from the covered set to improve the percentages. The baseline grew from 47 Vitest cases to a broader regression suite exercising API errors, real-model trace contracts, role sessions, QRIS case initialization and migration, malformed data, replay recovery, and LLM security boundaries. The four percentage metrics describe **these seven selected production modules**, not every Next.js page and component; coverage of other frontend areas is a separate expansion of scope.
+
+
+## Platform Showcase (examiner-facing, not a business use case)
+
+The top-level **Showcase** link opens `/showcase` as an always-visible technical reference for all five browser demo personas. It replaces the old role-dependent **Explore** dropdown.
+
+- Six working demonstrations: SimPy Workbench, Compare Loads, Engineering Quality, API Explorer, Model Methodology and optional LLM Settings.
+- Real source links: GitHub Actions workflow executions and YAML definition, published `quality-reports/latest.json`, backend `/api/v1/quality`, Swagger `/docs`, and machine-readable `/openapi.json`.
+- Technical showcase routes are available regardless of the selected persona. Role-specific *operational* journeys (QA submission, incident escalation, Technical Lead review, Manager sign-off) keep their distinct UI boundaries to demonstrate the functional model.
+- Showcase is **not** a sixth role or an extra UAM-controlled use case. The demo's browser-side role navigation is not backend authorization. All CI, coverage, audit and engine claims continue to be drawn from recorded evidence rather than invented metrics.
+
