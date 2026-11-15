@@ -7,7 +7,7 @@ import {
   Clock3, Cpu, ChevronDown, Download, FileText, GitCompareArrows, Info, Play, ShieldCheck, Waves,
 } from 'lucide-react';
 import { inspectSimPy, history, defaultLoad, defaultSpec, type HistoryItem } from '../lib/model';
-import { compactTimeline } from '../lib/trace';
+import { compactTimeline, hasFullReplay, type TraceSample } from '../lib/trace';
 import {
   demoRecords, saveAlignment, saveIncident, getPersona,
   type DemoRole, type DemoRecords, type DemoAlignment, type DemoIncident,
@@ -15,6 +15,7 @@ import {
 import { Outcome } from './ui';
 import AlignmentWorkbench, { type AnalysisCase } from './alignment-workbench';
 import AlignmentDecision from './alignment-decision';
+import AlignmentScenarioReplay from './alignment-scenario-replay';
 import { downloadTwinPeakPDF } from '../lib/report-pdf';
 import TracePreview from './trace-preview';
 
@@ -85,6 +86,39 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
     });
     setNote('');
     setMessage('Alignment evidence submitted for Technical Lead review.');
+  }
+  async function loadAlignmentReplay(item:DemoAlignment,factor:number):Promise<TraceSample[]>{
+    const saved=history().find(run=>run.id===item.runId);
+    if(!saved||saved.request.engine!=='simpy'){
+      throw new Error('The original server profile for this case is unavailable. Run a new SimPy evaluation from QA.');
+    }
+    const previous=item.whatIf?.find(c=>c.factor===factor);
+    if(previous?.verdict==='not_assessable'){
+      throw new Error('This scenario has no completed verdict to replay.');
+    }
+    const rps=previous?.rps??saved.request.load.rps*factor;
+    const inspection=await inspectSimPy({
+      ...saved.request,engine:'simpy',
+      load:{...saved.request.load,rps},
+    });
+    const expected=previous?.verdict??(factor===1?item.result.verdict:null);
+    if(expected&&inspection.result.verdict!==expected){
+      throw new Error('The new model verdict differs from the saved decision. Keep the original evidence and create a fresh QA evaluation instead.');
+    }
+    const timeline=compactTimeline(inspection.simulation.timeline);
+    if(!hasFullReplay(timeline)){
+      throw new Error('SimPy did not return a complete replay trace for this scenario.');
+    }
+    const latest=demoRecords().alignments.find(record=>record.id===item.id);
+    if(latest){
+      const current=latest.whatIf??[];
+      const merged=current.some(c=>c.factor===factor)
+        ?current.map(c=>c.factor===factor?{...c,timeline}:c)
+        :[...current,{factor,rps,verdict:inspection.result.verdict,result:inspection.result,timeline}]
+          .sort((a,b)=>a.factor-b.factor);
+      saveAlignment({...latest,whatIf:merged});
+    }
+    return timeline;
   }
   function decideAlignment(item:DemoAlignment,status:'returned'|'pending-signoff',reviewText:string){
     if(role!=='lead'||item.status!=='review')return;
@@ -165,8 +199,8 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
       </section>}
       {role==='lead'&&<div className="role-review-hint"><ClipboardCheck size={19}/><span>Review submitted model evidence. The Technical Lead records the alignment decision.</span></div>}
       <section className="role-list-panel"><div className="role-panel-head"><div><span className="role-eyebrow">ALIGNMENT RECORDS</span><h3>Sprint-cycle evidence</h3></div><span className="role-count">{latestByRelease.length} records</span></div>
-        {latestByRelease.length?latestByRelease.map(item=><article className="role-record tp-case-record" key={item.id}>
-          <details className="tp-case-disclosure">
+        {latestByRelease.length?latestByRelease.map((item,index)=><article className="role-record tp-case-record" key={item.id}>
+          <details className="tp-case-disclosure" defaultOpen={role==='lead'&&index===0}>
             <summary className="tp-case-summary">
               <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
               <div className="tp-case-preview"><Outcome verdict={item.result.verdict}/><span>Bottleneck: {item.result.bottleneck??'None'}</span><span className="tp-case-open">View case details <ChevronDown size={17}/></span></div>
@@ -176,7 +210,15 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
           <p className="tp-verdict-narrative">{item.result.reasons.join(' · ')}</p>
           <details className="tp-record-technical"><summary>View technical indicators</summary><div><span>CPU: {(item.result.resources.cpu.utilization*100).toFixed(1)}%</span><span>RAM: {(item.result.resources.ram.utilization*100).toFixed(1)}%</span><span>Network: {(item.result.resources.network.utilization*100).toFixed(1)}%</span></div></details>
           {item.whatIf&&item.whatIf.length>0&&<div className="tp-record-whatif">{item.whatIf.map(c=><span key={c.factor}>{c.factor}× · {c.rps} RPS · <Outcome verdict={c.verdict}/></span>)}</div>}
-          <TracePreview points={item.whatIf?.find(x=>x.factor===1)?.timeline??runs.find(r=>r.id===item.runId)?.timeline}/>
+          <AlignmentScenarioReplay
+            sectionId={'alignment-record-'+item.id}
+            heading="Replay the submitted workload"
+            cases={item.whatIf?.length?item.whatIf:[{
+              factor:1,rps:item.rps,verdict:item.result.verdict,
+              timeline:runs.find(r=>r.id===item.runId)?.timeline,
+            }]}
+            onLoadReplay={factor=>loadAlignmentReplay(item,factor)}
+          />
           <p>{item.qaNotes||'No supplementary testing notes provided.'}</p>
           {item.reviewerNote&&<p className="role-review-note"><strong>Technical review:</strong> {item.reviewerNote}</p>}
           {item.signoffNote&&<p className="role-review-note"><strong>Sign-off note:</strong> {item.signoffNote}</p>}

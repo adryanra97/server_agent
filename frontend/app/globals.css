@@ -2779,3 +2779,76 @@ body,.sa-app{background:#F5FAFE;color:#183D57}
 @media(prefers-reduced-motion:reduce){
   .tp-case-open svg,.tp-expand-icon{transition:none}
 }
+
+
+/* Release Alignment: evidence-first scenario tabs + the original SimPy
+   animated hardware replay. Contrast uses daylight blue on white surfaces. */
+.tp-scenario-replay{
+  margin-top:22px;
+  border:1px solid #c7e1ef;
+  background:#f5fafe;
+  padding:clamp(16px,2.2vw,26px);
+  min-width:0;
+  scroll-margin-top:96px;
+}
+.tp-replay-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:17px}
+.tp-replay-heading>div{min-width:0}
+.tp-replay-heading>div>span{font-size:10px;letter-spacing:.11em;font-weight:850;color:#0b6fa7}
+.tp-replay-heading h3{font-size:clamp(21px,2.15vw,30px);color:#174967;letter-spacing:-.045em;margin:8px 0}
+.tp-replay-heading p{font-size:13px;color:#436983;line-height:1.65;margin:0}
+.tp-replay-heading>svg{color:#1479ac;flex-shrink:0}
+.tp-replay-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.tp-replay-tabs>button{
+  text-align:left;
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;
+  min-width:0;padding:16px 17px;background:white;border:1px solid #cbdfea;
+  color:#204d6d;cursor:pointer;
+}
+.tp-replay-tabs>button.active{background:#e9f5fc;border-color:#147cae;box-shadow:inset 0 0 0 1px #147cae}
+.tp-replay-tabs>button:hover{background:#f0f8fd;border-color:#4ca3ca}
+.tp-replay-tabs>button:focus-visible{outline:3px solid #147cae;outline-offset:2px}
+.tp-replay-tab-eyebrow{font-size:10px;letter-spacing:.08em;font-weight:800;color:#43718c}
+.tp-replay-tab-main{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%}
+.tp-replay-tab-main strong{font-size:clamp(17px,1.65vw,24px);letter-spacing:-.04em;color:#144866}
+.tp-replay-tab-main svg{color:#1175a9}
+.tp-replay-tabs .status-pill{font-size:10px}
+.tp-replay-panel{min-width:0;background:#fff;border:1px solid #d0e4f0;padding:clamp(14px,1.7vw,23px)}
+.tp-replay-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px 18px;flex-wrap:wrap;padding:0 0 17px}
+.tp-replay-panel-head>div{display:flex;align-items:center;gap:10px;color:#174d70;font-size:14px}
+.tp-replay-panel-head>div svg{color:#0f7cab}
+.tp-replay-panel-head>span{font-size:10px;font-weight:800;letter-spacing:.08em;color:#396987}
+.tp-replay-panel .timeline-shell{margin:0;padding:0;border:0;background:transparent;width:100%;max-width:none}
+.tp-replay-panel .timeline-head h3{color:#173f5f}
+.tp-replay-panel .timeline-head p{color:#456d86}
+.tp-replay-panel .timeline-chart-header h3{color:#174a69}
+.tp-replay-panel .timeline-disclaimer{color:#4c7188}
+.tp-replay-fallback{background:#f7fbfe;padding:15px}
+.tp-replay-fallback>p{font-size:12px;line-height:1.7;color:#416984}
+.tp-replay-load{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid #096ba8;background:#096ba8;color:#fff;
+  padding:11px 15px;font-size:12px;font-weight:800;cursor:pointer;
+}
+.tp-replay-load:hover{background:#07527f}
+.tp-replay-load:disabled{opacity:.58;cursor:wait}
+.tp-case-body>.tp-scenario-replay{margin-top:20px}
+.tp-analysis-results{scroll-margin-top:95px}
+.tp-analysis-results>.tp-scenario-replay{margin-top:25px}
+@media(max-width:840px){
+  .tp-replay-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tp-replay-tabs>button{padding:12px;gap:7px}
+  .tp-replay-tab-main strong{font-size:17px}
+  .tp-replay-panel{padding:12px}
+}
+@media(max-width:600px){
+  .tp-scenario-replay{padding:12px}
+  .tp-replay-tabs{grid-template-columns:1fr;gap:7px}
+  .tp-replay-tabs>button{flex-direction:row;align-items:center;flex-wrap:wrap;gap:8px 13px}
+  .tp-replay-tab-main{width:auto;flex:1}
+  .tp-replay-tab-main strong{font-size:17px}
+  .tp-replay-tabs .status-pill{margin-left:auto}
+  .tp-replay-panel-head>span{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tp-replay-tabs>button,.tp-replay-panel .timeline-shell{transition:none}
+}

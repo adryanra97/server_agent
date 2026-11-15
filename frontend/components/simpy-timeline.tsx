@@ -72,9 +72,11 @@ function exportTrace(trace:TimelinePoint[]){
 }
 
 export default function SimulationTimeline({
-  trace,running,truncated,limit,
+  trace,running,truncated,limit,sectionId='simpy-timeline',
+  replayLabel='02 / SIMULATION REPLAY',analyticsLabel='03 / TIME-SERIES ANALYTICS',
 }:{
   trace:TimelinePoint[];running:boolean;truncated:boolean;limit:number;
+  sectionId?:string;replayLabel?:string;analyticsLabel?:string;
 }){
   const [index,setIndex]=useState(0);
   const [mode,setMode]=useState<Mode>('compute');
@@ -82,6 +84,10 @@ export default function SimulationTimeline({
   const [speed,setSpeed]=useState(1);
   const hasTrace=trace.length>0;
   const last=Math.max(0,trace.length-1);
+  const firstSecond=trace[0]?.second??0;
+  const lastSecond=trace[last]?.second??0;
+  const timelineDuration=Math.max(1,lastSecond-firstSecond);
+  const headingId=sectionId+'-heading';
   const point=trace[bound(index,0,last)]??null;
 
   useEffect(()=>{
@@ -113,12 +119,12 @@ export default function SimulationTimeline({
 
   const chartLines=useMemo(()=>selected.series.map(series=>{
     const points=trace.map((p,i)=>{
-      const x=PAD_L+(i/Math.max(1,trace.length-1))*plotW;
+      const x=PAD_L+((p.second-firstSecond)/timelineDuration)*plotW;
       const y=PAD_T+plotH*(1-Number(p[series.key])/maxValue);
       return String(x.toFixed(2))+','+String(y.toFixed(2));
     });
     return {...series,points:points.join(' ')};
-  }),[selected,maxValue,trace]);
+  }),[selected,maxValue,trace,firstSecond,timelineDuration]);
 
   const insight=useMemo(()=>{
     if(!hasTrace)return null;
@@ -141,13 +147,15 @@ export default function SimulationTimeline({
     const plotLeft=rect.left+PAD_L/W*rect.width;
     const plotWidth=plotW/W*rect.width;
     const offset=(clientX-plotLeft)/plotWidth;
-    chooseSecond(Math.round(bound(offset,0,1)*last));
+    const second=firstSecond+bound(offset,0,1)*timelineDuration;
+    const nearest=trace.reduce((best,point,i)=>Math.abs(point.second-second)<Math.abs(trace[best].second-second)?i:best,0);
+    chooseSecond(nearest);
   }
 
-  return <section className="timeline-shell" id="simpy-timeline" aria-labelledby="timeline-heading">
+  return <section className="timeline-shell" id={sectionId} aria-labelledby={headingId}>
     <header className="timeline-head">
-      <div><span className="simpy-section-number">02 / SIMULATION REPLAY</span>
-        <h3 id="timeline-heading">Every second tells <em>a different story.</em></h3>
+      <div><span className="simpy-section-number">{replayLabel}</span>
+        <h3 id={headingId}>Every second tells <em>a different story.</em></h3>
         <p>Explore resource demand, throughput, and waiting queues using one-second buckets computed from actual SimPy events.</p>
       </div>
       <div className="timeline-source"><span className="timeline-source-dot"/> {running?'COMPUTING MODEL':hasTrace?'RECORDED ENGINE DATA':'AWAITING SIMULATION'}</div>
@@ -213,7 +221,7 @@ export default function SimulationTimeline({
         <button type="button" className="timeline-play" disabled={!hasTrace||last===0} onClick={()=>{if(index>=last)setIndex(0);setPlaying(!playing)}} aria-label={playing?'Pause trace replay':'Play trace replay'}>{playing?<Pause size={19} fill="currentColor"/>:<Play size={19} fill="currentColor"/>}</button>
         <button type="button" className="timeline-step" disabled={!hasTrace||index===0} aria-label="Previous second" onClick={()=>chooseSecond(index-1)}><ChevronLeft size={20}/></button>
         <button type="button" className="timeline-step" disabled={!hasTrace||index===last} aria-label="Next second" onClick={()=>chooseSecond(index+1)}><ChevronRight size={20}/></button>
-        <div className="timeline-current"><strong>{hasTrace?'T + '+String(point?.second??0).padStart(2,'0')+'s':'T + —'}</strong><span>{hasTrace?String(trace.length)+' sampled seconds':'Run a simulation to activate replay'}</span></div>
+        <div className="timeline-current"><strong>{hasTrace?'T + '+String(point?.second??0).padStart(2,'0')+'s':'T + —'}</strong><span>{hasTrace?String(trace.length)+' recorded sample buckets':'Run a simulation to activate replay'}</span></div>
       </div>
       <label className="timeline-speed">SPEED
         <select value={speed} onChange={e=>setSpeed(Number(e.target.value))} aria-label="Replay speed">
@@ -223,9 +231,9 @@ export default function SimulationTimeline({
     </div>
 
     <input type="range" className="timeline-scrubber" min={0} max={last} step={1} disabled={!hasTrace} value={Math.min(index,last)} onChange={e=>chooseSecond(Number(e.target.value))} aria-label="Simulation second" />
-    <div className="timeline-axis-text"><span>0 seconds</span><span>{hasTrace?last+' seconds':'Awaiting simulation'}</span></div>
+    <div className="timeline-axis-text"><span>{hasTrace?firstSecond+' seconds':'0 seconds'}</span><span>{hasTrace?lastSecond+' seconds':'Awaiting simulation'}</span></div>
 
-    <div className="timeline-chart-header" id="simpy-analytics"><div><span className="simpy-section-number">03 / TIME-SERIES ANALYTICS</span><h3>What changes each second?</h3><p className="sa-chart-subtitle">One question at a time. Select a metric group, then drag the timeline or click the chart.</p></div>
+    <div className="timeline-chart-header" id={sectionId==='simpy-timeline'?'simpy-analytics':sectionId+'-analytics'}><div><span className="simpy-section-number">{analyticsLabel}</span><h3>What changes each second?</h3><p className="sa-chart-subtitle">One question at a time. Select a metric group, then drag the timeline or click the chart.</p></div>
       {hasTrace&&<button type="button" className="timeline-export" onClick={()=>exportTrace(trace)}><ArrowDownToLine size={16}/> Export per-second CSV</button>}
     </div>
 
@@ -245,8 +253,8 @@ export default function SimulationTimeline({
           return <g key={'threshold-'+threshold}><line x1={PAD_L} y1={y} x2={W-PAD_R} y2={y} stroke={threshold===80?'#cd9851':'#dc6b78'} strokeWidth={1} strokeDasharray="5 6"/><text x={W-PAD_R-3} y={y-5} fill={threshold===80?'#aa7332':'#b34958'} textAnchor="end" fontSize={11}>{threshold===80?'Risk 80%':'Capacity 100%'}</text></g>;
         })}
         {chartLines.map(line=><polyline key={line.key} points={line.points} fill="none" stroke={line.color} strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>)}
-        {[0,.25,.5,.75,1].map(v=><text key={v} x={PAD_L+plotW*v} y={H-13} fontSize={12} fill="#718a9c" textAnchor="middle">{Math.round(v*last)+'s'}</text>)}
-        <line x1={PAD_L+index/Math.max(1,last)*plotW} x2={PAD_L+index/Math.max(1,last)*plotW} y1={PAD_T} y2={PAD_T+plotH} stroke="#0b2b41" strokeWidth={1.6} strokeDasharray="5 4"/>
+        {[0,.25,.5,.75,1].map(v=><text key={v} x={PAD_L+plotW*v} y={H-13} fontSize={12} fill="#718a9c" textAnchor="middle">{Math.round(firstSecond+v*timelineDuration)+'s'}</text>)}
+        <line x1={PAD_L+((point?.second??firstSecond)-firstSecond)/timelineDuration*plotW} x2={PAD_L+((point?.second??firstSecond)-firstSecond)/timelineDuration*plotW} y1={PAD_T} y2={PAD_T+plotH} stroke="#0b2b41" strokeWidth={1.6} strokeDasharray="5 4"/>
         {selected.series.map(series=>{
           const x=PAD_L+index/Math.max(1,last)*plotW;
           const y=PAD_T+plotH*(1-Number(point?.[series.key]??0)/maxValue);

@@ -1,5 +1,5 @@
 import { defaultLoad, defaultSpec, history, inspectSimPy, saveRun, type ServerSpec, type Load, type VerdictResult } from './model';
-import { compactTimeline, type TraceSample } from './trace';
+import { compactTimeline, hasFullReplay, type TraceSample } from './trace';
 import { clearLLMSession } from './llm-session';
 
 /**
@@ -167,28 +167,44 @@ export function ensureDemoStarter():Promise<boolean>{
   const starter=demoRecords().alignments.find(item=>item.id==='starter-qris-cycle03');
   if(starter){
     window.localStorage.setItem(STARTER_KEY,'generated');
-    if(starter.whatIf?.some(item=>item.factor===1&&(item.timeline?.length??0)>1))
-      return Promise.resolve(true);
+    const factors=[1,2,3];
+    const previous=starter.whatIf??[];
+    const ready=factors.every(factor=>previous.some(item=>
+      item.factor===factor&&(hasFullReplay(item.timeline)||item.verdict==='not_assessable')
+    ));
+    if(ready)return Promise.resolve(true);
     if(starterPromise)return starterPromise;
     starterPromise=(async()=>{
       const saved=history().find(item=>item.id===starter.runId);
-      if(!saved)return true;
-      try{
-        const inspected=await inspectSimPy(saved.request);
-        // Preserve all previously recorded release decisions and the old verdict.
-        if(inspected.result.verdict!==starter.result.verdict)return true;
-        const timeline=compactTimeline(inspected.simulation.timeline);
-        if(timeline.length<2)return true;
-        const latest=demoRecords().alignments.find(item=>item.id===starter.id);
-        if(!latest||latest.whatIf?.some(item=>item.factor===1&&(item.timeline?.length??0)>1))
-          return true;
-        const prior=latest.whatIf??[];
-        const baseline=prior.some(item=>item.factor===1)?prior.map(item=>
-          item.factor===1?{...item,timeline}:item
-        ):[{factor:1,rps:latest.rps,verdict:latest.result.verdict,
-          result:latest.result,timeline},...prior];
-        saveAlignment({...latest,whatIf:baseline});
-      }catch{/* Timeline will remain explicitly unavailable until a fresh model run. */}
+      if(!saved||saved.request.engine!=='simpy')return true;
+      const scenarios=await Promise.all(factors.map(async factor=>{
+        const old=previous.find(c=>c.factor===factor);
+        if(old&&(hasFullReplay(old.timeline)||old.verdict==='not_assessable'))return old;
+        const rps=saved.request.load.rps*factor;
+        try{
+          const inspected=await inspectSimPy({
+            ...saved.request,engine:'simpy',
+            load:{...saved.request.load,rps},
+          });
+          const expected=old?.verdict??(factor===1?starter.result.verdict:null);
+          // Saved decision evidence never changes if a fresh simulation differs.
+          if(expected&&inspected.result.verdict!==expected)return old??{
+            factor,rps,verdict:starter.result.verdict,result:starter.result,
+          };
+          const timeline=compactTimeline(inspected.simulation.timeline);
+          return {
+            ...old,factor,rps,verdict:inspected.result.verdict,result:inspected.result,timeline,
+          };
+        }catch{
+          return old??{
+            factor,rps,verdict:'not_assessable' as const,
+            explanation:'This SimPy scenario could not be evaluated. Retry with a new QA evaluation.',
+            explanationSource:'model' as const,
+          };
+        }
+      }));
+      const latest=demoRecords().alignments.find(item=>item.id===starter.id);
+      if(latest)saveAlignment({...latest,whatIf:scenarios});
       return true;
     })().finally(()=>{starterPromise=null;});
     return starterPromise;
@@ -208,12 +224,31 @@ export function ensureDemoStarter():Promise<boolean>{
     const stamp=new Date().toISOString();
     const runId='starter-qris-cycle03-simpy';
     saveRun({id:runId,created_at:stamp,label:'QRIS Payment · Cycle 03 · baseline 45 RPS',request,result,timeline});
+    // One connected release case, with three independently measured scenarios.
+    const followups=await Promise.all([2,3].map(async factor=>{
+      const rps=load.rps*factor;
+      try{
+        const measured=await inspectSimPy({
+          ...request,load:{...load,rps},
+        });
+        return {
+          factor,rps,verdict:measured.result.verdict,result:measured.result,
+          timeline:compactTimeline(measured.simulation.timeline),
+        };
+      }catch{
+        return {
+          factor,rps,verdict:'not_assessable' as const,
+          explanation:'SimPy could not complete this workload. Run a new evaluation to retry.',
+          explanationSource:'model' as const,
+        };
+      }
+    }));
     saveAlignment({
       id:'starter-qris-cycle03',type:'alignment',createdAt:stamp,updatedAt:stamp,
       release:'QRIS-RC03',cycle:3,service:'QRIS Payment',
       qaNotes:'Baseline performance scenario for the release alignment demo. Review the measured model evidence before deciding the next cycle.',
       createdBy:'qa',status:'review',runId,result,rps:45,
-      whatIf:[{factor:1,rps:45,verdict:result.verdict,result,timeline}],
+      whatIf:[{factor:1,rps:45,verdict:result.verdict,result,timeline},...followups],
     });
     saveIncident({
       id:'starter-qris-incident',type:'incident',createdAt:stamp,updatedAt:stamp,

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, CircleHelp, Cpu, Play, RefreshCw } from 'lucide-react';
 import {
   defaultLoad, defaultSpec, inspectSimPy, saveRun,
@@ -9,6 +9,7 @@ import { readLLMSession, requestReasoning } from '../lib/llm-session';
 import { compactTimeline, type TraceSample } from '../lib/trace';
 import { Outcome, ResourceBars } from './ui';
 import { downloadUnassessablePDF } from '../lib/report-pdf';
+import AlignmentScenarioReplay from './alignment-scenario-replay';
 
 export type AnalysisCase={
   factor:number;rps:number;verdict:Verdict;
@@ -30,6 +31,15 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
   const [maxConnections,setMaxConnections]=useState(defaultSpec.network.max_connections);
   const [calibrationSource,setCalibrationSource]=useState<'sample'|'measured'>('sample');
   const [cases,setCases]=useState<AnalysisCase[]>([]);
+  const resultsRef=useRef<HTMLDivElement|null>(null);
+  useEffect(()=>{
+    if(cases.length>0){
+      resultsRef.current?.scrollIntoView({
+        behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+        block:'start',
+      });
+    }
+  },[cases.length]);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
   async function run(){
@@ -132,7 +142,7 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
       <button type="button" onClick={()=>void run()} disabled={busy}>{busy?<><RefreshCw size={17}/> Evaluating…</>:<><Play size={16}/> Run simulated analysis <ArrowRight size={16}/></>}</button>
     </div>
     {error&&<div className="tp-error" role="alert">{error}</div>}
-    {cases.length>0&&<div className="tp-analysis-results">
+    {cases.length>0&&<div className="tp-analysis-results" ref={resultsRef}>
       <div className="tp-panel-heading"><div><span>02 / ASSESSMENT RESULTS</span><h3>Verdict first. Evidence on demand.</h3>
         <p>SimPy results are shown when available. An unsuccessful engine request is marked Tidak Dapat Dinilai, without inventing measurements.</p>
       </div></div>
@@ -149,6 +159,7 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
           </button>
         </>}
       </article>)}</div>
+      <AlignmentScenarioReplay cases={cases} sectionId="alignment-live-replay"/>
     </div>}
   </section>;
 }
