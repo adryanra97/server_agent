@@ -61,6 +61,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
   const [incidentService,setIncidentService]=useState('Integration Gateway');
   const [mitigationCores,setMitigationCores]=useState(12);
   const [selectedIncident,setSelectedIncident]=useState<string|null>(null);
+  const [expandedAlignments,setExpandedAlignments]=useState<Record<string,boolean>>({});
   useEffect(()=>{
     setRuns(history());
     const refresh=()=>setRuns(history());
@@ -205,6 +206,9 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
               element.dataset.initialized='true';
               element.open=role==='lead'&&index===0;
             }
+          }} onToggle={event=>{
+            const expanded=event.currentTarget.open;
+            setExpandedAlignments(prev=>prev[item.id]===expanded?prev:{...prev,[item.id]:expanded});
           }}>
             <summary className="tp-case-summary">
               <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
@@ -215,7 +219,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
           <p className="tp-verdict-narrative">{item.result.reasons.join(' · ')}</p>
           <details className="tp-record-technical"><summary>View technical indicators</summary><div><span>CPU: {(item.result.resources.cpu.utilization*100).toFixed(1)}%</span><span>RAM: {(item.result.resources.ram.utilization*100).toFixed(1)}%</span><span>Network: {(item.result.resources.network.utilization*100).toFixed(1)}%</span></div></details>
           {item.whatIf&&item.whatIf.length>0&&<div className="tp-record-whatif">{item.whatIf.map(c=><span key={c.factor}>{c.factor}× · {c.rps} RPS · <Outcome verdict={c.verdict}/></span>)}</div>}
-          <AlignmentScenarioReplay
+          {(expandedAlignments[item.id]??(role==='lead'&&index===0))&&<AlignmentScenarioReplay
             sectionId={'alignment-record-'+item.id}
             heading="Replay the submitted workload"
             cases={item.whatIf?.length?item.whatIf:[{
@@ -223,7 +227,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
               timeline:runs.find(r=>r.id===item.runId)?.timeline,
             }]}
             onLoadReplay={factor=>loadAlignmentReplay(item,factor)}
-          />
+          />}
           <p>{item.qaNotes||'No supplementary testing notes provided.'}</p>
           {item.reviewerNote&&<p className="role-review-note"><strong>Technical review:</strong> {item.reviewerNote}</p>}
           {item.signoffNote&&<p className="role-review-note"><strong>Sign-off note:</strong> {item.signoffNote}</p>}
