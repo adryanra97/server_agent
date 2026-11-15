@@ -49,6 +49,12 @@
       }
     },
     {
+      "source": "/api/reasoning",
+      "destination": {
+        "service": "frontend"
+      }
+    },
+    {
       "source": "/api/:path*",
       "destination": {
         "service": "backend"

@@ -12,6 +12,8 @@ import {
   type DemoRole, type DemoRecords, type DemoAlignment, type DemoIncident,
 } from '../lib/demo';
 import { Outcome } from './ui';
+import AlignmentWorkbench, { type AnalysisCase } from './alignment-workbench';
+import AlignmentDecision from './alignment-decision';
 
 type Section='alignment'|'incident'|'signoff';
 const date=(value:string)=>new Date(value).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
@@ -41,9 +43,10 @@ function EmptyRecords({message,link,label}:{message:string;link?:string;label?:s
 export default function DemoWorkflows({role,section}:{role:DemoRole;section:Section}){
   const data=useDemoRecords();
   const [runs,setRuns]=useState<HistoryItem[]>([]);
-  const [release,setRelease]=useState('RC-01');
-  const [cycle,setCycle]=useState(1);
-  const [service,setService]=useState('Integration Gateway');
+  const [analysisCases,setAnalysisCases]=useState<AnalysisCase[]>([]);
+  const [release,setRelease]=useState('QRIS-RC03');
+  const [cycle,setCycle]=useState(3);
+  const [service,setService]=useState('QRIS Payment');
   const [runId,setRunId]=useState('');
   const [note,setNote]=useState('');
   const [message,setMessage]=useState('');
@@ -64,27 +67,28 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
   const latestByRelease=useMemo(()=>data.alignments.slice().sort((a,b)=>b.createdAt.localeCompare(a.createdAt)),[data.alignments]);
   function submitAlignment(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setMessage('');
-    if(role!=='qa'||!selectedRun){setMessage('Run a real SimPy evaluation first, then select its result.');return;}
+    if(role!=='qa'||!selectedRun){setMessage('Run a SimPy evaluation first, then select its result.');return;}
+    if(analysisCases[0]?.verdict==='not_assessable'){
+      setMessage('Normal demand is outside the assessment window. Use a supported workload before submitting a release verdict.');return;
+    }
     if(!note.trim()){setMessage('Add a brief QA test summary before submitting the release candidate.');return;}
     const stamp=now();
     saveAlignment({
       id:crypto.randomUUID(),type:'alignment',createdAt:stamp,updatedAt:stamp,
       release:release.trim(),cycle,service:service.trim(),qaNotes:note.trim(),
       createdBy:role,status:'review',runId:selectedRun.id,
+      whatIf:analysisCases.length?analysisCases:undefined,
       result:selectedRun.result,rps:selectedRun.request.load.rps,
     });
     setNote('');
     setMessage('Alignment evidence submitted for Technical Lead review.');
   }
-  function decideAlignment(item:DemoAlignment,status:'returned'|'pending-signoff'){
+  function decideAlignment(item:DemoAlignment,status:'returned'|'pending-signoff',reviewText:string){
     if(role!=='lead'||item.status!=='review')return;
-    if(!note.trim()){setMessage('Add a Technical Lead review note before recording your decision.');return;}
-    if(status==='pending-signoff'&&item.result.verdict==='will_crash'){
-      setMessage('This modeled scenario exceeds capacity. Return it to Dev for another cycle.');return;
-    }
+    if(!reviewText.trim()){setMessage('Add a Technical Lead review note before recording your decision.');return;}
     const stamp=now();
-    saveAlignment({...item,status,reviewerNote:note.trim(),reviewedAt:stamp,updatedAt:stamp});
-    setNote('');setMessage(status==='returned'?'Cycle returned to Development for iteration.':'Technical recommendation sent to the Manager sign-off queue.');
+    saveAlignment({...item,status,reviewerNote:reviewText.trim(),reviewedAt:stamp,updatedAt:stamp});
+    setMessage(status==='returned'?'Cycle returned to Development for iteration.':'Technical recommendation sent to the Manager sign-off queue.');
   }
   function signOff(item:DemoAlignment,status:'approved'|'rejected'){
     if(role!=='manager'||item.status!=='pending-signoff')return;
@@ -137,6 +141,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
     {message&&<div className="role-workflow-message" role="status"><Info size={18}/>{message}</div>}
 
     {section==='alignment'&&<>
+      {(role==='qa'||role==='lead')&&<AlignmentWorkbench onEvaluated={cases=>{setAnalysisCases(cases);setRunId('');}}/>}
       {role==='qa'&&<section className="role-form-panel">
         <div className="role-panel-head"><div><span className="role-eyebrow">STEP 01 / QA SUBMISSION</span><h3>Submit simulation evidence</h3></div><Activity size={22}/></div>
         <p>Select an actual evaluation saved by the ServerAgent simulator. It will be attached to this release-cycle submission.</p>
@@ -155,11 +160,14 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
       <section className="role-list-panel"><div className="role-panel-head"><div><span className="role-eyebrow">ALIGNMENT RECORDS</span><h3>Sprint-cycle evidence</h3></div><span className="role-count">{latestByRelease.length} records</span></div>
         {latestByRelease.length?latestByRelease.map(item=><article className="role-record" key={item.id}>
           <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
-          <div className="role-verdict-strip"><Outcome verdict={item.result.verdict}/><span>Bottleneck: <strong>{item.result.bottleneck??'None'}</strong></span><span>CPU: <strong>{(item.result.resources.cpu.utilization*100).toFixed(1)}%</strong></span><span>RAM: <strong>{(item.result.resources.ram.utilization*100).toFixed(1)}%</strong></span></div>
+          <div className="role-verdict-strip"><Outcome verdict={item.result.verdict}/><span>Limiting resource: <strong>{item.result.bottleneck??'None'}</strong></span></div>
+          <p className="tp-verdict-narrative">{item.result.reasons.join(' · ')}</p>
+          <details className="tp-record-technical"><summary>View technical indicators</summary><div><span>CPU: {(item.result.resources.cpu.utilization*100).toFixed(1)}%</span><span>RAM: {(item.result.resources.ram.utilization*100).toFixed(1)}%</span><span>Network: {(item.result.resources.network.utilization*100).toFixed(1)}%</span></div></details>
+          {item.whatIf&&item.whatIf.length>0&&<div className="tp-record-whatif">{item.whatIf.map(c=><span key={c.factor}>{c.factor}× · {c.rps} RPS · <Outcome verdict={c.verdict}/></span>)}</div>}
           <p>{item.qaNotes||'No supplementary testing notes provided.'}</p>
           {item.reviewerNote&&<p className="role-review-note"><strong>Technical review:</strong> {item.reviewerNote}</p>}
           {item.signoffNote&&<p className="role-review-note"><strong>Sign-off note:</strong> {item.signoffNote}</p>}
-          {role==='lead'&&item.status==='review'&&<div className="role-record-actions"><textarea aria-label="Technical review note" value={note} onChange={e=>setNote(e.target.value)} placeholder="Record review justification and next-cycle actions"/><div><button className="role-secondary-button" onClick={()=>decideAlignment(item,'returned')}>Return to Dev</button><button onClick={()=>decideAlignment(item,'pending-signoff')} disabled={item.result.verdict==='will_crash'}>Forward for sign-off <ArrowRight size={16}/></button></div>{item.result.verdict==='will_crash'&&<small>Modeled overload: this demo does not allow forwarding a will_crash verdict.</small>}</div>}
+          {role==='lead'&&item.status==='review'&&<AlignmentDecision key={item.id} item={item} onSave={(decision,text)=>decideAlignment(item,decision,text)}/>}
           {item.status==='approved'&&<div className="role-locked"><ShieldCheck size={17}/> Demo document {item.signedVersion} · approved {item.signedAt?date(item.signedAt):''} · locked against changes through this interface</div>}
         </article>):<EmptyRecords message="QA can create an alignment submission from an actual simulation run. Switch to the QA persona to begin." link={role==='qa'?'/simulation':undefined} label="Run SimPy simulation"/>}
       </section>

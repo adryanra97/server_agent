@@ -65,6 +65,10 @@ export function demoLogout(){
   window.dispatchEvent(new Event('serveragent-demo-user'));
 }
 export type AlignmentStatus = 'review'|'returned'|'pending-signoff'|'approved'|'rejected';
+export interface DemoWhatIf {
+  factor:number;rps:number;verdict:'will_survive'|'at_risk'|'will_crash'|'not_assessable';
+  result?:VerdictResult;explanation?:string;explanationSource?:'llm'|'model';
+}
 export interface DemoAlignment {
   id:string;
   type:'alignment';
@@ -79,6 +83,7 @@ export interface DemoAlignment {
   runId:string;
   result:VerdictResult;
   rps:number;
+  whatIf?:DemoWhatIf[];
   reviewerNote?:string;
   reviewedAt?:string;
   signoffNote?:string;
