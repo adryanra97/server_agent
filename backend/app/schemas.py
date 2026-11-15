@@ -19,10 +19,11 @@ from pydantic import BaseModel, Field
 class CpuSpec(BaseModel):
     """CPU capacity of the server."""
 
-    cores: float = Field(..., gt=0, description="Number of CPU cores available.", examples=[4])
+    cores: float = Field(..., gt=0, allow_inf_nan=False, description="Number of CPU cores available.", examples=[4])
     clock_ghz: float = Field(
         ...,
         gt=0,
+        allow_inf_nan=False,
         description=(
             "Clock speed per core, in GHz. Reserved for the future simulation "
             "engine; the rules engine keys off core count only."
@@ -34,14 +35,16 @@ class CpuSpec(BaseModel):
 class RamSpec(BaseModel):
     """RAM capacity of the server."""
 
-    total_mb: float = Field(..., gt=0, description="Total RAM, in megabytes.", examples=[8192])
+    total_mb: float = Field(
+        ..., gt=0, allow_inf_nan=False, description="Total RAM, in megabytes.", examples=[8192]
+    )
 
 
 class NetworkSpec(BaseModel):
     """Network capacity of the server."""
 
     bandwidth_mbps: float = Field(
-        ..., gt=0, description="Bandwidth capacity, in megabits per second.", examples=[1000]
+        ..., gt=0, allow_inf_nan=False, description="Bandwidth capacity, in megabits per second.", examples=[1000]
     )
     max_connections: int = Field(
         ..., gt=0, description="Maximum number of concurrent connections.", examples=[10000]
@@ -64,13 +67,18 @@ class ServerSpec(BaseModel):
 class Load(BaseModel):
     """The projected load to evaluate against the spec."""
 
-    rps: float = Field(..., ge=0, description="Requests per second.", examples=[500])
+    rps: float = Field(..., ge=0, allow_inf_nan=False, description="Requests per second.", examples=[500])
     avg_cpu_ms_per_req: float = Field(
-        ..., ge=0, description="Average CPU time per request, in milliseconds.", examples=[3.0]
+        ...,
+        ge=0,
+        allow_inf_nan=False,
+        description="Average CPU time per request, in milliseconds.",
+        examples=[3.0],
     )
     avg_mem_mb_per_req: float = Field(
         ...,
         ge=0,
+        allow_inf_nan=False,
         description="Average memory held per concurrent request, in megabytes.",
         examples=[2.0],
     )
@@ -81,7 +89,11 @@ class Load(BaseModel):
         examples=[250],
     )
     payload_kb: float = Field(
-        ..., ge=0, description="Response payload size per request, in kilobytes.", examples=[20.0]
+        ...,
+        ge=0,
+        allow_inf_nan=False,
+        description="Response payload size per request, in kilobytes.",
+        examples=[20.0],
     )
 
 

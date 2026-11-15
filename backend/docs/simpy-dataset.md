@@ -120,6 +120,26 @@ flag (and later fix) them:
 4. **`clock_ghz` is unused** by both engines. It is reserved; records should
    vary it anyway so future clock-aware behavior is not silently ignored.
 
+### Regression cases: tiny rates and single-slot connections
+
+- A tiny positive RPS such as `2.2e-313` can represent fewer than one
+  expected arrival in the 30-second nominal window. SimPy now plans **zero**
+  arrivals in that case rather than forcing a request with an effectively
+  infinite interarrival time. API output, including timeline data, stays finite.
+  Non-finite input values (`NaN` and infinities) are rejected by validation.
+- **Declared concurrency is not observed occupancy.** Rules divides
+  `concurrent_connections` by `max_connections`; SimPy measures how long
+  connection slots are actually held. With `max_connections=1`,
+  `concurrent_connections=0` and `rps=100`, Rules may report `will_survive`
+  while SimPy sees a nearly saturated slot and reports `at_risk`.
+  This difference is intentional and should remain visible in the diagnostic
+  evidence. Increasing the slot limit removes the bottleneck.
+
+Both tests should be kept: ordinary well-separated loads can agree, while
+a small hard connection limit reveals different assumptions. The models are
+cross-checks, not ground-truth labels, and must not be made to agree by
+silently changing inputs or overriding simulated measurements.
+
 ## 5. Parity metric and tiebreaker
 
 - **Metric:** verdict agreement rate between `simpy` and `rules` over the

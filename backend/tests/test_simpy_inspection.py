@@ -1,6 +1,10 @@
 """SimPy inspection is faithful to the copdash engine, with explicit evidence."""
 
+import json
+import math
+
 import pytest
+from pydantic import ValidationError
 from fastapi.testclient import TestClient
 
 from app.engines.simpy import SimPyEngine
@@ -115,3 +119,75 @@ def test_simpy_direct_engine_blocks_unfulfillable_allocation():
     )
     with pytest.raises(ValueError, match="Memory per request"):
         SimPyEngine().inspect(model)
+
+
+def test_tiny_positive_rps_does_not_create_an_infinite_arrival():
+    """Regression for #7: a denormal rate cannot produce infinite timestamps."""
+    load = {
+        **LOAD,
+        "rps": 2.2e-313,
+        "concurrent_connections": 0,
+    }
+    response = inspect(load=load)
+    assert response.status_code == 200
+    body = response.json()
+    assert body["simulation"]["planned_arrivals"] == 0
+    assert body["simulation"]["arrived"] == 0
+    assert body["simulation"]["completed"] == 0
+    assert body["result"]["verdict"] == "will_survive"
+    assert all(
+        math.isfinite(resource["utilization"])
+        for resource in body["result"]["resources"].values()
+    )
+    json.dumps(body, allow_nan=False)
+
+
+def test_less_than_one_expected_arrival_is_not_forced():
+    """A rate below one expected arrival per nominal window creates none."""
+    response = inspect(load={**LOAD, "rps": 0.01, "concurrent_connections": 0})
+    assert response.status_code == 200
+    assert response.json()["simulation"]["planned_arrivals"] == 0
+    assert response.json()["simulation"]["arrived"] == 0
+
+
+@pytest.mark.parametrize("bad_rate", [float("nan"), float("inf"), float("-inf")])
+def test_nonfinite_request_rates_are_rejected(bad_rate):
+    with pytest.raises(ValidationError):
+        Load.model_validate({**LOAD, "rps": bad_rate})
+
+
+def test_single_connection_explains_rules_simpy_difference():
+    """Regression for #8: observed queue occupancy differs from declared load."""
+    spec = {**SPEC, "network": {"bandwidth_mbps": 1000, "max_connections": 1}}
+    load = {
+        **LOAD,
+        "concurrent_connections": 0,
+        "avg_mem_mb_per_req": 0,
+        "payload_kb": 0,
+    }
+    rules = client.post("/verdict", json={"engine": "rules", "spec": spec, "load": load})
+    observed = inspect(spec=spec, load=load)
+    assert rules.status_code == observed.status_code == 200
+    rules_result = rules.json()
+    simpy_result = observed.json()
+    assert rules_result["verdict"] == "will_survive"
+    assert rules_result["resources"]["network"]["utilization"] == 0
+    assert simpy_result["result"]["verdict"] == "at_risk"
+    assert simpy_result["result"]["bottleneck"] == "network"
+    assert simpy_result["simulation"]["offered_utilization"]["connections"] == 0
+    assert simpy_result["simulation"]["measured_utilization"]["connections"] >= 0.8
+    assert simpy_result["simulation"]["completed"] == simpy_result["simulation"]["arrived"]
+
+
+def test_connection_limit_without_contention_remains_consistent():
+    spec = {**SPEC, "network": {"bandwidth_mbps": 1000, "max_connections": 10000}}
+    load = {
+        **LOAD,
+        "concurrent_connections": 0,
+        "avg_mem_mb_per_req": 0,
+        "payload_kb": 0,
+    }
+    rules = client.post("/verdict", json={"engine": "rules", "spec": spec, "load": load})
+    observed = inspect(spec=spec, load=load)
+    assert rules.status_code == observed.status_code == 200
+    assert rules.json()["verdict"] == observed.json()["result"]["verdict"] == "will_survive"
