@@ -69,7 +69,7 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
     event.preventDefault();setMessage('');
     if(role!=='qa'||!selectedRun){setMessage('Run a SimPy evaluation first, then select its result.');return;}
     if(analysisCases[0]?.verdict==='not_assessable'){
-      setMessage('Normal demand is outside the assessment window. Use a supported workload before submitting a release verdict.');return;
+      setMessage('The selected normal-demand simulation could not be evaluated. Retry the SimPy engine before submitting release evidence.');return;
     }
     if(!note.trim()){setMessage('Add a brief QA test summary before submitting the release candidate.');return;}
     const stamp=now();

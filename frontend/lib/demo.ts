@@ -1,4 +1,5 @@
 import { defaultLoad, defaultSpec, requestVerdict, saveRun, type ServerSpec, type Load, type VerdictResult } from './model';
+import { clearLLMSession } from './llm-session';
 
 /**
  * Educational role-play ONLY. These identities and client-side permissions are
@@ -36,13 +37,14 @@ export const allDemoRoutes = [
   {href:'/methodology',label:'Model Methodology'},
   {href:'/developer',label:'API Explorer'},
   {href:'/quality',label:'Engineering Quality'},
+  {href:'/settings',label:'LLM Settings'},
 ] as const;
 const allowed: Record<DemoRole, string[]> = {
-  qa:['/dashboard','/alignment','/access','/simulation','/compare','/reports','/methodology','/developer','/quality'],
-  lead:['/dashboard','/alignment','/incident','/signoff','/reports','/access','/methodology','/quality'],
-  engineer:['/dashboard','/incident','/access','/simulation','/compare','/developer','/methodology','/quality'],
-  manager:['/dashboard','/alignment','/signoff','/reports','/access','/methodology'],
-  support:['/dashboard','/incident','/reports','/access','/methodology'],
+  qa:['/dashboard','/alignment','/access','/simulation','/compare','/reports','/methodology','/developer','/quality','/settings'],
+  lead:['/dashboard','/alignment','/incident','/signoff','/reports','/access','/methodology','/quality','/settings'],
+  engineer:['/dashboard','/incident','/access','/simulation','/compare','/developer','/methodology','/quality','/settings'],
+  manager:['/dashboard','/alignment','/signoff','/reports','/access','/methodology','/settings'],
+  support:['/dashboard','/incident','/reports','/access','/methodology','/settings'],
 };
 export function allowedPages(role:DemoRole){return allDemoRoutes.filter(page=>allowed[role].includes(page.href));}
 export function canVisit(role:DemoRole,path:string){return allowed[role].includes(path);}
@@ -61,6 +63,7 @@ export function demoLogin(role:DemoRole,password:string){
   return true;
 }
 export function demoLogout(){
+  clearLLMSession();
   window.sessionStorage.removeItem(DEMO_SESSION_KEY);
   window.dispatchEvent(new Event('serveragent-demo-user'));
 }

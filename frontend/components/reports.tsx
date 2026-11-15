@@ -5,6 +5,7 @@ import { ArrowRight, Download, FileClock, Filter, Search } from 'lucide-react';
 import { csvHistory, history, type HistoryItem } from '../lib/model';
 import { Empty, Outcome, SectionHead } from './ui';
 import { downloadTwinPeakPDF } from '../lib/report-pdf';
+import { requestReasoning } from '../lib/llm-session';
 import { demoRecords, demoCsv, getDemoRole, type DemoRecords } from '../lib/demo';
 export default function Reports(){
   const [runs,setRuns]=useState<HistoryItem[]>([]);
@@ -44,15 +45,12 @@ export default function Reports(){
     setAiBusy(true);setReportNotice('');
     try{
       const first=filteredWorkflows.alignments[0];
-      const response=await fetch('/api/reasoning',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({kind:'report',service:first?.service??'QRIS Payment',
-          rps:first?.rps??0,verdict:first?.result.verdict??'not_assessable',
-          summary:first?.result.reasons.join(' · ')??'No alignment evidence selected.',
-          notes:first?.reviewerNote??first?.qaNotes??''}),
+      const data=await requestReasoning({
+        kind:'report',service:first?.service??'QRIS Payment',
+        rps:first?.rps??0,verdict:first?.result.verdict??'not_assessable',
+        summary:first?.result.reasons.join(' · ')??'No alignment evidence selected.',
+        notes:first?.reviewerNote??first?.qaNotes??'',
       });
-      if(!response.ok)throw Error('Unavailable');
-      const data=await response.json() as {text?:string;generated?:boolean};
       if(!data.text)throw Error('Empty explanation');
       setInsight({text:data.text,generated:!!data.generated});
     }catch{setReportNotice('Additional explanation is not available right now. Existing report evidence can still be exported.');}
@@ -72,7 +70,7 @@ export default function Reports(){
       <div className="tp-report-summary"><div><span>MATCHING RECORDS</span><strong>{reportCount}</strong><small>{filteredWorkflows.alignments.length} alignments · {filteredWorkflows.incidents.length} incidents</small></div>
         <div className="tp-report-actions">{canDownload&&<>
           <button type="button" disabled={!reportCount&&!filtered.length} onClick={()=>void makePdf()}><Download size={17}/> Download PDF</button>
-          <button type="button" disabled={!reportCount||aiBusy} className="tp-outline-action" onClick={()=>void explainReport()}>{aiBusy?'Analyzing…':'Add narrative'}</button>
+          <button type="button" disabled={!reportCount||aiBusy} className="tp-outline-action" onClick={()=>void explainReport()}>{aiBusy?'Analyzing…':'Add explanation'}</button>
           <button type="button" disabled={!reportCount} className="tp-outline-action" onClick={()=>demoCsv(filteredWorkflows)}><Download size={17}/> CSV</button>
         </>}</div>
       </div>

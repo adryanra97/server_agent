@@ -90,7 +90,7 @@ export async function downloadUnassessablePDF(rps:number,description:string,gene
   doc.text('TwinPeak — Scenario Assessment',18,27);
   doc.setFontSize(12);doc.text('Status: Tidak Dapat Dinilai',18,45);
   doc.setFont('helvetica','normal');doc.setTextColor(54,91,118);doc.setFontSize(11);
-  doc.text('QRIS Payment  |  '+rps+' RPS  |  Assessment scope 1-150 RPS',18,67);
+  doc.text('QRIS Payment  |  '+rps+' RPS  |  Model evaluation incomplete',18,67);
   const lines=doc.splitTextToSize(printable(description),174) as string[];
   doc.text(lines,18,84);
   const y=Math.min(255,84+lines.length*5+16);

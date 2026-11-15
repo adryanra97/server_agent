@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText, ChevronDown,
   ClipboardCheck, FileClock, FileSignature, FlaskConical, GitBranch,
-  LogOut, Menu, ShieldCheck, Terminal, UserRound, Waves, X,
+  LogOut, Menu, Settings2, ShieldCheck, Terminal, UserRound, Waves, X,
 } from 'lucide-react';
 import { Brand, Eyebrow } from './ui';
 import { getDemoRole, getPersona, allowedPages, canVisit, demoLogout, type DemoRole } from '../lib/demo';
@@ -19,6 +19,7 @@ import Developer from './developer';
 import Quality from './quality';
 import Methodology from './methodology';
 import AccessRoles from './access-roles';
+import LLMSettings from './llm-settings';
 import { ensureDemoStarter } from '../lib/demo';
 
 const titles:Record<string,{title:string;description:string;eyebrow:string}>={
@@ -33,13 +34,14 @@ const titles:Record<string,{title:string;description:string;eyebrow:string}>={
   quality:{title:'Engineering quality.',description:'Review real GitHub Actions checks, coverage, and build status.',eyebrow:'ENGINEERING / CI'},
   methodology:{title:'About the engines.',description:'Understand assumptions, thresholds, and limitations of the current model.',eyebrow:'ENGINEERING / METHODOLOGY'},
   access:{title:'Access & roles.',description:'Explore responsibilities and available actions for each of the five roles.',eyebrow:'WORKSPACE / ROLE ACCESS'},
+  settings:{title:'LLM settings.',description:'Connect a temporary model provider for explanations and report narratives.',eyebrow:'EXPLORE / SESSION SETTINGS'},
 };
 
 const navIcons:Record<string,typeof Activity>={
   '/dashboard':Activity,'/simulation':FlaskConical,'/compare':BarChart3,
   '/alignment':ClipboardCheck,'/incident':Waves,'/signoff':FileSignature,
   '/reports':FileClock,'/access':ShieldCheck,'/methodology':BookOpenText,
-  '/developer':Terminal,'/quality':ShieldCheck,
+  '/developer':Terminal,'/quality':ShieldCheck,'/settings':Settings2,
 };
 const navShort:Record<string,string>={
   '/dashboard':'Overview','/simulation':'Simulation','/compare':'Compare',
@@ -141,7 +143,8 @@ export default function Workspace(){
           section==='developer'?<Developer/>:
           section==='quality'?<Quality/>:
           section==='methodology'?<Methodology/>:
-          section==='access'?<AccessRoles role={role}/>:<DemoRoleDashboard role={role}/>}
+          section==='access'?<AccessRoles role={role}/>:
+          section==='settings'?<LLMSettings/>:<DemoRoleDashboard role={role}/>}
       </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>
         <h2>This page is not part of your demo role.</h2>
         <p><strong>{currentUser?.shortRole}</strong> has a different responsibility in the proposed AKPSI workflow. Switch accounts to explore this menu.</p>
