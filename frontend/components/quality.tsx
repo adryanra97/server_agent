@@ -227,7 +227,7 @@ export default function Quality(){
           </summary>
           <div className="eq-check-detail">
             <p>{check.description}</p>
-            <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job}</strong></span><span>Command: <code>{check.command}</code></span></div>
+            <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span></div>
             {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
           </div>
         </details>)}</div>
