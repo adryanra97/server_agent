@@ -39,9 +39,9 @@ describe('Platform Showcase for examiners',()=>{
       expect(link).toHaveAttribute('target','_blank');
       expect(link).toHaveAttribute('rel','noopener noreferrer');
     }
-    expect(within(evidence).getByRole('link',{name:/CI\/CD execution history/})).toHaveAttribute('href',/actions\/workflows\/quality.yml/);
-    expect(within(evidence).getByRole('link',{name:/CI pipeline definition/})).toHaveAttribute('href',/\.github\/workflows\/quality.yml/);
-    expect(within(evidence).getByRole('link',{name:/Test evidence JSON/})).toHaveAttribute('href',/quality-reports\/latest.json/);
+    expect(within(evidence).getByRole('link',{name:/CI\/CD execution history/}).getAttribute('href')).toMatch(/actions\/workflows\/quality.yml/);
+    expect(within(evidence).getByRole('link',{name:/CI pipeline definition/}).getAttribute('href')).toMatch(/\.github\/workflows\/quality.yml/);
+    expect(within(evidence).getByRole('link',{name:/Test evidence JSON/}).getAttribute('href')).toMatch(/quality-reports\/latest.json/);
     expect(within(evidence).getByRole('link',{name:/OpenAPI specification/})).toHaveAttribute('href','/openapi.json');
     expect(within(evidence).getByRole('link',{name:/Swagger API documentation/})).toHaveAttribute('href','/docs');
     expect(within(evidence).getByRole('link',{name:/Backend quality JSON/})).toHaveAttribute('href','/api/v1/quality');
