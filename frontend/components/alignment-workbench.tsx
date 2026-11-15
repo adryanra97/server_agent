@@ -26,7 +26,7 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
     const spec={...structuredClone(defaultSpec),cpu:{cores,clock_ghz:2.5},ram:{total_mb:ram}};
     const load={...defaultLoad,avg_cpu_ms_per_req:cpuMs};
     try{
-      const results=await Promise.all(levels.map(async factor: number):Promise<AnalysisCase>=>{
+      const results=await Promise.all(levels.map(async (factor: number):Promise<AnalysisCase>=>{
         const rps=peak*factor;
         if(rps>BOUND){
           return {factor,rps,verdict:'not_assessable',explanation:noteFor(rps),explanationSource:'model'};
