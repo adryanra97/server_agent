@@ -27,3 +27,64 @@ test.describe('TwinPeak role-based demo',()=>{
     expect(response.headers()['x-frame-options']).toBe('DENY');
   });
 });
+
+
+test.describe('role boundary journeys across the five personas',()=>{
+  const cases=[
+    {index:0,role:'qa',allowed:'/alignment',denied:'/signoff'},
+    {index:1,role:'lead',allowed:'/signoff',denied:'/compare'},
+    {index:2,role:'engineer',allowed:'/incident',denied:'/alignment'},
+    {index:3,role:'manager',allowed:'/signoff',denied:'/simulation'},
+    {index:4,role:'support',allowed:'/incident',denied:'/signoff'},
+  ] as const;
+
+  for (const scenario of cases) {
+    test(scenario.role+' can open its own page but cannot view a forbidden role page',async({page})=>{
+      await page.goto('/demo',{waitUntil:'domcontentloaded'});
+      await page.locator('.tp-persona-card').nth(scenario.index).click();
+      await expect(page).toHaveURL(/\/dashboard/);
+      expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBe(scenario.role);
+
+      await page.goto(scenario.allowed,{waitUntil:'domcontentloaded'});
+      await expect(page.locator('.sa-page-header')).toBeVisible();
+      await expect(page.locator('.sa-access-denied')).toHaveCount(0);
+
+      await page.goto(scenario.denied,{waitUntil:'domcontentloaded'});
+      await expect(page.locator('.sa-access-denied')).toBeVisible();
+      await expect(page.getByText('This page is not part of your demo role.')).toBeVisible();
+      await expect(page.locator('.sa-page-header')).toHaveCount(0);
+    });
+  }
+
+  test('Access & Roles can switch persona while retaining per-role permissions',async({page})=>{
+    await page.goto('/demo',{waitUntil:'domcontentloaded'});
+    await page.locator('.tp-persona-card').first().click();
+    await page.goto('/access',{waitUntil:'domcontentloaded'});
+    await expect(page.getByRole('table')).toBeVisible();
+    await expect(page.getByRole('table').getByRole('row')).toHaveCount(7);
+    await page.getByRole('button',{name:/Project Manager/}).click();
+    await expect(page).toHaveURL(/\/dashboard/);
+    expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBe('manager');
+    await page.goto('/simulation',{waitUntil:'domcontentloaded'});
+    await expect(page.locator('.sa-access-denied')).toBeVisible();
+  });
+
+  test('mobile users can open the navigation and sign out of the guided session',async({page})=>{
+    await page.setViewportSize({width:390,height:844});
+    await page.goto('/demo',{waitUntil:'domcontentloaded'});
+    await page.locator('.tp-persona-card').first().click();
+    await expect(page).toHaveURL(/\/dashboard/);
+    const menu=page.getByRole('button',{name:'Open menu'});
+    await expect(menu).toBeVisible();
+    await menu.click();
+    const mobileNav=page.getByRole('navigation',{name:'Mobile role navigation'});
+    await expect(mobileNav).toBeVisible();
+    await expect(mobileNav.getByRole('link',{name:/Release Alignment/})).toBeVisible();
+    // Never allow a session-scoped provider key to remain after sign out.
+    await page.evaluate(()=>sessionStorage.setItem('twinpeak-llm-session-v1','temporary-test-secret'));
+    await mobileNav.getByRole('button',{name:/Sign out/}).click();
+    await expect(page).toHaveURL(/\/login/);
+    expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBeNull();
+    expect(await page.evaluate(()=>sessionStorage.getItem('twinpeak-llm-session-v1'))).toBeNull();
+  });
+});
