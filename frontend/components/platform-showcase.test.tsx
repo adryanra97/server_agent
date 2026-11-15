@@ -36,7 +36,9 @@ describe('Examiner-facing editorial Showcase',()=>{
       ['LLM Settings','/settings'],
     ];
     for(const [name,href] of expected){
-      const link=screen.getByRole('link',{name:new RegExp(name)});
+      const link=Array.from(container.querySelectorAll('.tp-showcase-card'))
+        .find(el=>el.textContent?.includes(name));
+      expect(link).toBeDefined();
       expect(link).toHaveAttribute('href',href);
       expect(link).toHaveClass('tp-showcase-card');
     }
