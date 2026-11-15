@@ -179,3 +179,16 @@ describe('Guided QRIS case generation using real SimPy evidence',()=>{
     expect(demoRecords().alignments[0].whatIf).toHaveLength(3);
   });
 });
+
+describe('Completed starter scenarios with an honest unassessable case',()=>{
+  it('treats preserved not-assessable scenarios as completed evidence, not a reason to retry',async()=>{
+    saveAlignment({...starter,whatIf:[
+      {factor:1,rps:45,verdict:'will_survive',timeline:[trace(0),trace(1)]},
+      {factor:2,rps:90,verdict:'not_assessable',explanation:'Model unavailable'},
+      {factor:3,rps:135,verdict:'will_survive',timeline:[trace(0),trace(1)]},
+    ]});
+    expect(await ensureDemoStarter()).toBe(true);
+    expect(model).not.toHaveBeenCalled();
+    expect(demoRecords().alignments[0].whatIf?.[1].verdict).toBe('not_assessable');
+  });
+});

@@ -115,3 +115,18 @@ describe('LLM route defensive paths and interpretation safety',()=>{
     expect(await result.text()).not.toContain(credentials.apiKey);
   });
 });
+
+describe('Non-leaking LLM prompt defaults',()=>{
+  it('handles a report with missing summary and notes through a configured provider',async()=>{
+    const provider=vi.fn().mockResolvedValue({
+      ok:true,json:async()=>({choices:[{message:{content:'Review model evidence'}}]}),
+    });
+    vi.stubGlobal('fetch',provider);
+    const response=await request({kind:'report',service:'QRIS',verdict:'at_risk',session:credentials});
+    expect(response.status).toBe(200);
+    const payload=await response.json();
+    expect(payload).toMatchObject({generated:true,source:'llm'});
+    const prompt=JSON.parse(String((provider.mock.calls[0][1] as RequestInit).body));
+    expect(prompt.messages[1].content).toContain('"evidence":""');
+  });
+});

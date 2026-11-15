@@ -32,10 +32,9 @@ export default function AlignmentScenarioReplay({
   const canAnimate=hasFullReplay(trace);
   const hasSamples=trace.length>=2;
   async function loadReplay(){
-    if(!onLoadReplay||loading!==null)return;
     setLoading(current.factor);setError('');
     try{
-      const result=await onLoadReplay(current.factor);
+      const result=await onLoadReplay!(current.factor);
       if(!hasFullReplay(result))throw new Error('This scenario has no complete replay data. Please run the model again.');
       setLoaded(old=>({...old,[current.factor]:result}));
     }catch(error){
@@ -69,7 +68,7 @@ export default function AlignmentScenarioReplay({
           replayLabel="SCENARIO REPLAY / ANIMATED SIMPY"
           analyticsLabel="SCENARIO ANALYTICS / RECORDED TIME SERIES"
           trace={trace as TimelinePoint[]}
-          running={false} truncated={false} limit={trace[trace.length-1]?.second??0}
+          running={false} truncated={false} limit={trace[trace.length-1].second}
         />
       :<div className="tp-replay-fallback">
         <TracePreview points={hasSamples?trace:undefined}/>

@@ -113,3 +113,19 @@ describe('Demo role and workflow data robustness',()=>{
     expect(canVisit('manager','/developer')).toBe(false);
   });
 });
+
+describe('Defensive paths in browser workflow storage',()=>{
+  it('ignores browser APIs that throw during role inspection',()=>{
+    const broken=vi.spyOn(Storage.prototype,'getItem').mockImplementation(()=>{throw Error('Storage disabled');});
+    try{expect(getDemoRole()).toBeNull();}
+    finally{broken.mockRestore();}
+  });
+  it('exports partially missing fields safely as empty CSV cells',()=>{
+    vi.stubGlobal('URL',{...URL,createObjectURL:vi.fn().mockReturnValue('blob:partial'),revokeObjectURL:vi.fn()});
+    vi.spyOn(HTMLAnchorElement.prototype,'click').mockImplementation(()=>{});
+    expect(()=>demoCsv({
+      alignments:[{...alignment,service:null as unknown as string}],
+      incidents:[],
+    })).not.toThrow();
+  });
+});

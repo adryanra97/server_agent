@@ -27,7 +27,7 @@ function contextText(body:Context):string{
   const name=String(body.service||'Aplikasi').slice(0,100);
   const reasons=String(body.summary||'Model tidak menghasilkan bukti yang cukup.').slice(0,1200);
   if(body.kind==='indeterminate'){
-    return 'Tidak Dapat Dinilai untuk '+name+' pada '+String(body.rps??'—')+
+    return 'Tidak Dapat Dinilai untuk '+name+' pada '+String(body.rps)+
       ' RPS. Engine tidak dapat menyelesaikan penilaian: '+reasons+
       '. Periksa parameter yang diberikan, status layanan simulasi, dan sumber data pengujian sebelum membuat keputusan rilis.';
   }
