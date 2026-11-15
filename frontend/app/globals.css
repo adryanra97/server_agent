@@ -2693,3 +2693,89 @@ body,.sa-app{background:#F5FAFE;color:#183D57}
 .tp-analysis>.tp-analysis-form{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:860px){.tp-analysis>.tp-analysis-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.tp-analysis>.tp-analysis-form{grid-template-columns:1fr}}
+
+
+/* November 2026: all case lists reveal meaningful detail on click/tap.
+   Accessible native <details> affordance, consistent blue daylight palette. */
+.role-record.tp-case-record{padding:0;border-top:1px solid #d9e7f0}
+.tp-case-disclosure{background:#fff;color:#173f5b}
+.tp-case-summary{display:block;list-style:none;cursor:pointer;padding:17px 16px;position:relative;border-radius:3px}
+.tp-case-summary::-webkit-details-marker,.tp-report-result::-webkit-details-marker,.sa-report-event::-webkit-details-marker{display:none}
+.tp-case-summary::marker,.tp-report-result::marker,.sa-report-event::marker{content:''}
+.tp-case-summary:hover,.tp-report-entry>summary:hover,.tp-workflow-entry>summary:hover{background:#edf7fc}
+.tp-case-summary:focus-visible,.tp-report-entry>summary:focus-visible,.tp-workflow-entry>summary:focus-visible,.tp-process-link:focus-visible{
+  outline:3px solid #1683bc;outline-offset:-3px;
+}
+.tp-case-summary .role-record-heading{margin:0;align-items:center}
+.tp-case-summary .role-record-heading h4{margin:6px 0;font-size:clamp(15px,1.3vw,18px);color:#184d70}
+.tp-case-summary .role-record-heading small{color:#597c93}
+.tp-case-preview{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;color:#3f6880;font-size:12px}
+.tp-case-preview>span:not(.status-pill){line-height:1.5;min-width:0}
+.tp-case-open{margin-left:auto;display:inline-flex;align-items:center;gap:7px;color:#0b679f;font-size:12px;font-weight:850;white-space:nowrap}
+.tp-case-open svg,.tp-expand-icon{transition:transform .18s ease;color:#0b679f;flex-shrink:0}
+.tp-case-disclosure[open] .tp-case-open svg,
+.tp-report-entry[open]>.tp-report-result .tp-expand-icon,
+.tp-workflow-entry[open]>.sa-report-event .tp-expand-icon{transform:rotate(180deg)}
+.tp-case-disclosure[open]>.tp-case-summary{background:#f0f8fd;border-bottom:1px solid #d3e6f0}
+.tp-case-body{padding:21px clamp(14px,2vw,25px) 24px;background:#fff;color:#315d7b}
+.tp-case-body>.tp-verdict-narrative,.tp-case-body>p{color:#3f6680;line-height:1.67}
+.tp-case-body .role-record-actions{margin-top:18px}
+.tp-case-actions{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px solid #e0edf4}
+.tp-case-actions button,.tp-case-actions a,.tp-entry-download{
+  min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid #b1d6e8;background:#e9f5fb;color:#0a6094;font-size:12px;
+  font-weight:800;padding:10px 14px;text-decoration:none;cursor:pointer;
+}
+.tp-case-actions button:hover,.tp-case-actions a:hover,.tp-entry-download:hover{
+  color:#064a79;background:#d9eef9;border-color:#75b4d4;
+}
+.tp-report-entry{border-bottom:1px solid #dfebf3;background:#fff}
+.tp-report-entry>.tp-report-result{display:flex;cursor:pointer;list-style:none;border-bottom:0;padding:17px 10px;margin:0}
+.tp-report-entry[open]>.tp-report-result{background:#edf7fc;border-bottom:1px solid #dbeaf3}
+.tp-report-entry .tp-report-result>div{flex:1;min-width:155px}
+.tp-report-entry .tp-report-result>span{color:#126d9c;font-size:12px;font-weight:800;text-transform:capitalize}
+.tp-report-entry .tp-report-result>time{color:#608095;font-size:12px}
+.tp-report-entry-body{padding:19px clamp(13px,2vw,24px) 22px;background:#fafdff;color:#345f79}
+.tp-report-entry-body>p{font-size:13px;line-height:1.7;color:#3e6880;margin:10px 0}
+.tp-report-entry-body>p strong{color:#194e70}
+.tp-report-entry-body>h4{font-size:15px;margin:20px 0 9px;color:#174a71}
+.tp-entry-verdict{display:flex;align-items:center;flex-wrap:wrap;gap:13px;margin-bottom:14px;font-size:12px;color:#315e7b}
+.tp-report-entry-body .tp-entry-download{margin-top:17px}
+.tp-workflow-entry{border-bottom:1px solid #deebf3}
+.tp-workflow-entry .sa-report-event{cursor:pointer;list-style:none;margin:0;border-top:0;grid-template-columns:minmax(0,1fr) auto auto auto}
+.tp-workflow-entry[open]>.sa-report-event{background:#edf7fc}
+.tp-workflow-entry .tp-report-entry-body{border-top:1px solid #dbeaf3}
+.tp-process-link{text-decoration:none;color:#194b70;border-radius:3px}
+.tp-process-link>div{flex:1;min-width:0}
+.tp-process-link>svg{color:#1278af}
+.tp-process-link:hover{background:#ecf7fd;color:#075d93}
+.tp-process-link:hover>svg{transform:translate(2px,-2px)}
+.tp-process-link strong{color:inherit}
+.tp-trace-preview{border:1px solid #d4e6f0;background:#fff;margin:17px 0;padding:15px 16px;max-width:100%;overflow:hidden}
+.tp-trace-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;margin-bottom:11px}
+.tp-trace-heading strong{font-size:13px;color:#164b70}
+.tp-trace-heading span{font-size:11px;color:#5b8099}
+.tp-trace-preview svg{width:100%;height:auto;max-height:245px;display:block}
+.tp-trace-preview p{font-size:11px;line-height:1.6;color:#577b94;margin:9px 0 0}
+.tp-trace-empty{font-size:12px;color:#53788e;line-height:1.6;border:1px dashed #c0dceb;background:#f5fafc;margin:16px 0;padding:15px}
+.tp-history-trace{grid-column:1/-1;width:100%;min-width:0}
+.report-data-row span:last-child{display:inline-flex;align-items:center;gap:8px}
+.report-expanded .tp-entry-download{margin-top:17px}
+@media(max-width:900px){
+  .tp-workflow-entry .sa-report-event{grid-template-columns:minmax(0,1fr) auto}
+  .tp-workflow-entry .sa-report-event time{grid-column:1;grid-row:2}
+  .tp-workflow-entry .sa-report-event .tp-expand-icon{grid-column:2;grid-row:2}
+}
+@media(max-width:640px){
+  .tp-case-summary{padding:15px 12px}
+  .tp-case-summary .role-record-heading{flex-wrap:wrap}
+  .tp-case-open{width:100%;margin-left:0}
+  .tp-report-entry>.tp-report-result{gap:8px 10px;align-items:flex-start}
+  .tp-report-entry .tp-report-result>div{width:100%;flex-basis:100%}
+  .tp-report-entry .tp-report-result time{margin-right:auto}
+  .tp-case-body,.tp-report-entry-body{padding:15px 12px}
+  .tp-case-actions button,.tp-case-actions a{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .tp-case-open svg,.tp-expand-icon{transition:none}
+}

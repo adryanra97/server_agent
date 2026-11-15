@@ -199,3 +199,10 @@ Release Alignment keeps the main inputs (CPU cores, RAM, RPS) concise. **Advance
 - No configured key → explanatory guidance based on the available evidence, never mislabeled as an LLM response.
 
 **Security:** `sessionStorage` is accessible to scripts in the same origin. This is suitable as an explicitly temporary demo workflow, **not a secure production secrets vault**. Use an expendable limited-budget key and avoid sensitive production prompts.
+
+
+### Expandable case lists and evidence-rich PDF exports
+
+The Release Alignment, Incident Response, Sign-Off, and Report record lists use native accessible `<details>/<summary>` disclosures: users can open a record to inspect the full verdict, CPU/RAM/network evidence, QA and review notes, incident mitigation, sign-off status, and a real SimPy time-series preview when available. Report history remains searchable and its rows show an explicit expand icon. The Overview workflow list navigates when the whole row is clicked. Each workflow record also provides an individual case PDF.
+
+Report PDFs use jsPDF to render an executive summary, recorded model verdicts and decisions, and up to three line charts per saved real SimPy scenario: **CPU / RAM / network occupancy**, **request arrivals vs completions**, and **average queue length** versus simulated seconds. Chart points come only from recorded SimPy `/api/v1/simpy/inspect` event buckets; browser storage retains at most 150 evenly selected **existing** points for each trace, without interpolating metrics. Both the Workbench and Release Alignment now save compact real timelines alongside the computed verdict. Incident before/after inspections save their separate timelines. An older QRIS sample attempts to backfill the original timeline using the saved request while preserving previously recorded decisions and original verdict, only if the model still returns the same verdict. Older cases with no compatible trace show an explicit note instead of a synthetic plot.

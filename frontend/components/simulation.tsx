@@ -12,6 +12,7 @@ import {
   type VerdictResult, type ServerSpec, type Load,
 } from '../lib/model';
 import { Outcome, ResourceBars } from './ui';
+import { compactTimeline } from '../lib/trace';
 import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
 
 type SimulationEvidence = {
@@ -140,6 +141,7 @@ export default function Simulation(){
         id:crypto.randomUUID(),created_at:new Date().toISOString(),
         label:`SimPy · ${body.load.rps} RPS · ${body.spec.cpu.cores} cores`,
         request:{...body,engine:'simpy'},result:data.result,
+        timeline:compactTimeline(data.simulation.timeline),
       });
       if(compare){
         try{

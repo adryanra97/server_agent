@@ -1,4 +1,5 @@
-import { defaultLoad, defaultSpec, requestVerdict, saveRun, type ServerSpec, type Load, type VerdictResult } from './model';
+import { defaultLoad, defaultSpec, history, inspectSimPy, saveRun, type ServerSpec, type Load, type VerdictResult } from './model';
+import { compactTimeline, type TraceSample } from './trace';
 import { clearLLMSession } from './llm-session';
 
 /**
@@ -70,7 +71,7 @@ export function demoLogout(){
 export type AlignmentStatus = 'review'|'returned'|'pending-signoff'|'approved'|'rejected';
 export interface DemoWhatIf {
   factor:number;rps:number;verdict:'will_survive'|'at_risk'|'will_crash'|'not_assessable';
-  result?:VerdictResult;explanation?:string;explanationSource?:'llm'|'model';
+  result?:VerdictResult;timeline?:TraceSample[];explanation?:string;explanationSource?:'llm'|'model';
 }
 export interface DemoAlignment {
   id:string;
@@ -109,6 +110,8 @@ export interface DemoIncident {
   load:Load;
   before?:VerdictResult;
   after?:VerdictResult;
+  beforeTimeline?:TraceSample[];
+  afterTimeline?:TraceSample[];
   mitigatedCores?:number;
   engineerNotes?:string;
   analyzedAt?:string;
@@ -161,9 +164,34 @@ let starterPromise:Promise<boolean>|null=null;
 /** Populate example evidence from a real engine call; never fabricate a verdict. */
 export function ensureDemoStarter():Promise<boolean>{
   if(typeof window==='undefined')return Promise.resolve(false);
-  if(demoRecords().alignments.some(item=>item.id==='starter-qris-cycle03')){
+  const starter=demoRecords().alignments.find(item=>item.id==='starter-qris-cycle03');
+  if(starter){
     window.localStorage.setItem(STARTER_KEY,'generated');
-    return Promise.resolve(true);
+    if(starter.whatIf?.some(item=>item.factor===1&&(item.timeline?.length??0)>1))
+      return Promise.resolve(true);
+    if(starterPromise)return starterPromise;
+    starterPromise=(async()=>{
+      const saved=history().find(item=>item.id===starter.runId);
+      if(!saved)return true;
+      try{
+        const inspected=await inspectSimPy(saved.request);
+        // Preserve all previously recorded release decisions and the old verdict.
+        if(inspected.result.verdict!==starter.result.verdict)return true;
+        const timeline=compactTimeline(inspected.simulation.timeline);
+        if(timeline.length<2)return true;
+        const latest=demoRecords().alignments.find(item=>item.id===starter.id);
+        if(!latest||latest.whatIf?.some(item=>item.factor===1&&(item.timeline?.length??0)>1))
+          return true;
+        const prior=latest.whatIf??[];
+        const baseline=prior.some(item=>item.factor===1)?prior.map(item=>
+          item.factor===1?{...item,timeline}:item
+        ):[{factor:1,rps:latest.rps,verdict:latest.result.verdict,
+          result:latest.result,timeline},...prior];
+        saveAlignment({...latest,whatIf:baseline});
+      }catch{/* Timeline will remain explicitly unavailable until a fresh model run. */}
+      return true;
+    })().finally(()=>{starterPromise=null;});
+    return starterPromise;
   }
   if(starterPromise)return starterPromise;
   starterPromise=(async()=>{
@@ -174,15 +202,18 @@ export function ensureDemoStarter():Promise<boolean>{
     };
     const load:Load={...defaultLoad,rps:45,avg_cpu_ms_per_req:15};
     const request={engine:'simpy' as const,spec,load};
-    const result=await requestVerdict(request);
+    const inspection=await inspectSimPy(request);
+    const result=inspection.result;
+    const timeline=compactTimeline(inspection.simulation.timeline);
     const stamp=new Date().toISOString();
     const runId='starter-qris-cycle03-simpy';
-    saveRun({id:runId,created_at:stamp,label:'QRIS Payment · Cycle 03 · baseline 45 RPS',request,result});
+    saveRun({id:runId,created_at:stamp,label:'QRIS Payment · Cycle 03 · baseline 45 RPS',request,result,timeline});
     saveAlignment({
       id:'starter-qris-cycle03',type:'alignment',createdAt:stamp,updatedAt:stamp,
       release:'QRIS-RC03',cycle:3,service:'QRIS Payment',
       qaNotes:'Baseline performance scenario for the release alignment demo. Review the measured model evidence before deciding the next cycle.',
       createdBy:'qa',status:'review',runId,result,rps:45,
+      whatIf:[{factor:1,rps:45,verdict:result.verdict,result,timeline}],
     });
     saveIncident({
       id:'starter-qris-incident',type:'incident',createdAt:stamp,updatedAt:stamp,

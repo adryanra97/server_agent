@@ -1,3 +1,5 @@
+import type { TraceSample } from './trace';
+
 export type Engine = 'rules' | 'simpy';
 export type Verdict = 'will_survive' | 'at_risk' | 'will_crash' | 'not_assessable';
 
@@ -18,7 +20,7 @@ export interface VerdictResult {
   reasons:string[];
 }
 export interface VerdictRequest { engine:Engine; spec:ServerSpec; load:Load; }
-export interface HistoryItem { id:string; created_at:string; label:string; request:VerdictRequest; result:VerdictResult; }
+export interface HistoryItem { id:string; created_at:string; label:string; request:VerdictRequest; result:VerdictResult; timeline?:TraceSample[]; }
 export const defaultSpec:ServerSpec = {
   cpu:{cores:4,clock_ghz:2.5},ram:{total_mb:8192},
   network:{bandwidth_mbps:1000,max_connections:10000},
@@ -34,7 +36,7 @@ export const verdictNotes:Record<Verdict,string> = {
   will_survive:'All modeled resources remain below 80% utilization.',
   at_risk:'At least one resource is between 80% and 100% utilization.',
   will_crash:'At least one resource exceeds modeled capacity.',
-  not_assessable:'This scenario lies outside the defined assessment range; no model verdict is inferred.',
+  not_assessable:'The engine did not return a completed evaluation. No capacity verdict is inferred.',
 };
 export function history():HistoryItem[]{
   if(typeof window==='undefined')return [];
@@ -54,6 +56,29 @@ export async function requestVerdict(body:VerdictRequest):Promise<VerdictResult>
     throw new Error(typeof error==='string'?error:`Evaluation failed (HTTP ${response.status}). Review the input parameters.`);
   }
   return json as VerdictResult;
+}
+export interface SimPyInspection {
+  engine:'simpy';
+  result:VerdictResult;
+  simulation:{
+    timeline:TraceSample[];
+    timeline_truncated:boolean;
+    timeline_limit_seconds:number;
+    simulated_elapsed_seconds:number;
+  };
+  execution_ms:number;
+}
+export async function inspectSimPy(body:VerdictRequest):Promise<SimPyInspection>{
+  const response=await fetch('/api/v1/simpy/inspect',{
+    method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',
+    body:JSON.stringify({...body,engine:'simpy'}),
+  });
+  const data=await response.json().catch(()=>null);
+  if(!response.ok||!data?.result||!Array.isArray(data?.simulation?.timeline)){
+    throw new Error(typeof data?.detail==='string'?data.detail:
+      'SimPy inspection could not provide a recorded timeline.');
+  }
+  return data as SimPyInspection;
 }
 export function csvHistory(items:HistoryItem[]) {
   const cols=['id','created_at','label','engine','rps','cores','cpu','ram','network','verdict','bottleneck','confidence'];

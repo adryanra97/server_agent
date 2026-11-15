@@ -2,16 +2,17 @@
 import { useState } from 'react';
 import { ArrowRight, CircleHelp, Cpu, Play, RefreshCw } from 'lucide-react';
 import {
-  defaultLoad, defaultSpec, requestVerdict, saveRun,
+  defaultLoad, defaultSpec, inspectSimPy, saveRun,
   type VerdictResult, type Verdict, type VerdictRequest,
 } from '../lib/model';
 import { readLLMSession, requestReasoning } from '../lib/llm-session';
+import { compactTimeline, type TraceSample } from '../lib/trace';
 import { Outcome, ResourceBars } from './ui';
 import { downloadUnassessablePDF } from '../lib/report-pdf';
 
 export type AnalysisCase={
   factor:number;rps:number;verdict:Verdict;
-  result?:VerdictResult;explanation?:string;explanationSource?:'llm'|'model';
+  result?:VerdictResult;timeline?:TraceSample[];explanation?:string;explanationSource?:'llm'|'model';
 };
 const levels=[1,2,3];
 const noteFor=(rps:number)=>'SimPy could not complete the '+rps+
@@ -52,8 +53,9 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
     const settled=await Promise.allSettled(levels.map(async factor=>{
       const rps=peak*factor;
       const req:VerdictRequest={engine:'simpy',spec,load:{...load,rps}};
-      const result=await requestVerdict(req);
-      return {factor,rps,verdict:result.verdict,result} as AnalysisCase;
+      const inspected=await inspectSimPy(req);
+      return {factor,rps,verdict:inspected.result.verdict,result:inspected.result,
+        timeline:compactTimeline(inspected.simulation.timeline)} as AnalysisCase;
     }));
     const results:AnalysisCase[]=settled.map((entry,index)=>entry.status==='fulfilled'?entry.value:{
       factor:levels[index],rps:peak*levels[index],verdict:'not_assessable',
@@ -67,7 +69,7 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
           id:crypto.randomUUID(),created_at:new Date().toISOString(),
           label:'QRIS Payment · assessment '+peak+' RPS',
           request:{engine:'simpy',spec,load:{...load,rps:peak}},
-          result:normal.result,
+          result:normal.result,timeline:normal.timeline,
         });
       }catch{setError('The assessment finished, but the browser could not save it to the local history.');}
     }

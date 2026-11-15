@@ -75,10 +75,13 @@ export default function DemoRoleDashboard({role}:{role:DemoRole}){
       <section className="role-dashboard-panel"><div className="role-panel-head"><div><span className="role-eyebrow">FUNCTIONAL MODEL / AKPSI</span><h3>The workflow behind each decision.</h3></div><span>FOUR USE CASES</span></div>
         <div className="role-process-list">{workflow.map((item,index)=>{
           const enabled=visiblePages.some(x=>x.href===item.href);
-          return <div key={item.id} className={'role-process-item '+(enabled?'':'role-process-muted')}>
-            <span className="role-process-number">{item.id}</span><div><strong>{item.name}</strong><p>{item.detail}</p></div>
-            {enabled?<Link href={item.href} aria-label={'Open '+item.name}><ArrowUpRight size={19}/></Link>:<span className="role-process-not-assigned">OTHER ROLE</span>}
-          </div>;
+          return enabled?
+            <Link key={item.id} href={item.href} className="role-process-item tp-process-link" aria-label={'Open '+item.name}>
+              <span className="role-process-number">{item.id}</span><div><strong>{item.name}</strong><p>{item.detail}</p></div><ArrowUpRight size={19}/>
+            </Link>:
+            <div key={item.id} className="role-process-item role-process-muted">
+              <span className="role-process-number">{item.id}</span><div><strong>{item.name}</strong><p>{item.detail}</p></div><span className="role-process-not-assigned">OTHER ROLE</span>
+            </div>;
         })}</div>
       </section>
       <section className="role-dashboard-panel role-quick-panel"><div className="role-panel-head"><div><span className="role-eyebrow">QUICK ACCESS</span><h3>Your available workspace.</h3></div><ShieldCheck size={20}/></div>
