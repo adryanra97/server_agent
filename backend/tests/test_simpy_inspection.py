@@ -4,8 +4,8 @@ import json
 import math
 
 import pytest
-from pydantic import ValidationError
 from fastapi.testclient import TestClient
+from pydantic import ValidationError
 
 from app.engines.simpy import SimPyEngine
 from app.schemas import EvaluationInput, Load, ServerSpec
