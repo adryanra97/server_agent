@@ -34,6 +34,18 @@ describe('role-aware TwinPeak demo workflows',()=>{
     expect(canVisit('lead','/settings')).toBe(true);
     expect(allowedPages('manager').some(page=>page.href==='/access')).toBe(true);
   });
+  it('shares engineering demonstrations with all five personas independently of workflow actions',()=>{
+    const routes=['/showcase','/simulation','/compare','/methodology','/developer','/quality','/settings'];
+    for(const persona of demoPersonas){
+      for(const route of routes){
+        expect(canVisit(persona.id,route)).toBe(true);
+        expect(allowedPages(persona.id).some(page=>page.href===route)).toBe(true);
+      }
+    }
+    expect(canVisit('support','/signoff')).toBe(false);
+    expect(canVisit('engineer','/alignment')).toBe(false);
+    expect(canVisit('manager','/incident')).toBe(false);
+  });
   it('returns a known persona for a selected role',()=>{
     expect(getPersona('lead').shortRole).toBe('Technical Lead');
   });
