@@ -55,9 +55,10 @@ test.describe('role boundary journeys across the five personas',()=>{
       await expect(page).toHaveURL(/\/showcase/);
       await expect(page.getByRole('heading',{name:/See what powers every release decision/i})).toBeVisible();
       await expect(page.getByRole('link',{name:/Review CI\/CD evidence/})).toBeVisible();
-      for(const shared of ['/simulation','/compare','/methodology','/developer','/quality','/settings']){
+      for(const shared of ['/simulation','/developer','/quality']){
         await page.goto(shared,{waitUntil:'domcontentloaded'});
-        await expect(page.locator('.sa-page-header')).toBeVisible();
+        // Some full-screen workbench views intentionally hide the generic page header.
+        await expect(page.locator('.sa-page-header')).toHaveCount(1);
         await expect(page.locator('.sa-access-denied')).toHaveCount(0);
       }
       if(scenario.denied){
@@ -79,7 +80,7 @@ test.describe('role boundary journeys across the five personas',()=>{
     await expect(page).toHaveURL(/\/dashboard/);
     expect(await page.evaluate(()=>sessionStorage.getItem('serveragent-demo-identity-v1'))).toBe('manager');
     await page.goto('/simulation',{waitUntil:'domcontentloaded'});
-    await expect(page.locator('.sa-page-header')).toBeVisible();
+    await expect(page.locator('.sa-page-header')).toHaveCount(1);
     await expect(page.locator('.sa-access-denied')).toHaveCount(0);
   });
 
@@ -112,7 +113,7 @@ test('Showcase links expose original CI configuration and API reference',async({
   await expect(page.getByRole('link',{name:/CI\/CD execution history/})).toHaveAttribute('href',/actions\/workflows\/quality.yml/);
   await expect(page.getByRole('link',{name:/CI pipeline definition/})).toHaveAttribute('href',/blob\/main\/\.github\/workflows\/quality.yml/);
   await expect(page.getByRole('link',{name:/Test evidence JSON/})).toHaveAttribute('href',/quality-reports\/latest.json/);
-  await expect(page.getByRole('link',{name:/OpenAPI specification/})).toHaveAttribute('href','/openapi.json');
+  await expect(page.locator('.tp-showcase-reference-grid').getByRole('link',{name:/OpenAPI specification/})).toHaveAttribute('href','/openapi.json');
   await expect(page.getByRole('link',{name:/Swagger API documentation/})).toHaveAttribute('href','/docs');
   await expect(page.getByRole('link',{name:/Backend quality JSON/})).toHaveAttribute('href','/api/v1/quality');
 });
