@@ -34,7 +34,7 @@ Python 3.12+ and Node.js 22+.
 
 ```bash
 cd backend
-python -m pip install -r requirements.txt pytest httpx pytest-cov black ruff
+python -m pip install -r requirements.txt pytest httpx pytest-cov hypothesis black ruff
 uvicorn main:app --port 8000 --reload
 ```
 
@@ -50,9 +50,25 @@ The production routing is defined in `vercel.json`, using one Vercel Services pr
 
 ## Quality
 
+Run the **fullest** Python test suite — including the slower Hypothesis property
+tests that repeatedly simulate the SimPy engine — from the backend directory:
+
 ```bash
 cd backend
 pytest -q --cov=app --cov=main --cov-branch --cov-report=term-missing
+```
+
+CI runs the fast version, skipping the simulation-heavy property tests (marked
+`slow`) so feedback stays quick:
+
+```bash
+cd backend
+pytest -q -m "not slow" --cov=app --cov=main --cov-branch --cov-report=term-missing
+```
+
+Formatting and lint:
+
+```bash
 black --check app main.py tests
 ruff check app main.py tests
 
