@@ -53,8 +53,8 @@ test.describe('role boundary journeys across the five personas',()=>{
       await expect(primary.getByRole('link',{name:'Showcase'})).toBeVisible();
       await primary.getByRole('link',{name:'Showcase'}).click();
       await expect(page).toHaveURL(/\/showcase/);
-      await expect(page.getByRole('heading',{name:/See what powers every release decision/i})).toBeVisible();
-      await expect(page.getByRole('link',{name:/Review CI\/CD evidence/})).toBeVisible();
+      await expect(page.getByRole('heading',{name:/From simulation\s+to evidence/i})).toBeVisible();
+      await expect(page.getByRole('link',{name:/View engineering evidence/})).toBeVisible();
       for(const shared of ['/simulation','/developer','/quality']){
         await page.goto(shared,{waitUntil:'domcontentloaded'});
         // Some full-screen workbench views intentionally hide the generic page header.
@@ -110,10 +110,10 @@ test('Showcase links expose original CI configuration and API reference',async({
   await page.locator('.tp-persona-card').nth(4).click();
   await page.goto('/showcase',{waitUntil:'domcontentloaded'});
   await expect(page.locator('.tp-showcase-card')).toHaveCount(6);
-  await expect(page.getByRole('link',{name:/CI\/CD execution history/})).toHaveAttribute('href',/actions\/workflows\/quality.yml/);
-  await expect(page.getByRole('link',{name:/CI pipeline definition/})).toHaveAttribute('href',/blob\/main\/\.github\/workflows\/quality.yml/);
-  await expect(page.getByRole('link',{name:/Test evidence JSON/})).toHaveAttribute('href',/quality-reports\/latest.json/);
-  await expect(page.locator('.tp-showcase-reference-grid').getByRole('link',{name:/OpenAPI specification/})).toHaveAttribute('href','/openapi.json');
+  await expect(page.locator('.tp-showcase-evidence-grid').getByRole('link',{name:/GitHub Actions/})).toHaveAttribute('href',/actions\/workflows\/quality.yml/);
+  await expect(page.locator('.tp-showcase-raw-links').getByRole('link',{name:/CI\/CD configuration/})).toHaveAttribute('href',/blob\/main\/\.github\/workflows\/quality.yml/);
+  await expect(page.locator('.tp-showcase-evidence-grid').getByRole('link',{name:/Verified results JSON/})).toHaveAttribute('href',/quality-reports\/latest.json/);
+  await expect(page.locator('.tp-showcase-evidence-grid').getByRole('link',{name:/OpenAPI JSON/})).toHaveAttribute('href','/openapi.json');
   await expect(page.getByRole('link',{name:/Swagger API documentation/})).toHaveAttribute('href','/docs');
   await expect(page.getByRole('link',{name:/Backend quality JSON/})).toHaveAttribute('href','/api/v1/quality');
 });
