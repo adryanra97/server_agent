@@ -115,6 +115,15 @@ export default function Simulation(){
     const validation=validate();
     if(validation){setError(validation);return;}
     setBusy(true);setError('');setComparisonError('');setReport(null);setRules(null);setRawOpen(false);
+    // Move to the visual replay immediately after a valid Simulate click.
+    // The timeline first shows COMPUTING MODEL, then auto-plays the recorded
+    // trace on completion. Preserve reduced-motion preferences.
+    window.requestAnimationFrame(()=>{
+      document.getElementById('simpy-timeline')?.scrollIntoView({
+        behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+        block:'start',
+      });
+    });
     try{
       const response=await fetch('/api/v1/simpy/inspect',{
         method:'POST',headers:{'Content-Type':'application/json'},
