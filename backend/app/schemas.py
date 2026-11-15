@@ -19,7 +19,9 @@ from pydantic import BaseModel, Field
 class CpuSpec(BaseModel):
     """CPU capacity of the server."""
 
-    cores: float = Field(..., gt=0, allow_inf_nan=False, description="Number of CPU cores available.", examples=[4])
+    cores: float = Field(
+        ..., gt=0, allow_inf_nan=False, description="Number of CPU cores available.", examples=[4]
+    )
     clock_ghz: float = Field(
         ...,
         gt=0,
@@ -44,7 +46,11 @@ class NetworkSpec(BaseModel):
     """Network capacity of the server."""
 
     bandwidth_mbps: float = Field(
-        ..., gt=0, allow_inf_nan=False, description="Bandwidth capacity, in megabits per second.", examples=[1000]
+        ...,
+        gt=0,
+        allow_inf_nan=False,
+        description="Bandwidth capacity, in megabits per second.",
+        examples=[1000],
     )
     max_connections: int = Field(
         ..., gt=0, description="Maximum number of concurrent connections.", examples=[10000]
@@ -67,7 +73,9 @@ class ServerSpec(BaseModel):
 class Load(BaseModel):
     """The projected load to evaluate against the spec."""
 
-    rps: float = Field(..., ge=0, allow_inf_nan=False, description="Requests per second.", examples=[500])
+    rps: float = Field(
+        ..., ge=0, allow_inf_nan=False, description="Requests per second.", examples=[500]
+    )
     avg_cpu_ms_per_req: float = Field(
         ...,
         ge=0,

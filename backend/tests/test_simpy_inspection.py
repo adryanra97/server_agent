@@ -136,8 +136,7 @@ def test_tiny_positive_rps_does_not_create_an_infinite_arrival():
     assert body["simulation"]["completed"] == 0
     assert body["result"]["verdict"] == "will_survive"
     assert all(
-        math.isfinite(resource["utilization"])
-        for resource in body["result"]["resources"].values()
+        math.isfinite(resource["utilization"]) for resource in body["result"]["resources"].values()
     )
     json.dumps(body, allow_nan=False)
 
