@@ -27,14 +27,14 @@ export default function Home(){
     finally{setBusy(false);}
   }
   return <main className="home">
-    <header className="home-header"><div className="home-header-inner"><Brand/><nav aria-label="Primary"><a href="#engines">Engines</a><a href="#how-it-works">How it works</a><a href="/docs" target="_blank" rel="noopener noreferrer">API Docs</a></nav><Link className="header-cta" href="/demo">Explore role demo <ArrowUpRight size={16}/></Link></div></header>
+    <header className="home-header"><div className="home-header-inner"><Brand/><nav aria-label="Primary"><a href="#engines">Engines</a><a href="#how-it-works">How it works</a><a href="/docs" target="_blank" rel="noopener noreferrer">API Docs</a></nav><Link className="header-cta" href="/demo">Explore Digital Twin <ArrowUpRight size={16}/></Link></div></header>
     <section className="truth-hero"><div className="truth-inner">
       <div className="truth-copy">
-        <Eyebrow>CAPACITY INTELLIGENCE / SIMPY DISCRETE-EVENT ENGINE</Eyebrow>
-        <h1>Will your server<br/><em>survive the load?</em></h1>
-        <p>Model CPU, memory, and network demand against server capacity. Explore request arrivals, CPU processing, memory use, and network demand through the SimPy engine. Explore resource pressure and the evidence behind each capacity verdict.</p>
-        <div className="truth-actions"><Link href="/demo" className="btn btn-primary">Explore role demo <ArrowRight size={17}/></Link><a className="text-button" href="/docs" target="_blank" rel="noopener noreferrer">Explore the OpenAPI <ArrowUpRight size={16}/></a></div>
-        <div className="truth-facts"><span>01 / TWO ENGINES</span><span>02 / THREE RESOURCES</span><span>03 / EXPLAINABLE RESULTS</span></div>
+        <Eyebrow>SIMULATION-BASED DIGITAL TWIN / CAPACITY INTELLIGENCE</Eyebrow>
+        <h1>What if your<br/>infrastructure had<br/><em>a Digital Twin?</em></h1>
+        <p>Build a simulation-based digital model of your server and workload. Test what happens when demand grows, uncover capacity bottlenecks, and make informed decisions before changing production.</p>
+        <div className="truth-actions"><Link href="/demo" className="btn btn-primary">Explore the Digital Twin <ArrowRight size={17}/></Link><a className="text-button" href="/docs" target="_blank" rel="noopener noreferrer">Inspect the API <ArrowUpRight size={16}/></a></div>
+        <div className="truth-facts"><span>01 / MODEL YOUR SERVER</span><span>02 / TEST FUTURE LOAD</span><span>03 / EXPLAIN EVERY VERDICT</span></div>
       </div>
       <div className="truth-console">
         <div className="truth-console-top"><span className="kicker">CAPACITY EVALUATION</span><span className="truth-indicator"><span className="live-indicator"/> {health==='online'?'ENGINE ONLINE':health==='checking'?'CHECKING ENGINE':'ENGINE UNAVAILABLE'}</span></div>
