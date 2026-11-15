@@ -200,7 +200,12 @@ export default function DemoWorkflows({role,section}:{role:DemoRole;section:Sect
       {role==='lead'&&<div className="role-review-hint"><ClipboardCheck size={19}/><span>Review submitted model evidence. The Technical Lead records the alignment decision.</span></div>}
       <section className="role-list-panel"><div className="role-panel-head"><div><span className="role-eyebrow">ALIGNMENT RECORDS</span><h3>Sprint-cycle evidence</h3></div><span className="role-count">{latestByRelease.length} records</span></div>
         {latestByRelease.length?latestByRelease.map((item,index)=><article className="role-record tp-case-record" key={item.id}>
-          <details className="tp-case-disclosure" defaultOpen={role==='lead'&&index===0}>
+          <details className="tp-case-disclosure" ref={element=>{
+            if(element&&!element.dataset.initialized){
+              element.dataset.initialized='true';
+              element.open=role==='lead'&&index===0;
+            }
+          }}>
             <summary className="tp-case-summary">
               <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
               <div className="tp-case-preview"><Outcome verdict={item.result.verdict}/><span>Bottleneck: {item.result.bottleneck??'None'}</span><span className="tp-case-open">View case details <ChevronDown size={17}/></span></div>
