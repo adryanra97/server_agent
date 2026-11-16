@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import AccessRoles from './access-roles';
+import { WorkspaceRoleContext } from './workspace-role';
 import { DEMO_SESSION_KEY, allowedPages, demoPersonas, type DemoRole } from '../lib/demo';
 
 const push=vi.hoisted(()=>vi.fn());
@@ -8,9 +9,13 @@ vi.mock('next/navigation',()=>({useRouter:()=>({push})}));
 
 beforeEach(()=>{push.mockClear();});
 
+const renderAccessRoles=(role:DemoRole)=>render(
+  <WorkspaceRoleContext.Provider value={role}><AccessRoles/></WorkspaceRoleContext.Provider>
+);
+
 describe('Access & Roles permission matrix',()=>{
   it('shows actual permissions for all five roles across six workspace menus',()=>{
-    render(<AccessRoles role="qa"/>);
+    renderAccessRoles('qa');
     const table=screen.getByRole('table');
     expect(within(table).getAllByRole('row')).toHaveLength(7);
     expect(within(table).getAllByRole('columnheader')).toHaveLength(6);
@@ -32,7 +37,7 @@ describe('Access & Roles permission matrix',()=>{
   });
 
   it('shows which role is active and switches perspective through the demo session',()=>{
-    const {rerender}=render(<AccessRoles role="qa"/>);
+    const {rerender}=renderAccessRoles('qa');
     expect(screen.getByText('Current: QA Tester')).toBeInTheDocument();
     const qaButton=screen.getByRole('button',{name:/QA Tester/});
     expect(qaButton).toHaveClass('active');
@@ -40,7 +45,7 @@ describe('Access & Roles permission matrix',()=>{
     fireEvent.click(managerButton);
     expect(sessionStorage.getItem(DEMO_SESSION_KEY)).toBe('manager');
     expect(push).toHaveBeenCalledWith('/dashboard');
-    rerender(<AccessRoles role={'manager' as DemoRole}/>);
+    rerender(<WorkspaceRoleContext.Provider value="manager"><AccessRoles/></WorkspaceRoleContext.Provider>);
     expect(screen.getByText('Current: Project Manager')).toBeInTheDocument();
     expect(screen.getByRole('button',{name:/Project Manager/})).toHaveClass('active');
     expect(screen.getByRole('button',{name:/QA Tester/})).not.toHaveClass('active');
