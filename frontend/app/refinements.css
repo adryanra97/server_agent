@@ -109,17 +109,17 @@
 .sa-app .eq-check-unavailable{
   display:block;margin-top:12px;color:#566B7D;font-size:11px;
 }
-/* Check clusters (dynamic / static analysis / formatting & build) and complexity tiers. */
+/* Check clusters (dynamic / static analysis / formatting & build). */
 .sa-app .eq-check-groups{display:flex;flex-direction:column;gap:26px;margin-top:17px}
 .sa-app .eq-check-group-title{display:flex;align-items:baseline;gap:10px;margin:0}
 .sa-app .eq-check-group-title strong{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#173F5F}
 .sa-app .eq-check-group-title span{font-size:12px;color:#5A7086;font-weight:500}
 .sa-app .eq-check-group .eq-check-list{margin-top:12px}
 .sa-app .eq-check-pills{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
-.sa-app .eq-check-complexity{font-size:9px;font-weight:800;letter-spacing:.08em;padding:2px 7px;border-radius:999px;text-transform:uppercase}
-.sa-app .eq-check-complexity.high{color:#8A5A10;background:#FBF0DC}
-.sa-app .eq-check-complexity.medium{color:#1D5FA6;background:#E4F0FB}
-.sa-app .eq-check-complexity.low{color:#526575;background:#ECF0F4}
+.sa-app .eq-hint{position:relative;display:inline-flex;align-items:center;color:#5A7086;cursor:help}
+.sa-app .eq-hint>svg{display:block}
+.sa-app .eq-hint::after{content:attr(data-tip);position:absolute;left:0;bottom:calc(100% + 8px);width:max-content;max-width:280px;padding:8px 11px;border-radius:7px;background:#143866;color:#fff;font-size:11px;line-height:1.5;font-weight:500;letter-spacing:0;opacity:0;pointer-events:none;transition:opacity .15s;z-index:20;text-align:left}
+.sa-app .eq-hint:hover::after,.sa-app .eq-hint:focus-visible::after{opacity:1}
 @media(max-width:1000px){
   .sa-app .eq-content-pipeline .eq-check-list{grid-template-columns:1fr}
 }
