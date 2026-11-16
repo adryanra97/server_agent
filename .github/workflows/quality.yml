@@ -201,9 +201,16 @@ jobs:
           node-version: '22'
       - name: Install frontend dependencies
         run: npm install --no-audit --no-fund
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backend dependencies for browser tests
+        run: python -m pip install -r ../backend/requirements.txt
       - name: Install Chromium test browser
         run: npx playwright install --with-deps chromium
       - name: Build Next.js for browser tests
+        env:
+          TWINPEAK_E2E_BACKEND_ORIGIN: http://127.0.0.1:8100
         run: npm run build
       - name: Run real Chromium user journeys
         run: npm run test:e2e

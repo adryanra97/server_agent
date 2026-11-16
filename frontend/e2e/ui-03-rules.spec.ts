@@ -10,12 +10,11 @@ test('UI-03 example evaluation with Rules engine', async ({ page }) => {
   await page.getByText('Rules', { exact: true }).first().click();
   await page.getByText('Evaluate this example').click();
 
-  // Hasil muncul
-  await expect(placeholder).toBeHidden({ timeout: 15000 });
-  await expect(page.getByText('Capacity result')).toBeVisible();
-  await expect(page.getByText('Lolos Bersyarat')).toBeVisible();
-
-  // Angka CPU harus tepat 90.0% dan bottleneck-nya cpu
-  await expect(page.getByText('90.0%')).toBeVisible();
-  await expect(page.locator('body')).toContainText(/Bottleneck:\s*cpu/i);
+  // The result must come from the real Rules API, not the placeholder.
+  const result = page.locator('.truth-result');
+  await expect(result).toBeVisible({ timeout: 20000 });
+  await expect(placeholder).toBeHidden();
+  await expect(result.getByText('Lolos Bersyarat')).toBeVisible();
+  await expect(result.getByText('90.0%')).toBeVisible();
+  await expect(result).toContainText(/Bottleneck:\s*cpu/i);
 });

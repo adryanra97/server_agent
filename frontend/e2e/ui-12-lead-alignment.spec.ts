@@ -4,6 +4,7 @@ test('UI-12 Technical Lead runs the release alignment analysis', async ({ page }
   test.setTimeout(60000);
 
   await page.goto('/demo');
+  await expect(page.getByText('Scenario evidence is ready')).toBeVisible({ timeout: 45000 });
 
   // Pilih role Technical Lead
   await page.getByRole('button', { name: /Technical Lead/ }).click();
@@ -19,8 +20,9 @@ test('UI-12 Technical Lead runs the release alignment analysis', async ({ page }
   // Jalankan analisis
   await page.getByRole('button', { name: 'Run simulated analysis' }).click();
 
-  // Hasil simulasi muncul
-  await expect(page.getByText(/Elapsed time includes draining queued requests/)).toBeVisible({ timeout: 30000 });
+  // The three live SimPy scenarios should return actual capacity evidence.
+  await expect(page.locator('.tp-whatif-card')).toHaveCount(3, { timeout: 30000 });
+  await expect(page.locator('.tp-whatif-card').first()).not.toContainText('Tidak Dapat Dinilai');
   await expect(page.getByText(/Baseline performance scenario for the release alignment demo/)).toBeVisible();
 
   // Bagian keputusan cycle siap dipakai
