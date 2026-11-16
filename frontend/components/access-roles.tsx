@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Check, Minus, ShieldCheck } from 'lucide-react';
 import { allowedPages, demoPersonas, getPersona, selectDemoPersona, type DemoRole } from '../lib/demo';
+import { useWorkspaceRole } from './workspace-role';
 
 const entries=[
   {href:'/dashboard',title:'Overview',description:'Release status and work queue'},
@@ -11,7 +12,8 @@ const entries=[
   {href:'/reports',title:'Report',description:'Find decisions and download reports'},
   {href:'/access',title:'Access & roles',description:'Role permissions and perspective'},
 ];
-export default function AccessRoles({role}:{role:DemoRole}){
+export default function AccessRoles(){
+  const role=useWorkspaceRole();
   const router=useRouter();
   function enter(id:DemoRole){selectDemoPersona(id);router.push('/dashboard');}
   return <div className="tp-access">

@@ -9,6 +9,7 @@ import {
 import { getPersona, allowedPages, demoRecords, type DemoRecords, type DemoRole } from '../lib/demo';
 import { history, type HistoryItem } from '../lib/model';
 import { Outcome } from './ui';
+import { useWorkspaceRole } from './workspace-role';
 
 const missions:Record<DemoRole,{eyebrow:string;title:string;description:string;primary:string;primaryHref:string;secondary:string;secondaryHref:string}> = {
   qa:{eyebrow:'YOUR WORK / PERFORMANCE EVIDENCE',title:'Prepare the evidence. Move the release forward.',
@@ -33,7 +34,8 @@ const workflow=[
   {id:'UC-03',name:'Reports & history',detail:'Review past evaluations and workflow decisions',href:'/reports'},
   {id:'UC-04',name:'Sign-off decision',detail:'Manager approves or rejects a technical recommendation',href:'/signoff'},
 ];
-export default function DemoRoleDashboard({role}:{role:DemoRole}){
+export default function DemoRoleDashboard(){
+  const role=useWorkspaceRole();
   const persona=getPersona(role);
   const mission=missions[role];
   const [records,setRecords]=useState<DemoRecords>({alignments:[],incidents:[]});

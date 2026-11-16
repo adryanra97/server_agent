@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText,
@@ -10,18 +10,8 @@ import {
 } from 'lucide-react';
 import { Brand, Eyebrow } from './ui';
 import { getDemoRole, getPersona, allowedPages, canVisit, demoLogout, type DemoRole } from '../lib/demo';
-import DemoRoleDashboard from './demo-dashboard';
-import DemoWorkflows from './demo-workflows';
-import Simulation from './simulation';
-import Compare from './compare';
-import Reports from './reports';
-import Developer from './developer';
-import Quality from './quality';
-import Methodology from './methodology';
-import AccessRoles from './access-roles';
-import LLMSettings from './llm-settings';
-import PlatformShowcase from './platform-showcase';
 import { ensureDemoStarter } from '../lib/demo';
+import { WorkspaceRoleContext } from './workspace-role';
 
 const titles:Record<string,{title:string;description:string;eyebrow:string}>={
   dashboard:{title:'Your workspace.',description:'Role-specific decisions and the latest SimPy evaluation evidence.',eyebrow:'ROLE WORKSPACE / OVERVIEW'},
@@ -59,7 +49,7 @@ function NotSignedIn(){
     <small>Guided access · Role-based experience</small>
   </div>;
 }
-export default function Workspace(){
+export default function Workspace({children}:{children:ReactNode}){
   const pathname=usePathname();
   const router=useRouter();
   const section=pathname.split('/')[1]||'dashboard';
@@ -97,7 +87,7 @@ export default function Workspace(){
   if(!role){
     return <div className="sa-app"><header className="sa-header"><div className="sa-header-main"><Brand dark/><Link href="/login" className="sa-run-cta">Demo login <ArrowUpRight size={16}/></Link></div></header><NotSignedIn/></div>;
   }
-  return <div className="sa-app">
+  return <WorkspaceRoleContext.Provider value={role}><div className="sa-app">
     <header className="sa-header">
       <div className="sa-header-main">
         <Brand dark/>
@@ -134,19 +124,7 @@ export default function Workspace(){
     <main className={'sa-main sa-section-'+section}>
       <div className="sa-breadcrumb"><Link href="/demo" aria-label="TwinPeak demo">TwinPeak</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
       {allowed?<>{section!=='showcase'&&<div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>}
-        {section==='showcase'?<PlatformShowcase/>:
-          section==='dashboard'?<DemoRoleDashboard role={role}/>:
-          section==='simulation'?<Simulation/>:
-          section==='compare'?<Compare/>:
-          section==='alignment'?<DemoWorkflows role={role} section="alignment"/>:
-          section==='incident'?<DemoWorkflows role={role} section="incident"/>:
-          section==='signoff'?<DemoWorkflows role={role} section="signoff"/>:
-          section==='reports'?<Reports/>:
-          section==='developer'?<Developer/>:
-          section==='quality'?<Quality/>:
-          section==='methodology'?<Methodology/>:
-          section==='access'?<AccessRoles role={role}/>:
-          section==='settings'?<LLMSettings/>:<DemoRoleDashboard role={role}/>}
+        {children}
       </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>
         <h2>This page is not part of your demo role.</h2>
         <p><strong>{currentUser?.shortRole}</strong> has a different responsibility in the guided release workflow. Switch accounts to explore this menu.</p>
@@ -155,5 +133,5 @@ export default function Workspace(){
       <footer className="sa-footer"><div><Brand dark/><p>Capacity evidence meets role-based decision making.</p></div>
         <div><span>Role-based capacity evaluation workspace</span><span>Simulation-based evaluation · release workflow decision support</span></div></footer>
     </main>
-  </div>;
+  </div></WorkspaceRoleContext.Provider>;
 }

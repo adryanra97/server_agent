@@ -10,9 +10,10 @@ import { inspectSimPy, history, defaultLoad, defaultSpec, type HistoryItem } fro
 import { compactTimeline, hasFullReplay, type TraceSample } from '../lib/trace';
 import {
   demoRecords, saveAlignment, saveIncident, getPersona,
-  type DemoRole, type DemoRecords, type DemoAlignment, type DemoIncident,
+  type DemoRecords, type DemoAlignment, type DemoIncident,
 } from '../lib/demo';
 import { Outcome } from './ui';
+import { useWorkspaceRole } from './workspace-role';
 import AlignmentWorkbench, { type AnalysisCase } from './alignment-workbench';
 import AlignmentDecision from './alignment-decision';
 import AlignmentScenarioReplay from './alignment-scenario-replay';
@@ -44,7 +45,8 @@ function StateTag({value}:{value:string}){
 function EmptyRecords({message,link,label}:{message:string;link?:string;label?:string}){
   return <div className="role-empty"><FileText size={30}/><strong>No matching records yet.</strong><p>{message}</p>{link&&<Link href={link}>{label??'Continue'} <ArrowUpRight size={16}/></Link>}</div>;
 }
-export default function DemoWorkflows({role,section}:{role:DemoRole;section:Section}){
+export default function DemoWorkflows({section}:{section:Section}){
+  const role=useWorkspaceRole();
   const data=useDemoRecords();
   const [runs,setRuns]=useState<HistoryItem[]>([]);
   const [analysisCases,setAnalysisCases]=useState<AnalysisCase[]>([]);
