@@ -133,6 +133,8 @@ test('Quality checks show their purpose and reveal the real CI command on demand
   await expect(hypothesis).toHaveAttribute('open','');
   await expect(hypothesis.locator('.eq-check-detail')).toBeVisible();
   await expect(hypothesis.locator('.eq-check-detail code')).toContainText('pytest backend/tests/test_');
+  await expect(hypothesis.getByRole('link',{name:'View Hypothesis findings'}))
+    .toHaveAttribute('href',/found-by-pbt/);
   await expect(checks.filter({hasText:'Python security scanning'}).locator('summary')).toContainText('Bandit');
   await hypothesis.locator('summary').click();
   await expect(hypothesis.locator('.eq-check-detail')).toBeHidden();

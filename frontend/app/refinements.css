@@ -99,11 +99,13 @@
   font:11px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;
   overflow-wrap:anywhere;
 }
-.sa-app .eq-check-detail>a{
+.sa-app .eq-check-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:15px}
+.sa-app .eq-check-actions a{
   display:inline-flex;align-items:center;gap:7px;
-  margin-top:15px;color:#075E94;font-size:12px;font-weight:750;
+  color:#075E94;font-size:12px;font-weight:750;
 }
-.sa-app .eq-check-detail>a:hover{text-decoration:underline}
+.sa-app .eq-check-actions a:hover{text-decoration:underline}
+.sa-app .eq-check-actions .eq-check-unavailable{margin-top:0}
 .sa-app .eq-check-unavailable{
   display:block;margin-top:12px;color:#566B7D;font-size:11px;
 }
