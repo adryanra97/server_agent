@@ -34,7 +34,7 @@ Python 3.12+ and Node.js 22+.
 
 ```bash
 cd backend
-python -m pip install -r requirements.txt pytest httpx pytest-cov black ruff
+python -m pip install -r requirements.txt pytest httpx pytest-cov hypothesis black ruff
 uvicorn main:app --port 8000 --reload
 ```
 
@@ -47,6 +47,14 @@ npm run dev
 ```
 
 The production routing is defined in `vercel.json`, using one Vercel Services project. The original API routes are sent to the FastAPI backend and all website pages to Next.js. For same-origin local routing, use `vercel dev` at the repository root or configure an equivalent development proxy.
+
+## Property-based testing
+
+The Python test suite also uses Hypothesis to test Rules, SimPy, schema validation,
+timeline recording, and quality reporting with generated inputs. Run the full
+suite with `pytest` (including the SimPy tests marked `slow`).
+CI runs all of these tests as well; the Engineering page reports the actual
+JUnit test cases, not the number of generated Hypothesis examples.
 
 ## Quality
 

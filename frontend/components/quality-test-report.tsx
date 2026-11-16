@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { isHypothesisCase } from '../lib/quality-evidence';
 import {
   ArrowUpRight, CheckCircle2, ChevronDown, ChevronRight, CircleAlert,
   Clock3, FileCode2, Info, LoaderCircle, Search, TestTube2, XCircle,
@@ -50,7 +51,7 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
   const [filter,setFilter]=useState<Filter>('all');
-  const [suiteFilter,setSuiteFilter]=useState<'all'|'backend'|'frontend'|'e2e'>('all');
+  const [suiteFilter,setSuiteFilter]=useState<'all'|'backend'|'frontend'|'e2e'|'hypothesis'>('all');
   const [search,setSearch]=useState('');
   const [expanded,setExpanded]=useState<Record<string,boolean>>({});
   const [retry,setRetry]=useState(0);
@@ -78,7 +79,7 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
   const visible=useMemo(()=>{
     if(!report)return [];
     const query=search.toLowerCase().trim();
-    return report.tests.filter(test=>(suiteFilter==='all'||(test.suite??'backend')===suiteFilter)&&
+    return report.tests.filter(test=>(suiteFilter==='all'||(suiteFilter==='hypothesis'?isHypothesisCase(test):(test.suite??'backend')===suiteFilter))&&
       (filter==='all'||test.status===filter)&&
       (!query||(test.name+' '+test.group+' '+test.id+' '+test.file).toLowerCase().includes(query)));
   },[report,search,filter,suiteFilter]);
@@ -123,14 +124,16 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
           {([
             ['all','All suites'],['backend','Python · Pytest'],
             ['frontend','TypeScript · Vitest'],['e2e','Browser · Playwright'],
+            ['hypothesis','Hypothesis · Properties'],
           ] as const).map(([key,label])=>{
-            const count=report.tests.filter(test=>key==='all'||(test.suite??'backend')===key).length;
+            const count=report.tests.filter(test=>key==='all'||(key==='hypothesis'?isHypothesisCase(test):(test.suite??'backend')===key)).length;
             return <button key={key} type="button" aria-pressed={suiteFilter===key}
               className={suiteFilter===key?'active':''} onClick={()=>{setSuiteFilter(key);setExpanded({});}}>
               <strong>{label}</strong><span>{count} tests</span>
             </button>;
           })}
         </div>
+        {suiteFilter==='hypothesis'&&<p className="eq-hypothesis-note">Each row is one recorded Pytest test case. Hypothesis runs many generated examples inside each case; those examples are not counted as separate tests.</p>}
         {report.frontend_coverage?.status==='reported'&&<div className="eq-frontend-coverage">
           <div><span>FRONTEND LINE COVERAGE</span><strong>{report.frontend_coverage.line?.toFixed(1)??'—'}%</strong></div>
           <div><span>FRONTEND BRANCH COVERAGE</span><strong>{report.frontend_coverage.branch?.toFixed(1)??'—'}%</strong></div>
