@@ -107,6 +107,17 @@
 .sa-app .eq-check-unavailable{
   display:block;margin-top:12px;color:#566B7D;font-size:11px;
 }
+/* Check clusters (dynamic / static analysis / formatting & build) and complexity tiers. */
+.sa-app .eq-check-groups{display:flex;flex-direction:column;gap:26px;margin-top:17px}
+.sa-app .eq-check-group-title{display:flex;align-items:baseline;gap:10px;margin:0}
+.sa-app .eq-check-group-title strong{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#173F5F}
+.sa-app .eq-check-group-title span{font-size:12px;color:#5A7086;font-weight:500}
+.sa-app .eq-check-group .eq-check-list{margin-top:12px}
+.sa-app .eq-check-pills{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.sa-app .eq-check-complexity{font-size:9px;font-weight:800;letter-spacing:.08em;padding:2px 7px;border-radius:999px;text-transform:uppercase}
+.sa-app .eq-check-complexity.high{color:#8A5A10;background:#FBF0DC}
+.sa-app .eq-check-complexity.medium{color:#1D5FA6;background:#E4F0FB}
+.sa-app .eq-check-complexity.low{color:#526575;background:#ECF0F4}
 @media(max-width:1000px){
   .sa-app .eq-content-pipeline .eq-check-list{grid-template-columns:1fr}
 }

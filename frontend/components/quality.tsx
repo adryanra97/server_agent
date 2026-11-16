@@ -32,18 +32,26 @@ type PublishedQuality={
     pip?:{vulnerabilities:number|null;packages_with_findings:number|null;status:string};
   };
 };
-type CheckDefinition={key:string;name:string;short:string;description:string;job:string;step:string;command:string};
+type CheckKind='dynamic'|'analysis'|'build';
+type CheckComplexity='high'|'medium'|'low';
+type CheckDefinition={key:string;name:string;short:string;description:string;job:string;step:string;command:string;kind:CheckKind;complexity:CheckComplexity;complexityNote:string};
 const checks:CheckDefinition[]=[
-  {key:'pytest',short:'Backend & API testing',name:'Pytest',description:'Simulation and API regression tests with Python branch coverage',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest --cov=app --cov=main --cov-branch'},
-  {key:'vitest',short:'Frontend logic & components',name:'Vitest · Frontend',description:'TypeScript logic, React interactions, API contracts, LLM security regression',job:'Frontend unit & component tests',step:'Run Vitest component, contract and security regression tests',command:'npm run test:coverage'},
-  {key:'playwright',short:'Real browser testing',name:'Playwright · Browser',description:'Chromium demo journey, role navigation and security headers',job:'Browser end-to-end tests',step:'Run real Chromium user journeys',command:'npm run test:e2e'},
-  {key:'black',short:'Python code formatting',name:'Black',description:'Python code formatting',job:'Python formatting & lint',step:'Black',command:'black --check'},
-  {key:'ruff',short:'Python code quality',name:'Ruff',description:'Python lint and static conventions',job:'Python formatting & lint',step:'Ruff',command:'ruff check'},
-  {key:'typescript',short:'Type safety checks',name:'TypeScript',description:'Typed frontend validation',job:'TypeScript & Next.js',step:'Typecheck',command:'npm run lint'},
-  {key:'nextjs',short:'Production build validation',name:'Next.js build',description:'Production build validation',job:'TypeScript & Next.js',step:'Build',command:'npm run build'},
-  {key:'bandit',short:'Python security scanning',name:'Bandit',description:'Python static analysis with a medium-severity security gate',job:'Bandit security analysis',step:'Enforce security gate (medium severity and confidence or higher)',command:'bandit -r app main.py --severity-level medium'},
-  {key:'npm-audit',short:'JavaScript dependency security',name:'npm audit · Dependencies',description:'Production JavaScript dependency vulnerabilities; high/critical fail the gate',job:'Frontend dependency audit',step:'Read severity counts and enforce high/critical gate',command:'npm audit --omit=dev'},
-  {key:'pip-audit',short:'Python dependency security',name:'pip-audit · Dependencies',description:'Known vulnerability checks for declared Python dependencies',job:'Python dependency audit',step:'Audit declared Python dependencies',command:'pip-audit -r requirements.txt'},
+  {key:'hypothesis',kind:'dynamic',complexity:'high',complexityNote:'Generates and shrinks thousands of inputs to surface edge cases',short:'Generated-input property tests',name:'Hypothesis · Property-based',description:'Property-based tests that generate inputs, then shrink any failure to a minimal counterexample',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest backend/tests/test_*_properties.py'},
+  {key:'pytest',kind:'dynamic',complexity:'medium',complexityNote:'Full simulation and API regression suite with measured branch coverage',short:'Backend & API testing',name:'Pytest',description:'Simulation and API regression tests with Python branch coverage',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest --cov=app --cov=main --cov-branch'},
+  {key:'vitest',kind:'dynamic',complexity:'medium',complexityNote:'Component, contract, and security regression across the frontend',short:'Frontend logic & components',name:'Vitest · Frontend',description:'TypeScript logic, React interactions, API contracts, LLM security regression',job:'Frontend unit & component tests',step:'Run Vitest component, contract and security regression tests',command:'npm run test:coverage'},
+  {key:'playwright',kind:'dynamic',complexity:'high',complexityNote:'Drives a real Chromium browser through multi-step user journeys',short:'Real browser testing',name:'Playwright · Browser',description:'Chromium demo journey, role navigation and security headers',job:'Browser end-to-end tests',step:'Run real Chromium user journeys',command:'npm run test:e2e'},
+  {key:'ruff',kind:'analysis',complexity:'medium',complexityNote:'Many-category lint rules applied across the Python tree',short:'Python code quality',name:'Ruff',description:'Python lint and static conventions',job:'Python formatting & lint',step:'Ruff',command:'ruff check'},
+  {key:'bandit',kind:'analysis',complexity:'medium',complexityNote:'Source-level security analysis gated on severity and confidence',short:'Python security scanning',name:'Bandit',description:'Python static analysis with a medium-severity security gate',job:'Bandit security analysis',step:'Enforce security gate (medium severity and confidence or higher)',command:'bandit -r app main.py --severity-level medium'},
+  {key:'typescript',kind:'analysis',complexity:'medium',complexityNote:'Type-level analysis across the whole frontend',short:'Type safety checks',name:'TypeScript',description:'Typed frontend validation',job:'TypeScript & Next.js',step:'Typecheck',command:'npm run lint'},
+  {key:'npm-audit',kind:'analysis',complexity:'low',complexityNote:'Registry advisory lookup against a vulnerability database',short:'JavaScript dependency security',name:'npm audit · Dependencies',description:'Production JavaScript dependency vulnerabilities; high/critical fail the gate',job:'Frontend dependency audit',step:'Read severity counts and enforce high/critical gate',command:'npm audit --omit=dev'},
+  {key:'pip-audit',kind:'analysis',complexity:'low',complexityNote:'Registry advisory lookup against a vulnerability database',short:'Python dependency security',name:'pip-audit · Dependencies',description:'Known vulnerability checks for declared Python dependencies',job:'Python dependency audit',step:'Audit declared Python dependencies',command:'pip-audit -r requirements.txt'},
+  {key:'black',kind:'build',complexity:'low',complexityNote:'Deterministic reformatting against a canonical style',short:'Python code formatting',name:'Black',description:'Python code formatting',job:'Python formatting & lint',step:'Black',command:'black --check'},
+  {key:'nextjs',kind:'build',complexity:'medium',complexityNote:'Production compile of the entire Next.js app',short:'Production build validation',name:'Next.js build',description:'Production build validation',job:'TypeScript & Next.js',step:'Build',command:'npm run build'},
+];
+const CHECK_GROUPS:{kind:CheckKind;label:string;note:string}[]=[
+  {kind:'dynamic',label:'Dynamic checks',note:'execute the code'},
+  {kind:'analysis',label:'Static analysis',note:'inspect source & dependencies'},
+  {kind:'build',label:'Formatting & build',note:'enforce form & prove compilation'},
 ];
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
@@ -175,6 +183,11 @@ export default function Quality(){
     const verdict=step?.conclusion??(step?.status==='in_progress'?'in_progress':step?.status==='queued'?'queued':null);
     return {...check,job,status:verdict,jobStatus:job?.status??'unavailable'};
   });
+  let checkNumber=0;
+  const groups=CHECK_GROUPS.map(group=>({
+    ...group,
+    items:statuses.filter(s=>s.kind===group.kind).map(s=>({...s,number:++checkNumber})),
+  }));
   const passed=statuses.filter(s=>s.status==='success').length;
   const failed=statuses.filter(s=>s.status==='failure').length;
   const completed=quality.status==='completed';
@@ -223,20 +236,26 @@ export default function Quality(){
 
     <div className="eq-content eq-content-pipeline">
       <section className="eq-checks">
-        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Ten quality checks. One verifiable pipeline.</h3><p>See what each check does, then open its command and GitHub Actions evidence. Section 02 contains the individual test cases.</p></div><Workflow size={23}/></div>
-        <div className="eq-check-list">{statuses.map((check,index)=><details className="eq-check" key={check.key}>
-          <summary className="eq-check-summary">
-            <span className="eq-check-number">{String(index+1).padStart(2,'0')}</span>
-            <span className="eq-check-text"><strong>{check.name}</strong><span className="eq-check-short"> · {check.short}</span></span>
-            <span className={'eq-check-pill '+statusClass(check.status)}>{check.status==='success'?<CheckCircle2 size={15}/>:check.status==='failure'?<XCircle size={15}/>:<Clock3 size={15}/>} {labelStatus(check.status)}</span>
-            <ChevronDown size={17} className="eq-check-chevron" aria-hidden="true"/>
-          </summary>
-          <div className="eq-check-detail">
-            <p>{check.description}</p>
-            <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span></div>
-            {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
-          </div>
-        </details>)}</div>
+        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Eleven quality checks. One verifiable pipeline.</h3><p>See what each check does, then open its command and GitHub Actions evidence. Checks are grouped by whether they execute code, analyze source, or enforce form and build.</p></div><Workflow size={23}/></div>
+        <div className="eq-check-groups">{groups.map(group=><div className="eq-check-group" key={group.kind}>
+          <div className="eq-check-group-title"><strong>{group.label}</strong><span>{group.note}</span></div>
+          <div className="eq-check-list">{group.items.map(check=><details className="eq-check" key={check.key}>
+            <summary className="eq-check-summary">
+              <span className="eq-check-number">{String(check.number).padStart(2,'0')}</span>
+              <span className="eq-check-text"><strong>{check.name}</strong><span className="eq-check-short"> · {check.short}</span></span>
+              <span className="eq-check-pills">
+                <span className={'eq-check-pill '+statusClass(check.status)}>{check.status==='success'?<CheckCircle2 size={15}/>:check.status==='failure'?<XCircle size={15}/>:<Clock3 size={15}/>} {labelStatus(check.status)}</span>
+                <span className={'eq-check-complexity '+check.complexity}>{check.complexity.toUpperCase()}</span>
+              </span>
+              <ChevronDown size={17} className="eq-check-chevron" aria-hidden="true"/>
+            </summary>
+            <div className="eq-check-detail">
+              <p>{check.description}</p>
+              <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span><span>Complexity: <strong>{check.complexityNote}</strong></span></div>
+              {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
+            </div>
+          </details>)}</div>
+        </div>)}</div>
         <p className="eq-footnote"><Info size={16}/> Check statuses reflect the latest GitHub Actions execution.</p>
       </section>
     </div>
