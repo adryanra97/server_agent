@@ -32,18 +32,25 @@ type PublishedQuality={
     pip?:{vulnerabilities:number|null;packages_with_findings:number|null;status:string};
   };
 };
-type CheckDefinition={key:string;name:string;short:string;description:string;job:string;step:string;command:string};
+type CheckDefinition={key:string;name:string;short:string;description:string;job:string;step:string;command:string;group:'dynamic'|'scans'|'static'};
 const checks:CheckDefinition[]=[
-  {key:'pytest',short:'Backend & API testing',name:'Pytest',description:'Simulation and API regression tests with Python branch coverage',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest --cov=app --cov=main --cov-branch'},
-  {key:'vitest',short:'Frontend logic & components',name:'Vitest · Frontend',description:'TypeScript logic, React interactions, API contracts, LLM security regression',job:'Frontend unit & component tests',step:'Run Vitest component, contract and security regression tests',command:'npm run test:coverage'},
-  {key:'playwright',short:'Real browser testing',name:'Playwright · Browser',description:'Chromium demo journey, role navigation and security headers',job:'Browser end-to-end tests',step:'Run real Chromium user journeys',command:'npm run test:e2e'},
-  {key:'black',short:'Python code formatting',name:'Black',description:'Python code formatting',job:'Python formatting & lint',step:'Black',command:'black --check'},
-  {key:'ruff',short:'Python code quality',name:'Ruff',description:'Python lint and static conventions',job:'Python formatting & lint',step:'Ruff',command:'ruff check'},
-  {key:'typescript',short:'Type safety checks',name:'TypeScript',description:'Typed frontend validation',job:'TypeScript & Next.js',step:'Typecheck',command:'npm run lint'},
-  {key:'nextjs',short:'Production build validation',name:'Next.js build',description:'Production build validation',job:'TypeScript & Next.js',step:'Build',command:'npm run build'},
-  {key:'bandit',short:'Python security scanning',name:'Bandit',description:'Python static analysis with a medium-severity security gate',job:'Bandit security analysis',step:'Enforce security gate (medium severity and confidence or higher)',command:'bandit -r app main.py --severity-level medium'},
-  {key:'npm-audit',short:'JavaScript dependency security',name:'npm audit · Dependencies',description:'Production JavaScript dependency vulnerabilities; high/critical fail the gate',job:'Frontend dependency audit',step:'Read severity counts and enforce high/critical gate',command:'npm audit --omit=dev'},
-  {key:'pip-audit',short:'Python dependency security',name:'pip-audit · Dependencies',description:'Known vulnerability checks for declared Python dependencies',job:'Python dependency audit',step:'Audit declared Python dependencies',command:'pip-audit -r requirements.txt'},
+  {key:'hypothesis',short:'Property-based testing',name:'Hypothesis',description:'Generated-input property tests for Rules, SimPy, schemas, timelines and quality parsing',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest -q (test_*_properties.py suites)',group:'dynamic'},
+  {key:'pytest',short:'Backend & API testing',name:'Pytest',description:'Simulation and API regression tests with Python branch coverage',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest --cov=app --cov=main --cov-branch',group:'dynamic'},
+  {key:'vitest',short:'Frontend logic & components',name:'Vitest · Frontend',description:'TypeScript logic, React interactions, API contracts, LLM security regression',job:'Frontend unit & component tests',step:'Run Vitest component, contract and security regression tests',command:'npm run test:coverage',group:'dynamic'},
+  {key:'playwright',short:'Real browser testing',name:'Playwright · Browser',description:'Chromium demo journey, role navigation and security headers',job:'Browser end-to-end tests',step:'Run real Chromium user journeys',command:'npm run test:e2e',group:'dynamic'},
+  {key:'bandit',short:'Python security scanning',name:'Bandit',description:'Python static analysis with a medium-severity security gate',job:'Bandit security analysis',step:'Enforce security gate (medium severity and confidence or higher)',command:'bandit -r app main.py --severity-level medium',group:'scans'},
+  {key:'npm-audit',short:'JavaScript dependency security',name:'npm audit · Dependencies',description:'Production JavaScript dependency vulnerabilities; high/critical fail the gate',job:'Frontend dependency audit',step:'Read severity counts and enforce high/critical gate',command:'npm audit --omit=dev',group:'scans'},
+  {key:'pip-audit',short:'Python dependency security',name:'pip-audit · Dependencies',description:'Known vulnerability checks for declared Python dependencies',job:'Python dependency audit',step:'Audit declared Python dependencies',command:'pip-audit -r requirements.txt',group:'scans'},
+  {key:'black',short:'Python code formatting',name:'Black',description:'Python code formatting',job:'Python formatting & lint',step:'Black',command:'black --check',group:'static'},
+  {key:'ruff',short:'Python code quality',name:'Ruff',description:'Python lint and static conventions',job:'Python formatting & lint',step:'Ruff',command:'ruff check',group:'static'},
+  {key:'typescript',short:'Type safety checks',name:'TypeScript',description:'Typed frontend validation',job:'TypeScript & Next.js',step:'Typecheck',command:'npm run lint',group:'static'},
+  {key:'nextjs',short:'Production build validation',name:'Next.js build',description:'Production build validation',job:'TypeScript & Next.js',step:'Build',command:'npm run build',group:'static'},
+];
+const PBT_ISSUES='https://github.com/adryanra97/server_agent/issues?q=is%3Aissue+label%3Afound-by-pbt';
+const checkGroups:{key:'dynamic'|'scans'|'static';label:string;blurb:string}[]=[
+  {key:'dynamic',label:'Dynamic checks',blurb:'High-effort suites that execute code and observe behavior.'},
+  {key:'scans',label:'Security scans',blurb:'Dependency and static security analysis.'},
+  {key:'static',label:'Static checks',blurb:'Formatting, lint, type and build gates.'},
 ];
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
@@ -223,20 +230,29 @@ export default function Quality(){
 
     <div className="eq-content eq-content-pipeline">
       <section className="eq-checks">
-        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Ten quality checks. One verifiable pipeline.</h3><p>See what each check does, then open its command and GitHub Actions evidence. Section 02 contains the individual test cases.</p></div><Workflow size={23}/></div>
-        <div className="eq-check-list">{statuses.map((check,index)=><details className="eq-check" key={check.key}>
-          <summary className="eq-check-summary">
-            <span className="eq-check-number">{String(index+1).padStart(2,'0')}</span>
-            <span className="eq-check-text"><strong>{check.name}</strong><span className="eq-check-short"> · {check.short}</span></span>
-            <span className={'eq-check-pill '+statusClass(check.status)}>{check.status==='success'?<CheckCircle2 size={15}/>:check.status==='failure'?<XCircle size={15}/>:<Clock3 size={15}/>} {labelStatus(check.status)}</span>
-            <ChevronDown size={17} className="eq-check-chevron" aria-hidden="true"/>
-          </summary>
-          <div className="eq-check-detail">
-            <p>{check.description}</p>
-            <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span></div>
-            {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
-          </div>
-        </details>)}</div>
+        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Eleven quality checks. One verifiable pipeline.</h3><p>See what each check does, then open its command and GitHub Actions evidence. Section 02 contains the individual test cases.</p></div><Workflow size={23}/></div>
+        {checkGroups.map(group=>{
+          const groupChecks=statuses.filter(s=>s.group===group.key);
+          return <div className="eq-check-group" key={group.key}>
+            <div className="eq-check-group-head"><strong>{group.label}</strong><span>{group.blurb}</span></div>
+            <div className="eq-check-list">{groupChecks.map((check,index)=><details className="eq-check" key={check.key}>
+              <summary className="eq-check-summary">
+                <span className="eq-check-number">{String(index+1).padStart(2,'0')}</span>
+                <span className="eq-check-text"><strong>{check.name}</strong><span className="eq-check-short"> · {check.short}</span></span>
+                <span className={'eq-check-pill '+statusClass(check.status)}>{check.status==='success'?<CheckCircle2 size={15}/>:check.status==='failure'?<XCircle size={15}/>:<Clock3 size={15}/>} {labelStatus(check.status)}</span>
+                <ChevronDown size={17} className="eq-check-chevron" aria-hidden="true"/>
+              </summary>
+              <div className="eq-check-detail">
+                <p>{check.description}</p>
+                <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span></div>
+                <div className="eq-check-actions">
+                  {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
+                  {check.key==='hypothesis'&&<a href={PBT_ISSUES} target="_blank" rel="noopener noreferrer" aria-label="View found-by-pbt issues">View found-by-pbt issues <ArrowUpRight size={15}/></a>}
+                </div>
+              </div>
+            </details>)}</div>
+          </div>;
+        })}
         <p className="eq-footnote"><Info size={16}/> Check statuses reflect the latest GitHub Actions execution.</p>
       </section>
     </div>
