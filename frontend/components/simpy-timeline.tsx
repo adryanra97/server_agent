@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { pressureLevel, pressureLabel } from '../lib/resource-pressure';
 import {
   Activity, ArrowDownToLine, ChevronLeft, ChevronRight, Cpu, Database,
   Info, Network, Pause, Play, RotateCcw, Waves, Server, HardDrive, Router, CircleCheck, Gauge,
@@ -89,6 +90,9 @@ export default function SimulationTimeline({
   const timelineDuration=Math.max(1,lastSecond-firstSecond);
   const headingId=sectionId+'-heading';
   const point=trace[bound(index,0,last)]??null;
+  const cpuPressure=pressureLevel(point?.cpu_percent);
+  const ramPressure=pressureLevel(point?.ram_percent);
+  const networkPressure=pressureLevel(point?Math.max(point.network_percent,point.connection_percent):undefined);
 
   useEffect(()=>{
     setIndex(0);
@@ -175,31 +179,34 @@ export default function SimulationTimeline({
           <small>requests entering</small>
           <div className="sa-stage-arrival-dots"><i/><i/><i/><i/><i/></div>
         </div>
-        <div className="sa-stage-network">
+        <div className="sa-stage-network" data-pressure={networkPressure}>
           <div className="sa-stage-wire-label"><Router size={18}/><span>NETWORK LINK</span></div>
           <div className="sa-stage-wire"><span className="sa-stage-wire-track"/><b className="sa-stage-packet"/><b className="sa-stage-packet"/><b className="sa-stage-packet"/></div>
           <div className="sa-stage-traffic-meter">
             <div><span>Delivered bandwidth</span><strong>{hasTrace?round(point?.network_percent??0)+'%':'—'}</strong></div>
             <div className="sa-stage-mini-rail"><span style={{width:Math.min(100,Math.max(0,point?.network_percent??0))+'%'}}/></div>
             <small>Connection occupancy {hasTrace?round(point?.connection_percent??0)+'%':'—'}</small>
+            <span className="sa-stage-pressure">Link pressure: {pressureLabel(networkPressure)}</span>
           </div>
         </div>
         <div className="sa-stage-server">
-          <div className="sa-stage-server-head"><Server size={22}/><span>APPLICATION SERVER</span><span className="sa-stage-server-led"/></div>
+          <div className="sa-stage-server-head"><Server size={22}/><span>APPLICATION SERVER</span><span className="sa-stage-server-led" data-pressure={pressureLevel(point?Math.max(point.cpu_percent,point.ram_percent,point.network_percent,point.connection_percent):undefined)} aria-hidden="true"/></div>
           <div className="sa-stage-server-body">
-            <div className="sa-stage-component">
+            <div className="sa-stage-component" data-pressure={cpuPressure}>
               <div className="sa-stage-component-name"><Cpu size={20}/><div><strong>CPU</strong><small>Processing capacity</small></div><b>{hasTrace?round(point?.cpu_percent??0)+'%':'—'}</b></div>
+              <span className="sa-stage-pressure">CPU pressure: {pressureLabel(cpuPressure)}</span>
               <div className="sa-stage-chip-graphic">
                 <div className="sa-stage-chip"><span/><span/><span/><span/></div>
                 <div className="sa-stage-hardware-meter"><span style={{width:Math.min(100,Math.max(0,point?.cpu_percent??0))+'%'}}/></div>
               </div>
             </div>
-            <div className="sa-stage-component">
+            <div className="sa-stage-component" data-pressure={ramPressure}>
               <div className="sa-stage-component-name"><HardDrive size={20}/><div><strong>Memory</strong><small>Allocated to requests</small></div><b>{hasTrace?round(point?.ram_percent??0)+'%':'—'}</b></div>
+              <span className="sa-stage-pressure">Memory pressure: {pressureLabel(ramPressure)}</span>
               <div className="sa-stage-memory-graphic">
                 <div className="sa-stage-memory-banks">{Array.from({length:12},(_,i)=>{
                   const fill=Math.max(0,Math.min(100,(point?.ram_percent??0)*12-i*100));
-                  return <i key={i} style={{background:`linear-gradient(90deg,#63b9ba ${fill}%,#dce8f5 ${fill}%)`}}/>;
+                  return <i key={i} style={{background:`linear-gradient(90deg,var(--stage-signal) ${fill}%,#dce8f5 ${fill}%)`}}/>;
                 })}</div>
                 <div className="sa-stage-hardware-meter sa-stage-memory-meter"><span style={{width:Math.min(100,Math.max(0,point?.ram_percent??0))+'%'}}/></div>
               </div>

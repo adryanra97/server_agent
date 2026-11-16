@@ -149,7 +149,7 @@ export default function Workspace(){
           section==='settings'?<LLMSettings/>:<DemoRoleDashboard role={role}/>}
       </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>
         <h2>This page is not part of your demo role.</h2>
-        <p><strong>{currentUser?.shortRole}</strong> has a different responsibility in the proposed AKPSI workflow. Switch accounts to explore this menu.</p>
+        <p><strong>{currentUser?.shortRole}</strong> has a different responsibility in the guided release workflow. Switch accounts to explore this menu.</p>
         <Link href="/dashboard">Return to your dashboard <ArrowRight size={16}/></Link>
         <Link href="/login">Switch demo persona <ArrowUpRight size={16}/></Link></div>}
       <footer className="sa-footer"><div><Brand dark/><p>Capacity evidence meets role-based decision making.</p></div>
