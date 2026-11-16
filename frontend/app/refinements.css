@@ -130,3 +130,38 @@
 @media(max-width:1100px){.sa-app .eq-suite-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:750px){.sa-app .eq-suite-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.sa-app .eq-suite-tabs{grid-template-columns:1fr}}
+
+/* TwinPeak navigation: a restrained Metrodata green accent on the existing blue UI. */
+.home .home-header,
+.sa-app .sa-header,
+.demo-login-header{
+  border-top:3px solid #78BE43;
+}
+/* Existing page indicator stays understated; navigation text and buttons remain blue. */
+.sa-app .sa-header .sa-main-nav>a.current::after{
+  background:#78BE43;
+  height:2px;
+}
+/* Help visitors recognize clickable section navigation without recoloring labels. */
+.home .home-header nav a{
+  position:relative;
+}
+.home .home-header nav a::after{
+  content:"";
+  position:absolute;
+  bottom:-10px;
+  left:0;
+  right:0;
+  height:2px;
+  background:#78BE43;
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .18s ease;
+}
+.home .home-header nav a:hover::after,
+.home .home-header nav a:focus-visible::after{
+  transform:scaleX(1);
+}
+@media(prefers-reduced-motion:reduce){
+  .home .home-header nav a::after{transition:none}
+}
