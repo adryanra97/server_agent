@@ -123,3 +123,10 @@
 @media(prefers-reduced-motion:reduce){
   .sa-app .eq-check-chevron{transition:none}
 }
+
+/* Five test-suite filters including source-linked Hypothesis cases. */
+.sa-app .eq-suite-tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sa-app .eq-hypothesis-note{font-size:12px;line-height:1.7;color:#334155;margin:0 0 17px}
+@media(max-width:1100px){.sa-app .eq-suite-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:750px){.sa-app .eq-suite-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.sa-app .eq-suite-tabs{grid-template-columns:1fr}}

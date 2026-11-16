@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import QualityTestReport from './quality-test-report';
+import { hypothesisCaseStats } from '../lib/quality-evidence';
 import {
   Activity, ArrowUpRight, CheckCircle2, ChevronDown, Clock3, Code2, GitBranch,
   GitCommitHorizontal, Info, LoaderCircle, RefreshCw, ShieldAlert,
@@ -19,7 +20,9 @@ type QualityEvidence={
 };
 
 type PublishedQuality={
-  run_id:number;commit_sha:string;tests:{
+  run_id:number;commit_sha:string;
+  summary?:{total:number;passed:number;failed:number;skipped:number;errors:number};
+  tests:{
     id:string;name:string;group:string;file:string;status:string;suite?:string;
   }[];
   suites?:Record<string,{total:number;passed:number;failed:number;skipped:number;errors:number;status:string}>;
@@ -183,6 +186,7 @@ export default function Quality(){
   const pipAudit=published?.security?.pip;
   const frontendCoverage=published?.frontend_coverage;
   const suiteStats=published?.suites;
+  const propertyCases=hypothesisCaseStats(published?.tests??[]);
   const regressionCases=published?.tests.filter(test=>
     /(reasoning\/route|llm-session|next.config|security)/i.test(test.file+' '+test.group+' '+test.name)
   )??[];
@@ -206,6 +210,8 @@ export default function Quality(){
     </div>
 
     <div className="eq-metrics">
+      <div className="eq-metric"><span>TOTAL EXECUTED TESTS</span><strong>{published?.summary?.total??'—'}</strong><p>Recorded Pytest, Vitest, and Playwright cases</p></div>
+      <div className="eq-metric"><span>HYPOTHESIS TEST CASES</span><strong>{published?propertyCases.passed+' / '+propertyCases.total:'—'}</strong><p>Generated-input tests recorded by CI · not example count</p></div>
       <div className="eq-metric"><span>LINE COVERAGE</span><strong>{num(quality.coverage_line??quality.coverage)===null?'—':Number(quality.coverage_line??quality.coverage).toFixed(1)+'%'}</strong><p>{quality.coverage_status==='reported'?'Measured from CI test report':'Not reported by this run'}</p></div>
       <div className="eq-metric"><span>BRANCH COVERAGE</span><strong>{num(quality.coverage_branch)===null?'—':Number(quality.coverage_branch).toFixed(1)+'%'}</strong><p>{quality.coverage_status==='reported'?'Measured execution branches':'Not reported by this run'}</p></div>
       <div className="eq-metric"><span>AUTOMATED CHECKS</span><strong>{jobs.length?passed+' / '+checks.length:'—'}</strong><p>{jobs.length?failed+' failed · '+(checks.length-passed-failed)+' pending / unavailable':'Awaiting job-level evidence'}</p></div>
