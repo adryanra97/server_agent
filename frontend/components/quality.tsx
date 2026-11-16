@@ -53,6 +53,7 @@ const CHECK_GROUPS:{kind:CheckKind;label:string;note:string}[]=[
   {kind:'analysis',label:'Static analysis',note:'inspect source & dependencies'},
   {kind:'build',label:'Formatting & build',note:'enforce form & prove compilation'},
 ];
+const PBT_ISSUES='https://github.com/adryanra97/server_agent/issues?q=is%3Aissue+label%3Afound-by-pbt';
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
 const branch='main';
@@ -256,7 +257,10 @@ export default function Quality(){
             <div className="eq-check-detail">
               <p>{check.description}</p>
               <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span><span>Complexity: <strong>{check.complexityNote}</strong></span></div>
-              {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
+              <div className="eq-check-actions">
+                {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
+                {check.key==='hypothesis'&&<a href={PBT_ISSUES} target="_blank" rel="noopener noreferrer">View Hypothesis findings <ArrowUpRight size={15}/></a>}
+              </div>
             </div>
           </details>)}</div>
         </div>)}</div>
