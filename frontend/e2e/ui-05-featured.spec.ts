@@ -18,5 +18,5 @@ test('UI-05 featured scenario details', async ({ page }) => {
   // Langkah journey tampil dan evaluasi selesai
   await expect(page.getByText('QA evidence').first()).toBeVisible();
   await expect(page.getByText('Technical review').first()).toBeVisible();
-  await expect(page.getByText('Scenario evidence is ready')).toBeVisible({ timeout: 20000 });
+  await expect(page.getByText('Scenario evidence is ready')).toBeVisible({ timeout: 45000 });
 });

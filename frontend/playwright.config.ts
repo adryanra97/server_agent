@@ -11,11 +11,21 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [{name:'chromium', use:{...devices['Desktop Chrome'], viewport:{width:1366,height:768}}}],
-  webServer: {
-    command: 'npm run start -- -p 3100',
-    url: 'http://127.0.0.1:3100',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-    env: { NEXT_TELEMETRY_DISABLED: '1' },
-  },
+  webServer: [
+    {
+      command: 'python -m uvicorn main:app --host 127.0.0.1 --port 8100',
+      cwd: '../backend',
+      url: 'http://127.0.0.1:8100/health',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+      env: { PYTHONUNBUFFERED: '1' },
+    },
+    {
+      command: 'npm run start -- -p 3100',
+      url: 'http://127.0.0.1:3100',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+      env: { NEXT_TELEMETRY_DISABLED: '1' },
+    },
+  ],
 });

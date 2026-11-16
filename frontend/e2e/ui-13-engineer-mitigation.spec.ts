@@ -4,6 +4,7 @@ test('UI-13 Integration Engineer tests a mitigation', async ({ page }) => {
   test.setTimeout(60000);
 
   await page.goto('/demo');
+  await expect(page.getByText('Scenario evidence is ready')).toBeVisible({ timeout: 45000 });
 
   // Pilih role Integration Engineer
   await page.getByRole('button', { name: /Integration Engineer/ }).click();
@@ -15,8 +16,10 @@ test('UI-13 Integration Engineer tests a mitigation', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Incident response/ }).first()).toBeVisible();
   await expect(page.getByText('Reproduce & test').first()).toBeVisible();
 
-  // Buka insiden, lalu jalankan tes mitigasi
-  await page.locator('summary').first().click();
+  // The QRIS starter incident must exist before running the mitigation.
+  const incident = page.locator('.role-list-panel .tp-case-record').first();
+  await expect(incident).toBeVisible();
+  await incident.locator('.tp-case-summary').click();
   await page.getByRole('button', { name: 'Test mitigation' }).click();
   await page.getByRole('button', { name: 'Run before / after SimPy' }).click();
 
@@ -24,6 +27,7 @@ test('UI-13 Integration Engineer tests a mitigation', async ({ page }) => {
   await expect(
     page.getByText(/Original SimPy engine executed both scenarios/)
   ).toBeVisible({ timeout: 30000 });
+  await expect(incident.locator('.role-before-after')).toBeVisible();
 
   // Tombol PDF ada, tapi TIDAK diklik
   await expect(page.getByRole('button', { name: 'Download incident PDF' })).toBeVisible();

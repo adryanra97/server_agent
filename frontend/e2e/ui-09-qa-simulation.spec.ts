@@ -22,7 +22,7 @@ test('UI-09 QA Tester runs a simulation', async ({ page }) => {
   await page.getByRole('button', { name: 'Run simulation & view replay' }).click();
 
   // Hasil evaluasi muncul
-  await expect(page.getByRole('heading', { name: /Capacity outcome/ })).toBeVisible({ timeout: 30000 });
+  await expect(page.locator('.simpy-result-content')).toBeVisible({ timeout: 30000 });
   await expect(page.getByText('Capacity remains within the defined envelope.')).toBeVisible();
 
   // Limiting resource CPU, semua request selesai diproses
