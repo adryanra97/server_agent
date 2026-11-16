@@ -248,3 +248,23 @@ The top-level **Showcase** link opens `/showcase` as an always-visible technical
 - Technical showcase routes are available regardless of the selected persona. Role-specific *operational* journeys (QA submission, incident escalation, Technical Lead review, Manager sign-off) keep their distinct UI boundaries to demonstrate the functional model.
 - Showcase is **not** a sixth role or an extra UAM-controlled use case. The demo's browser-side role navigation is not backend authorization. All CI, coverage, audit and engine claims continue to be drawn from recorded evidence rather than invented metrics.
 
+## Methodology fact-check and challenge directions
+
+Every claim shown on the `/methodology` page was traced to the engine source and found accurate. The table records where each assumption lives and, instead of a pass/fail mark, how each assumption can be challenged — these are the open questions a reviewer or future dataset should probe.
+
+| # | Assumption (as stated on `/methodology`) | Source of truth | Further direction (how to challenge it) |
+| --- | --- | --- | --- |
+| 1 | Rules engine computes demand ÷ capacity for CPU, RAM, and network; the peak is the bottleneck | `backend/app/engines/rules.py` | Compare the closed-form ratio against real CPU/RAM telemetry under non-uniform or bursty traffic, where the linear, memoryless demand model is most likely to break. |
+| 2 | `CPU = RPS × CPU ms / 1000 ÷ cores` | `rules.py` (`cpu_demand / cpu_capacity`) | Challenge the constant per-request CPU cost; vary `avg_cpu_ms_per_req` by request class or introduce contention, GC pauses, and thermal throttling. |
+| 3 | `RAM = concurrent × MB/req ÷ RAM MB` | `rules.py` (`ram_demand / ram_capacity`) | Memory is rarely perfectly linear in concurrency; test shared buffers, per-process overhead, and swap pressure against the linear model. |
+| 4 | `Network = max(bandwidth %, connections %)` | `rules.py` (`net_util`) | Challenge taking only the stricter of two constraints — packet-per-second limits, latency, or connection-churn can degrade service before either threshold trips. |
+| 5 | SimPy uses resources for CPU/connections and a container for RAM, with exponential interarrival times | `backend/app/engines/simpy.py` | Replace the Poisson arrival process with real request logs; verify the exponential interarrival assumption holds for actual traffic (bursty vs periodic). |
+| 6 | Fixed seed, 30-second window, 20,000-arrival cap | `simpy.py` (`SEED`, `HORIZON`, `MAX_ARRIVALS`) | Run multi-seed replication to expose variance the fixed seed hides, and confirm the 20k cap does not truncate high-RPS scenarios or bias verdicts. |
+| 7 | Survive < 80%, at-risk 80–100%, crash > 100% | `rules.py` / `simpy.py` (`AT_RISK_THRESHOLD`, `CRASH_THRESHOLD`) | The bands are arbitrary; validate against real SLO/outage data and sensitivity-test verdict flips near the 80% and 100% boundaries. |
+| 8 | Clock speed is not used in the calculation | `backend/app/schemas.py` (`clock_ghz`, reserved) | Currently a no-op knob; once clock-aware modeling exists, verify `clock_ghz` actually moves the verdict rather than being silently ignored. |
+| 9 | Confidence is a heuristic, not a measured probability | `_confidence` in both engines | Calibrate the deterministic confidence against the empirical frequency of correct verdicts, not just distance-from-threshold. |
+| 10 | SimPy is reproducible for the same input | `simpy.py` (fixed seed/horizon/cap) | Confirm reproducibility across platforms and Python versions, and weigh a fixed seed's determinism against the operator-relevant variance it hides. |
+| 11 | Both engines are single-server models | both engines | Extend to multi-node/horizontal scaling; timeouts, database latency, and tail-latency effects are omitted and materially change real outcomes. |
+| 12 | Connection limits can produce different verdicts (Rules = declared, SimPy = measured slots) | `simpy.py` + `backend/docs/simpy-dataset.md` | Feed the emergent (measured) concurrency back into the rules engine and check for agreement; reconcile declared vs observed occupancy explicitly. |
+| 13 | Very small RPS may produce no arrivals | `simpy.py` (`int(rps * HORIZON)`) | Probe sub-one-arrival windows and guard against misreading a "quiet" simulation as a passing verdict; consider probabilistic sampling instead of integer truncation. |
+
