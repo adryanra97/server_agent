@@ -148,3 +148,31 @@ test('Homepage keeps readable copy and uses green only as a small accent',async(
     .evaluate(el=>getComputedStyle(el,'::before').backgroundColor);
   expect(accent).toBe('rgb(120, 190, 67)');
 });
+
+
+test('Green navigation accent is consistent without changing blue actions',async({page})=>{
+  const green='rgb(120, 190, 67)';
+  for(const [url,selector] of [
+    ['/','.home-header'],
+    ['/login','.demo-login-header'],
+    ['/demo','.demo-login-header'],
+  ] as const){
+    await page.goto(url,{waitUntil:'domcontentloaded'});
+    const header=page.locator(selector);
+    await expect(header).toBeVisible();
+    await expect(header).toHaveCSS('border-top-color',green);
+    await expect(header).toHaveCSS('border-top-width','3px');
+  }
+  await page.goto('/demo',{waitUntil:'domcontentloaded'});
+  await page.locator('.tp-persona-card').first().click();
+  await expect(page).toHaveURL(/\/dashboard/);
+  const appHeader=page.locator('.sa-header');
+  await expect(appHeader).toHaveCSS('border-top-color',green);
+  const active=page.locator('.sa-main-nav>a.current').first();
+  await expect(active).toBeVisible();
+  expect(await active.evaluate(el=>getComputedStyle(el,'::after').backgroundColor)).toBe(green);
+  expect(await active.evaluate(el=>getComputedStyle(el,'::after').height)).toBe('2px');
+  await page.setViewportSize({width:390,height:844});
+  await expect(appHeader).toHaveCSS('border-top-color',green);
+  await expect(appHeader).toHaveCSS('border-top-width','3px');
+});
