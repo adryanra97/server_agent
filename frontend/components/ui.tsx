@@ -35,11 +35,14 @@ export function ResourceBars({result}:{result:VerdictResult}){
     {(['cpu','ram','network'] as const).map((name)=><div className="resource-row" key={name}>
       <div className="resource-header">
         <span>{name==='cpu'?'CPU utilization':name==='ram'?'RAM utilization':'Network utilization'}</span>
-        <strong>{(result.resources[name].utilization*100).toFixed(1)}%</strong>
+        <div className="resource-value">
+          <span className={'resource-state resource-state-'+result.resources[name].status}>{result.resources[name].status==='critical'?'Critical':result.resources[name].status==='warning'?'Warning':'Normal'}</span>
+          <strong>{(result.resources[name].utilization*100).toFixed(1)}%</strong>
+        </div>
       </div>
       <div className="progress-rail"><div className="progress-fill" style={{
         width:`${Math.min(100,Math.max(0,result.resources[name].utilization*100))}%`,
-        background:result.resources[name].status==='critical'?'var(--danger)':result.resources[name].status==='warning'?'var(--amber)':'var(--blue)',
+        background:result.resources[name].status==='critical'?'var(--danger)':result.resources[name].status==='warning'?'var(--amber)':'var(--success)',
       }}/></div>
     </div>)}
   </div>;

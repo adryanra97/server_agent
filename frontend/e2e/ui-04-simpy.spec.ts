@@ -15,6 +15,9 @@ test('UI-04 example evaluation with SimPy engine', async ({ page }) => {
   await expect(result).toBeVisible({ timeout: 20000 });
   await expect(placeholder).toBeHidden();
   await expect(result.getByText('Lolos Bersyarat')).toBeVisible();
-  await expect(result).toContainText(/CPU utilization\s*\d+(?:\.\d+)?%/i);
+  const cpu=result.locator('.resource-row').first();
+  await expect(cpu).toContainText('CPU utilization');
+  await expect(cpu.locator('.resource-header strong')).toContainText(/^\d+(?:\.\d+)?%$/);
+  await expect(cpu.locator('.resource-state')).toHaveText('Warning');
   await expect(result).toContainText(/Bottleneck:\s*cpu/i);
 });

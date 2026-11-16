@@ -17,6 +17,20 @@ test('UI-08 mobile layout on landing page', async ({ page }) => {
   await expectNoHorizontalScroll(page);
 });
 
+test('UI-08 homepage mobile navigation opens and closes accessibly', async ({ page }) => {
+  await page.goto('/');
+  const toggle=page.getByRole('button',{name:'Open navigation'});
+  await expect(toggle).toBeVisible();
+  await expect(toggle).toHaveAttribute('aria-expanded','false');
+  await toggle.click();
+  const nav=page.getByRole('navigation',{name:'Primary'});
+  await expect(nav.getByRole('link',{name:'Engines'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Close navigation'})).toHaveAttribute('aria-expanded','true');
+  await nav.getByRole('link',{name:'Engines'}).click();
+  await expect(page.getByRole('button',{name:'Open navigation'})).toHaveAttribute('aria-expanded','false');
+  await expectNoHorizontalScroll(page);
+});
+
 test('UI-08 mobile layout on demo page', async ({ page }) => {
   await page.goto('/demo');
   await expect(page.locator('.tp-persona-card')).toHaveCount(5);

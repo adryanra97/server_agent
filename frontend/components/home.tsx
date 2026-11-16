@@ -10,6 +10,7 @@ import { Brand, Eyebrow, Outcome, ResourceBars } from './ui';
 
 export default function Home(){
   const [engine,setEngine]=useState<Engine>('simpy');
+  const [mobileMenu,setMobileMenu]=useState(false);
   const [health,setHealth]=useState<'checking'|'online'|'unavailable'>('checking');
   useEffect(()=>{
     fetch('/health',{cache:'no-store'})
@@ -27,7 +28,19 @@ export default function Home(){
     finally{setBusy(false);}
   }
   return <main className="home">
-    <header className="home-header"><div className="home-header-inner"><Brand/><nav aria-label="Primary"><a href="#engines">Engines</a><a href="#how-it-works">How it works</a><a href="/docs" target="_blank" rel="noopener noreferrer">API Docs</a></nav><Link className="header-cta" href="/demo">Explore Digital Twin <ArrowUpRight size={16}/></Link></div></header>
+    <header className="home-header"><div className="home-header-inner"><Brand/>
+      <nav id="home-navigation" className={'home-nav '+(mobileMenu?'is-open':'')} aria-label="Primary" onKeyDown={event=>{if(event.key==='Escape')setMobileMenu(false);}}>
+        <span className="home-nav-label">EXPLORE TWINPEAK</span>
+        <a href="#engines" onClick={()=>setMobileMenu(false)}>Engines</a>
+        <a href="#how-it-works" onClick={()=>setMobileMenu(false)}>How it works</a>
+        <a href="/docs" target="_blank" rel="noopener noreferrer" onClick={()=>setMobileMenu(false)}>API Docs</a>
+        <Link href="/demo" className="home-nav-demo" onClick={()=>setMobileMenu(false)}>Explore Digital Twin <ArrowUpRight size={16}/></Link>
+      </nav>
+      <Link className="header-cta" href="/demo">Explore Digital Twin <ArrowUpRight size={16}/></Link>
+      <button type="button" className="home-mobile-toggle" aria-label={mobileMenu?'Close navigation':'Open navigation'} aria-expanded={mobileMenu} aria-controls="home-navigation" onClick={()=>setMobileMenu(open=>!open)}>
+        {mobileMenu?<span aria-hidden="true">×</span>:<span aria-hidden="true">☰</span>}
+      </button>
+    </div></header>
     <section className="truth-hero"><div className="truth-inner">
       <div className="truth-copy">
         <Eyebrow>SIMULATION-BASED DIGITAL TWIN / CAPACITY INTELLIGENCE</Eyebrow>
@@ -40,14 +53,16 @@ export default function Home(){
         <div className="truth-console-top"><span className="kicker">CAPACITY EVALUATION</span><span className="truth-indicator"><span className="live-indicator"/> {health==='online'?'ENGINE ONLINE':health==='checking'?'CHECKING ENGINE':'ENGINE UNAVAILABLE'}</span></div>
         <div className="truth-console-title"><div><small>SERVER PROFILE</small><h3>4 CPU cores · 8 GB RAM</h3><span>1,000 Mbps bandwidth · 10,000 connections</span></div><Cpu size={25}/></div>
         <div className="truth-request"><span>TEST WORKLOAD</span><strong>360 <small>requests / second</small></strong><p>10 ms CPU / request · 100 connections · 10 KB payload</p></div>
-        <div className="truth-choice"><span>ENGINE</span><div><button className={engine==='rules'?'active':''} onClick={()=>{setEngine('rules');setResult(null)}}>Rules</button><button className={engine==='simpy'?'active':''} onClick={()=>{setEngine('simpy');setResult(null)}}>SimPy</button></div></div>
+        <div className="truth-choice"><span>ENGINE</span><div><button type="button" aria-pressed={engine==='rules'} className={engine==='rules'?'active':''} onClick={()=>{setEngine('rules');setResult(null)}}>Rules</button><button type="button" aria-pressed={engine==='simpy'} className={engine==='simpy'?'active':''} onClick={()=>{setEngine('simpy');setResult(null)}}>SimPy</button></div></div>
         <button className="btn btn-primary truth-run" onClick={tryExample} disabled={busy}><Play size={16} fill="currentColor"/>{busy?'Evaluating…':'Evaluate this example'}<ArrowRight size={16}/></button>
-        {result?<div className="truth-result"><div className="truth-result-head"><span className="kicker">CAPACITY RESULT</span><Outcome verdict={result.verdict}/></div><ResourceBars result={result}/><p>Bottleneck: <strong>{result.bottleneck??'none'}</strong> · Heuristic confidence: <strong>{(result.confidence*100).toFixed(0)}%</strong></p></div>:<div className="truth-await"><Gauge size={19}/><span>Run the example to see the estimated resource pressure and capacity verdict.</span></div>}
-        {error&&<p role="alert" className="error-box">{error}</p>}
+        <div className="truth-result-shell" aria-busy={busy} aria-live="polite">
+          {result?<div className="truth-result"><div className="truth-result-head"><span className="kicker">CAPACITY RESULT</span><Outcome verdict={result.verdict}/></div><ResourceBars result={result}/><p>Bottleneck: <strong>{result.bottleneck??'none'}</strong> · Heuristic confidence: <strong>{(result.confidence*100).toFixed(0)}%</strong></p></div>:<div className="truth-await"><Gauge size={19}/><span>{busy?'Evaluating the model against the selected workload…':'Run the example to see the estimated resource pressure and capacity verdict.'}</span></div>}
+          {error&&<p role="alert" className="error-box">{error}</p>}
+        </div>
       </div>
     </div></section>
     <section className="truth-strip"><div><span>PROVENANCE</span><strong>Engine methodology</strong><p>Two complementary capacity evaluation models.</p></div><div><span>VERDICTS</span><strong>Survive · Risk · Crash</strong><p>Capacity thresholds at 80% and 100%.</p></div><div><span>OUTPUT</span><strong>Metrics & reasoning</strong><p>Every response includes the model’s calculation details.</p></div></section>
-    <section className="home-roles" aria-labelledby="home-roles-title"><div className="home-roles-head"><span className="role-eyebrow">ROLE-BASED WORKFLOW / AKPSI</span><h2 id="home-roles-title">Five roles. <em>One shared decision trail.</em></h2><p>Explore distinct workspaces for QA, Technical Lead, Integration Engineer, Project Manager, and Support & Monitoring. Each persona has different responsibilities.</p><Link href="/demo">Choose a demo role <ArrowUpRight size={18}/></Link></div><div className="home-role-row"><div><span>01</span><strong>QA Tester</strong><small>Run simulations</small></div><div><span>02</span><strong>Technical Lead</strong><small>Review readiness</small></div><div><span>03</span><strong>Project Manager</strong><small>Approve sign-off</small></div><div><span>04</span><strong>Integration Engineer</strong><small>Test mitigation</small></div><div><span>05</span><strong>Support & Monitoring</strong><small>Escalate & report</small></div></div></section>
+    <section className="home-roles" aria-labelledby="home-roles-title"><div className="home-roles-head"><span className="role-eyebrow">ROLE-BASED RELEASE WORKFLOW</span><h2 id="home-roles-title">Five roles. <em>One shared decision trail.</em></h2><p>Explore distinct workspaces for QA, Technical Lead, Integration Engineer, Project Manager, and Support & Monitoring. Each persona has different responsibilities.</p><Link href="/demo">Choose a demo role <ArrowUpRight size={18}/></Link></div><div className="home-role-row"><div><span>01</span><strong>QA Tester</strong><small>Run simulations</small></div><div><span>02</span><strong>Technical Lead</strong><small>Review readiness</small></div><div><span>03</span><strong>Project Manager</strong><small>Approve sign-off</small></div><div><span>04</span><strong>Integration Engineer</strong><small>Test mitigation</small></div><div><span>05</span><strong>Support & Monitoring</strong><small>Escalate & report</small></div></div></section>
     <section id="engines" className="truth-section"><div className="truth-section-intro"><Eyebrow>TWO COMPLEMENTARY ENGINES</Eyebrow><h2>One question.<br/><span>Two ways to answer.</span></h2><p>Both engines share the exact same input and output schema, so you can explore the same server under the same demand assumptions.</p></div>
       <div className="truth-engine-grid"><Link href="/demo" className="truth-engine-card"><div className="truth-engine-top"><span>REFERENCE / RULES</span><ArrowUpRight size={19}/></div><span className="truth-engine-icon"><BarChart3 size={27}/></span><h3>Rules engine</h3><p>Fast, deterministic demand-versus-capacity formulas. Ideal when you need a transparent calculation and clear bottleneck indicators.</p><span className="truth-engine-link">Explore rules <ArrowRight size={15}/></span></Link><Link href="/demo" className="truth-engine-card"><div className="truth-engine-top"><span>ENGINE / 01</span><ArrowUpRight size={19}/></div><span className="truth-engine-icon"><Waves size={27}/></span><h3>SimPy engine</h3><p>Discrete-event modeling of arriving requests moving through CPU, RAM and network resources, using a repeatable random seed.</p><span className="truth-engine-link">Explore SimPy <ArrowRight size={15}/></span></Link></div>
     </section>
