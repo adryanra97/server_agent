@@ -92,6 +92,10 @@ class SimPyEngine:
             cpu_time = load.avg_cpu_ms_per_req / 1000.0
             wire_time = load.payload_kb * 8.0 / (spec.network.bandwidth_mbps * 1000.0)
             mem_hold = load.avg_mem_mb_per_req
+            if mem_hold > 0 and ram.level - mem_hold == ram.level:
+                # Values below the container's floating-point resolution have
+                # no representable effect on its level.
+                mem_hold = 0.0
 
             net_wait_start = env.now
             with net.request() as conn_req:
@@ -120,7 +124,11 @@ class SimPyEngine:
                     yield env.timeout(wire_time)
                 finally:
                     if mem_hold > 0:
-                        yield ram.put(mem_hold)
+                        # Floating-point subtraction in Container.get() can
+                        # leave just enough residue for an equal-sized put to
+                        # exceed the capacity by an ulp.
+                        release = min(mem_hold, ram.capacity - ram.level)
+                        yield ram.put(release)
                 stats["ram_busy"] += mem_hold * (env.now - mem_acquired)
                 if timeline is not None:
                     timeline.interval("ram_busy", mem_acquired, env.now, mem_hold)
