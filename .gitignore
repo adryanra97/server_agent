@@ -11,3 +11,4 @@ htmlcov/
 .pytest_cache/
 .vercel/
 *.tsbuildinfo
+package-lock.json
