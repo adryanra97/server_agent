@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { pressureLevel, pressureLabel } from '../lib/resource-pressure';
+import { nextReplayIndex } from '../lib/replay-step';
 import {
   Activity, ArrowDownToLine, ChevronLeft, ChevronRight, Cpu, Database,
   Info, Network, Pause, Play, RotateCcw, Waves, Server, HardDrive, Router, CircleCheck, Gauge,
@@ -104,8 +105,7 @@ export default function SimulationTimeline({
     if(!playing||trace.length<2)return;
     const interval=window.setInterval(()=>{
       setIndex(current=>{
-        if(current>=trace.length-1)return looping?0:current;
-        return current+1;
+        return nextReplayIndex(current,trace.length-1,looping);
       });
     },Math.round(520/speed));
     return()=>window.clearInterval(interval);

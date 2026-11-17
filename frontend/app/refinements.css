@@ -314,3 +314,86 @@
   .tp-submission-dialog-actions{flex-direction:column}
   .tp-submission-dialog-actions>button,.tp-submission-dialog-actions>a{width:100%}
 }
+
+
+/* Validation visibility: error is adjacent to the field and not signaled by color alone. */
+.sa-app .simpy-field-invalid .simpy-input input,
+.sa-app .tp-analysis-form .tp-field-invalid input{
+  border:2px solid #B43F52!important;
+  background:#FFF6F7!important;
+  box-shadow:0 0 0 2px rgba(180,63,82,.07);
+}
+.sa-app .simpy-field-invalid .simpy-input input:focus-visible,
+.sa-app .tp-analysis-form .tp-field-invalid input:focus-visible{outline:3px solid #B43F52;outline-offset:2px}
+.sa-app .simpy-field-issue,.sa-app .tp-field-issue{
+  display:block;margin-top:7px;font-size:12px;font-weight:700;
+  line-height:1.55;color:#9B3041;letter-spacing:0;
+}
+.sa-app .tp-analysis-form .tp-field-invalid{color:#9B3041}
+.sa-app .simpy-error:focus,.sa-app .tp-input-warning:focus,.sa-app .tp-error:focus{outline:2px solid #B87816;outline-offset:3px}
+.sa-app .simpy-error,.sa-app .tp-input-warning,.sa-app .tp-error{scroll-margin-block:110px}
+
+/* Comparison: scannable modeled numbers, shared bar scale and explicit gaps. */
+.sa-app .simpy-compare-card .simpy-compare-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px;
+  padding:26px 0 20px;align-items:stretch;
+}
+.sa-app .simpy-compare-grid .simpy-compare-engine{
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;
+  padding:20px 22px;background:#F2F8FC;border:1px solid #CEDFED;border-radius:9px;
+}
+.sa-app .simpy-compare-engine>span:first-child{
+  color:#57768E;font-weight:800;font-size:11px;letter-spacing:.08em;
+}
+.sa-app .simpy-compare-engine>strong{color:#163F61;font-size:27px;letter-spacing:-.04em;line-height:1.2}
+.sa-app .simpy-compare-grid .simpy-compare-summary{
+  grid-column:1/-1;display:flex;flex-direction:row;gap:12px;align-items:flex-start;
+  padding:15px 19px;border-radius:8px;background:#EAF6EF;color:#155E43;border:1px solid #C8E4D5;
+}
+.sa-app .simpy-compare-grid .simpy-compare-summary.differs{background:#FFF4E2;color:#815410;border-color:#EBD2A7}
+.sa-app .simpy-compare-summary svg{flex:none;margin-top:2px}
+.sa-app .simpy-compare-summary>div{display:flex;flex-direction:column;gap:4px}
+.sa-app .simpy-compare-summary strong{color:inherit;font-size:14px;line-height:1.4}
+.sa-app .simpy-compare-summary span{color:inherit;font-size:13px;line-height:1.55}
+.sa-app .simpy-compare-metrics-head{display:flex;justify-content:space-between;gap:14px;align-items:end;margin:8px 0 17px}
+.sa-app .simpy-compare-metrics-head h4{font-size:19px;color:#183E5E;margin:0 0 5px}
+.sa-app .simpy-compare-metrics-head p{font-size:13px;color:#536F83;line-height:1.55;margin:0}
+.sa-app .simpy-compare-metrics-head>span{flex:none;color:#5B7385;font-size:11px;font-weight:750;letter-spacing:.035em}
+.sa-app .simpy-difference-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.sa-app .simpy-difference-grid .simpy-compare-metric{
+  min-width:0;padding:19px;border:1px solid #D2E0E9;border-radius:9px;background:#F9FCFE;
+  display:flex;flex-direction:column;gap:17px;
+}
+.sa-app .simpy-difference-grid .simpy-compare-metric.largest-gap{
+  background:#F0F7FD;border-color:#91C4E4;
+}
+.sa-app .simpy-compare-metric-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.sa-app .simpy-compare-metric-head>strong{font-size:13px;font-weight:850;color:#284E69;letter-spacing:.05em}
+.sa-app .simpy-compare-metric-head>span{color:#325A79;font-weight:700;font-size:12px}
+.sa-app .simpy-compare-metric-head b{font-size:18px;color:#164E75;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sa-app .simpy-compare-meter{display:grid;gap:8px}
+.sa-app .simpy-compare-meter-label{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sa-app .simpy-compare-meter-label>span{color:#4D6F87;font-size:12px;font-weight:750}
+.sa-app .simpy-compare-meter-label>strong{
+  font-size:clamp(19px,2vw,26px);color:#133F61;
+  font-variant-numeric:tabular-nums;letter-spacing:-.04em;
+}
+.sa-app .simpy-compare-track{height:9px;border-radius:30px;background:#DAE8F1;overflow:hidden}
+.sa-app .simpy-compare-track .simpy-compare-fill{display:block;height:100%;border-radius:30px}
+.sa-app .simpy-compare-track .simpy-compare-fill.simpy{background:#086EA6}
+.sa-app .simpy-compare-track .simpy-compare-fill.rules{background:#22A27A}
+.sa-app .simpy-compare-card .simpy-compare-caption{font-size:13px;color:#536F83;line-height:1.7;margin-top:19px}
+@media(max-width:940px){
+  .sa-app .simpy-difference-grid{grid-template-columns:1fr}
+  .sa-app .simpy-compare-metrics-head{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:550px){
+  .sa-app .simpy-compare-card .simpy-compare-grid{grid-template-columns:1fr}
+}
+.sa-app .timeline-playback-options{display:flex;align-items:center;gap:12px}
+.sa-app .timeline-loop{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;
+  min-height:40px;border:1px solid #BACDE0;border-radius:5px;background:#FFF;
+  color:#345F7D;font-size:12px;font-weight:800;cursor:pointer}
+.sa-app .timeline-loop.is-on{background:#E6F5F1;border-color:#9AD5BF;color:#16684C}
+.sa-app .timeline-loop:focus-visible{outline:3px solid #1269A5;outline-offset:2px}
+@media(max-width:600px){.sa-app .timeline-controls{flex-wrap:wrap}.sa-app .timeline-playback-options{width:100%;justify-content:space-between}}

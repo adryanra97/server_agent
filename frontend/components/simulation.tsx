@@ -16,6 +16,7 @@ import { compactTimeline } from '../lib/trace';
 import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
 import { WholeNumberInput } from './whole-number-input';
 import { simulationFieldIssues } from '../lib/simulation-input-validation';
+import EngineComparison from './engine-comparison';
 
 type SimulationEvidence = {
   arrival_process: string;
@@ -179,11 +180,6 @@ export default function Simulation(){
   const details=report?.simulation;
   const verdict=report?.result;
   const affected=verdict?.bottleneck??null;
-  const difference=rules&&verdict?
-    (['cpu','ram','network'] as const).map(key=>({
-      label:key.toUpperCase(),simpy:verdict.resources[key].utilization,
-      rules:rules.resources[key].utilization,
-    })):[];
 
   return <div className="simpy-page">
     <section className="simpy-intro" aria-labelledby="simpy-intro-title">
@@ -276,10 +272,8 @@ export default function Simulation(){
 
     {report&&compare&&<section className="simpy-compare-card" aria-label="Engine parity comparison">
       <div className="simpy-card-header"><div><span className="simpy-section-number">06 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Compare both engines using the same server capacity and workload.</p></div><GitCompareArrows size={22}/></div>
-      {rules&&verdict?<><div className="simpy-compare-grid"><div><span>DISCRETE-EVENT</span><strong>SimPy</strong><Outcome verdict={verdict.verdict}/></div><div><span>DETERMINISTIC</span><strong>Rules</strong><Outcome verdict={rules.verdict}/></div><div className="simpy-agreement">{rules.verdict===verdict.verdict?<><CheckCircle2 size={17}/> Verdicts agree</>:<><CircleAlert size={17}/> Model verdicts differ</>}</div></div>
-        <div className="simpy-difference-grid">{difference.map(row=><div key={row.label}><strong>{row.label}</strong><span>SimPy {pct(row.simpy)}</span><span>Rules {pct(row.rules)}</span></div>)}</div>
-        <p className="simpy-compare-caption">Results can differ near capacity thresholds because SimPy models request arrivals over time.</p>
-      </>:<p className="simpy-compare-caption">{comparisonError||'The rules comparison has not been completed.'}</p>}
+      {rules&&verdict?<EngineComparison simpy={verdict} rules={rules}/>:
+        <p className="simpy-compare-caption">{comparisonError||'The rules comparison has not been completed.'}</p>}
     </section>}
 
     {report&&<details className="simpy-raw" open={rawOpen} onToggle={e=>setRawOpen(e.currentTarget.open)}><summary><Terminal size={17}/> Inspect the complete model JSON <span>EVALUATION OUTPUT</span></summary><pre><code>{JSON.stringify(report,null,2)}</code></pre></details>}
