@@ -28,7 +28,9 @@ test('QA submission notes remain attributed and visible to Technical Lead before
   await expect(page.getByRole('status')).toContainText('Alignment evidence submitted');
 
   await page.goto('/access',{waitUntil:'domcontentloaded'});
-  await page.getByRole('button',{name:/Technical Lead/}).click();
+  const leadChoice=page.locator('.tp-access-role-grid .tp-access-role').nth(1);
+  await expect(leadChoice).toContainText('Technical Lead');
+  await leadChoice.click();
   await expect(page).toHaveURL(/\/dashboard/);
   await page.goto('/alignment',{waitUntil:'domcontentloaded'});
   const note=page.getByRole('region',{name:'QA submission notes'}).filter({hasText:'Development Notes'});
