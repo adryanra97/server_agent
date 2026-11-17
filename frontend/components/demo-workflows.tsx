@@ -17,6 +17,7 @@ import { useWorkspaceRole } from './workspace-role';
 import AlignmentWorkbench, { type AnalysisCase } from './alignment-workbench';
 import { WholeNumberInput } from './whole-number-input';
 import AlignmentDecision from './alignment-decision';
+import QaSubmissionNotes from './qa-submission-notes';
 import AlignmentScenarioReplay from './alignment-scenario-replay';
 import { downloadTwinPeakPDF } from '../lib/report-pdf';
 import TracePreview from './trace-preview';
@@ -239,9 +240,10 @@ export default function DemoWorkflows({section}:{section:Section}){
           }}>
             <summary className="tp-case-summary">
               <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
-              <div className="tp-case-preview"><Outcome verdict={item.result.verdict}/><span>Bottleneck: {item.result.bottleneck??'None'}</span><span className="tp-case-open">View case details <ChevronDown size={17}/></span></div>
+              <div className="tp-case-preview"><Outcome verdict={item.result.verdict}/><span>Bottleneck: {item.result.bottleneck??'None'}</span>{typeof item.qaNotes==='string'&&item.qaNotes.trim()&&<span className="tp-qa-preview-marker"><ClipboardCheck size={14} aria-hidden="true"/> QA notes attached</span>}<span className="tp-case-open">View case details <ChevronDown size={17}/></span></div>
             </summary>
             <div className="tp-case-body">
+              <QaSubmissionNotes item={item}/>
               <div className="role-verdict-strip"><Outcome verdict={item.result.verdict}/><span>Limiting resource: <strong>{item.result.bottleneck??'None'}</strong></span></div>
           <p className="tp-verdict-narrative">{item.result.reasons.join(' · ')}</p>
           <details className="tp-record-technical"><summary>View technical indicators</summary><div><span>CPU: {(item.result.resources.cpu.utilization*100).toFixed(1)}%</span><span>RAM: {(item.result.resources.ram.utilization*100).toFixed(1)}%</span><span>Network: {(item.result.resources.network.utilization*100).toFixed(1)}%</span></div></details>
@@ -255,7 +257,7 @@ export default function DemoWorkflows({section}:{section:Section}){
             }]}
             onLoadReplay={factor=>loadAlignmentReplay(item,factor)}
           />}
-          <p>{item.qaNotes||'No supplementary testing notes provided.'}</p>
+          
           {item.reviewerNote&&<p className="role-review-note"><strong>Technical review:</strong> {item.reviewerNote}</p>}
           {item.signoffNote&&<p className="role-review-note"><strong>Sign-off note:</strong> {item.signoffNote}</p>}
           {role==='lead'&&item.status==='review'&&<AlignmentDecision key={item.id} item={item} onSave={(decision,text)=>decideAlignment(item,decision,text)}/>}

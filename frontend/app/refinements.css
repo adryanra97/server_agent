@@ -474,3 +474,30 @@
   .sa-app .tp-reuse-settings{align-items:stretch;padding:15px;margin-bottom:18px}
   .sa-app .tp-reuse-settings-button{width:100%}
 }
+
+
+/* QA-to-Technical-Lead handoff: original submission context before model evidence.
+   Notes are visibly attributed, readable, and distinct from the reviewer decision. */
+.sa-app .tp-qa-submission-notes{
+  padding:17px 19px;margin:0 0 22px;border:1px solid #D7E4ED;border-radius:7px;
+  background:#F9FCFE;color:#254E69;
+}
+.sa-app .tp-qa-submission-heading{display:flex;gap:11px;align-items:flex-start}
+.sa-app .tp-qa-submission-heading>svg{flex-shrink:0;margin-top:4px;color:#2C668D}
+.sa-app .tp-qa-submission-heading>div{min-width:0}
+.sa-app .tp-qa-submission-heading span{
+  display:block;font-size:10px;font-weight:800;letter-spacing:.07em;color:#517B94;
+}
+.sa-app .tp-qa-submission-heading h5{
+  margin:4px 0 5px;font-size:17px;font-weight:800;line-height:1.4;color:#143F60;
+}
+.sa-app .tp-qa-submission-heading small{display:block;font-size:11px;color:#5C798F;line-height:1.55}
+.sa-app .tp-qa-submission-text,.sa-app .tp-qa-submission-empty{
+  margin:14px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;
+  font-size:13px;line-height:1.75;color:#294F68;
+}
+.sa-app .tp-qa-submission-empty{color:#647F90;font-style:italic}
+.sa-app .tp-case-preview .tp-qa-preview-marker{
+  display:inline-flex;align-items:center;gap:5px;color:#315F7F;font-weight:750;
+}
+@media(max-width:560px){.sa-app .tp-qa-submission-notes{padding:15px}}
