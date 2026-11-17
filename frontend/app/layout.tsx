@@ -2,6 +2,7 @@ import './globals.css';
 import './showcase.css';
 import './refinements.css';
 import type { Metadata } from 'next';
+import BackToTop from '../components/back-to-top';
 
 export const metadata: Metadata = {
   title: 'TwinPeak — Capacity & release intelligence',
@@ -22,5 +23,5 @@ export const metadata: Metadata = {
   },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body>{children}<BackToTop/></body></html>;
 }

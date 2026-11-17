@@ -1,3 +1,4 @@
+import {persistWorkspaceRecord} from './workspace-sync';
 import type { TraceSample } from './trace';
 
 export type Engine = 'rules' | 'simpy';
@@ -47,6 +48,7 @@ export function saveRun(record:HistoryItem){
   if(typeof window==='undefined')return;
   localStorage.setItem('serveragent-copdash-runs',JSON.stringify([record,...history()].slice(0,50)));
   window.dispatchEvent(new Event('serveragent-history'));
+  void persistWorkspaceRecord('run',record as unknown as Record<string,unknown>);
 }
 export async function requestVerdict(body:VerdictRequest):Promise<VerdictResult>{
   const response=await fetch('/verdict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
