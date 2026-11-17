@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "run_id": 44075192929,
-  "commit_sha": "9007604dfd9aee93df8cd2e0a92def552afe4146",
+  "run_id": 44088334230,
+  "commit_sha": "8a4fb6f575dee2cc903d8513c488ed12fbf9bfac",
   "branch": "main",
-  "generated_at": "2026-11-17T11:35:55.824388+00:00",
+  "generated_at": "2026-11-17T13:01:40.384254+00:00",
   "summary": {
-    "total": 313,
+    "total": 310,
     "passed": 310,
     "failed": 0,
-    "skipped": 3,
+    "skipped": 0,
     "errors": 0,
-    "duration_seconds": 81.18
+    "duration_seconds": 105.244
   },
   "tests": [
     {
@@ -19,7 +19,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -28,7 +28,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.011,
+      "duration_seconds": 0.014,
       "suite": "backend"
     },
     {
@@ -37,7 +37,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.086,
+      "duration_seconds": 0.113,
       "suite": "backend"
     },
     {
@@ -46,7 +46,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -55,7 +55,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -64,7 +64,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.167,
+      "duration_seconds": 0.229,
       "suite": "backend"
     },
     {
@@ -73,7 +73,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.006,
+      "duration_seconds": 0.008,
       "suite": "backend"
     },
     {
@@ -82,7 +82,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -91,7 +91,7 @@
       "group": "test_platform",
       "file": "backend/tests/test_platform.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -100,7 +100,7 @@
       "group": "test_pytest_report_properties",
       "file": "backend/tests/test_pytest_report_properties.py",
       "status": "passed",
-      "duration_seconds": 6.549,
+      "duration_seconds": 8.946,
       "suite": "backend"
     },
     {
@@ -109,7 +109,7 @@
       "group": "test_pytest_report_publisher",
       "file": "backend/tests/test_pytest_report_publisher.py",
       "status": "passed",
-      "duration_seconds": 0.001,
+      "duration_seconds": 0.002,
       "suite": "backend"
     },
     {
@@ -145,7 +145,7 @@
       "group": "test_quality_evidence",
       "file": "backend/tests/test_quality_evidence.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -154,7 +154,7 @@
       "group": "test_quality_evidence",
       "file": "backend/tests/test_quality_evidence.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -163,7 +163,7 @@
       "group": "test_quality_evidence",
       "file": "backend/tests/test_quality_evidence.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -172,7 +172,7 @@
       "group": "test_quality_evidence",
       "file": "backend/tests/test_quality_evidence.py",
       "status": "passed",
-      "duration_seconds": 0.008,
+      "duration_seconds": 0.011,
       "suite": "backend"
     },
     {
@@ -181,7 +181,7 @@
       "group": "test_quality_properties",
       "file": "backend/tests/test_quality_properties.py",
       "status": "passed",
-      "duration_seconds": 0.101,
+      "duration_seconds": 0.147,
       "suite": "backend"
     },
     {
@@ -190,7 +190,7 @@
       "group": "test_quality_properties",
       "file": "backend/tests/test_quality_properties.py",
       "status": "passed",
-      "duration_seconds": 0.807,
+      "duration_seconds": 1.174,
       "suite": "backend"
     },
     {
@@ -199,7 +199,7 @@
       "group": "test_quality_tests",
       "file": "backend/tests/test_quality_tests.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -208,7 +208,7 @@
       "group": "test_quality_tests",
       "file": "backend/tests/test_quality_tests.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -217,7 +217,7 @@
       "group": "test_quality_tests",
       "file": "backend/tests/test_quality_tests.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.005,
       "suite": "backend"
     },
     {
@@ -226,7 +226,7 @@
       "group": "test_quality_tests",
       "file": "backend/tests/test_quality_tests.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.005,
       "suite": "backend"
     },
     {
@@ -235,7 +235,7 @@
       "group": "test_quality_tests",
       "file": "backend/tests/test_quality_tests.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -244,7 +244,7 @@
       "group": "test_quality_tests",
       "file": "backend/tests/test_quality_tests.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.005,
       "suite": "backend"
     },
     {
@@ -253,7 +253,7 @@
       "group": "test_rules_properties",
       "file": "backend/tests/test_rules_properties.py",
       "status": "passed",
-      "duration_seconds": 0.291,
+      "duration_seconds": 0.429,
       "suite": "backend"
     },
     {
@@ -262,7 +262,7 @@
       "group": "test_rules_properties",
       "file": "backend/tests/test_rules_properties.py",
       "status": "passed",
-      "duration_seconds": 0.342,
+      "duration_seconds": 0.483,
       "suite": "backend"
     },
     {
@@ -271,7 +271,7 @@
       "group": "test_rules_properties",
       "file": "backend/tests/test_rules_properties.py",
       "status": "passed",
-      "duration_seconds": 0.289,
+      "duration_seconds": 0.423,
       "suite": "backend"
     },
     {
@@ -280,7 +280,7 @@
       "group": "test_rules_properties",
       "file": "backend/tests/test_rules_properties.py",
       "status": "passed",
-      "duration_seconds": 0.499,
+      "duration_seconds": 0.69,
       "suite": "backend"
     },
     {
@@ -289,7 +289,7 @@
       "group": "test_schemas_properties",
       "file": "backend/tests/test_schemas_properties.py",
       "status": "passed",
-      "duration_seconds": 0.251,
+      "duration_seconds": 0.353,
       "suite": "backend"
     },
     {
@@ -298,7 +298,7 @@
       "group": "test_schemas_properties",
       "file": "backend/tests/test_schemas_properties.py",
       "status": "passed",
-      "duration_seconds": 0.299,
+      "duration_seconds": 0.435,
       "suite": "backend"
     },
     {
@@ -307,7 +307,7 @@
       "group": "test_schemas_properties",
       "file": "backend/tests/test_schemas_properties.py",
       "status": "passed",
-      "duration_seconds": 0.274,
+      "duration_seconds": 0.405,
       "suite": "backend"
     },
     {
@@ -316,7 +316,7 @@
       "group": "test_simpy",
       "file": "backend/tests/test_simpy.py",
       "status": "passed",
-      "duration_seconds": 2.099,
+      "duration_seconds": 2.844,
       "suite": "backend"
     },
     {
@@ -325,7 +325,7 @@
       "group": "test_simpy",
       "file": "backend/tests/test_simpy.py",
       "status": "passed",
-      "duration_seconds": 1.259,
+      "duration_seconds": 1.753,
       "suite": "backend"
     },
     {
@@ -334,7 +334,7 @@
       "group": "test_simpy",
       "file": "backend/tests/test_simpy.py",
       "status": "passed",
-      "duration_seconds": 0.165,
+      "duration_seconds": 0.23,
       "suite": "backend"
     },
     {
@@ -343,7 +343,7 @@
       "group": "test_simpy",
       "file": "backend/tests/test_simpy.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -352,7 +352,7 @@
       "group": "test_simpy",
       "file": "backend/tests/test_simpy.py",
       "status": "passed",
-      "duration_seconds": 0.17,
+      "duration_seconds": 0.23,
       "suite": "backend"
     },
     {
@@ -361,7 +361,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.169,
+      "duration_seconds": 0.234,
       "suite": "backend"
     },
     {
@@ -370,7 +370,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.378,
+      "duration_seconds": 0.522,
       "suite": "backend"
     },
     {
@@ -379,7 +379,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -388,7 +388,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.0,
+      "duration_seconds": 0.001,
       "suite": "backend"
     },
     {
@@ -397,7 +397,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.0,
+      "duration_seconds": 0.001,
       "suite": "backend"
     },
     {
@@ -415,7 +415,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.007,
+      "duration_seconds": 0.012,
       "suite": "backend"
     },
     {
@@ -424,7 +424,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.417,
+      "duration_seconds": 0.575,
       "suite": "backend"
     },
     {
@@ -442,7 +442,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -451,7 +451,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 1.693,
+      "duration_seconds": 2.362,
       "suite": "backend"
     },
     {
@@ -460,7 +460,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.212,
+      "duration_seconds": 0.3,
       "suite": "backend"
     },
     {
@@ -469,7 +469,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -478,7 +478,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.012,
+      "duration_seconds": 0.018,
       "suite": "backend"
     },
     {
@@ -487,7 +487,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.172,
+      "duration_seconds": 0.243,
       "suite": "backend"
     },
     {
@@ -496,7 +496,7 @@
       "group": "test_simpy_inspection",
       "file": "backend/tests/test_simpy_inspection.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -505,7 +505,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 3.518,
+      "duration_seconds": 4.846,
       "suite": "backend"
     },
     {
@@ -514,7 +514,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 2.441,
+      "duration_seconds": 3.337,
       "suite": "backend"
     },
     {
@@ -523,7 +523,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 4.354,
+      "duration_seconds": 6.095,
       "suite": "backend"
     },
     {
@@ -532,7 +532,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 0.031,
+      "duration_seconds": 0.044,
       "suite": "backend"
     },
     {
@@ -541,7 +541,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 1.483,
+      "duration_seconds": 2.014,
       "suite": "backend"
     },
     {
@@ -550,7 +550,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 1.501,
+      "duration_seconds": 2.055,
       "suite": "backend"
     },
     {
@@ -559,7 +559,7 @@
       "group": "test_simpy_properties",
       "file": "backend/tests/test_simpy_properties.py",
       "status": "passed",
-      "duration_seconds": 1.164,
+      "duration_seconds": 1.612,
       "suite": "backend"
     },
     {
@@ -613,7 +613,7 @@
       "group": "test_simpy_unit",
       "file": "backend/tests/test_simpy_unit.py",
       "status": "passed",
-      "duration_seconds": 0.326,
+      "duration_seconds": 0.443,
       "suite": "backend"
     },
     {
@@ -667,7 +667,7 @@
       "group": "test_simpy_unit",
       "file": "backend/tests/test_simpy_unit.py",
       "status": "passed",
-      "duration_seconds": 0.002,
+      "duration_seconds": 0.003,
       "suite": "backend"
     },
     {
@@ -712,7 +712,7 @@
       "group": "test_timeline",
       "file": "backend/tests/test_timeline.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -721,7 +721,7 @@
       "group": "test_timeline",
       "file": "backend/tests/test_timeline.py",
       "status": "passed",
-      "duration_seconds": 0.595,
+      "duration_seconds": 0.812,
       "suite": "backend"
     },
     {
@@ -730,7 +730,7 @@
       "group": "test_timeline",
       "file": "backend/tests/test_timeline.py",
       "status": "passed",
-      "duration_seconds": 0.214,
+      "duration_seconds": 0.293,
       "suite": "backend"
     },
     {
@@ -739,7 +739,7 @@
       "group": "test_timeline",
       "file": "backend/tests/test_timeline.py",
       "status": "passed",
-      "duration_seconds": 0.002,
+      "duration_seconds": 0.003,
       "suite": "backend"
     },
     {
@@ -748,7 +748,7 @@
       "group": "test_timeline",
       "file": "backend/tests/test_timeline.py",
       "status": "passed",
-      "duration_seconds": 0.0,
+      "duration_seconds": 0.001,
       "suite": "backend"
     },
     {
@@ -757,7 +757,7 @@
       "group": "test_timeline_properties",
       "file": "backend/tests/test_timeline_properties.py",
       "status": "passed",
-      "duration_seconds": 2.345,
+      "duration_seconds": 3.376,
       "suite": "backend"
     },
     {
@@ -766,7 +766,7 @@
       "group": "test_timeline_properties",
       "file": "backend/tests/test_timeline_properties.py",
       "status": "passed",
-      "duration_seconds": 0.146,
+      "duration_seconds": 0.209,
       "suite": "backend"
     },
     {
@@ -775,7 +775,7 @@
       "group": "test_timeline_properties",
       "file": "backend/tests/test_timeline_properties.py",
       "status": "passed",
-      "duration_seconds": 0.207,
+      "duration_seconds": 0.268,
       "suite": "backend"
     },
     {
@@ -784,7 +784,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.012,
+      "duration_seconds": 0.017,
       "suite": "backend"
     },
     {
@@ -793,7 +793,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -802,7 +802,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -811,7 +811,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -820,7 +820,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -829,7 +829,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -838,7 +838,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.003,
+      "duration_seconds": 0.005,
       "suite": "backend"
     },
     {
@@ -847,7 +847,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.005,
+      "duration_seconds": 0.007,
       "suite": "backend"
     },
     {
@@ -856,7 +856,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -865,7 +865,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -874,7 +874,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.003,
+      "duration_seconds": 0.005,
       "suite": "backend"
     },
     {
@@ -883,7 +883,7 @@
       "group": "test_verdict",
       "file": "backend/tests/test_verdict.py",
       "status": "passed",
-      "duration_seconds": 0.004,
+      "duration_seconds": 0.006,
       "suite": "backend"
     },
     {
@@ -893,7 +893,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0009
+      "duration_seconds": 0.001
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > describes a genuinely indeterminate SimPy result without inventing a verdict",
@@ -902,7 +902,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0017
+      "duration_seconds": 0.0034
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > does not replace an indeterminate verdict when returning LLM explanation",
@@ -920,7 +920,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0019
+      "duration_seconds": 0.0023
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > fails validation for a partial model provider session",
@@ -929,7 +929,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0031
+      "duration_seconds": 0.0037
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > rejects a missing or nonfinite workload before attempting model reasoning",
@@ -938,7 +938,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0012
+      "duration_seconds": 0.0016
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > rejects null, nonobject and missing request kinds",
@@ -947,7 +947,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0019
+      "duration_seconds": 0.0027
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > rejects unparseable request bodies and does not contact providers",
@@ -956,7 +956,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0084
+      "duration_seconds": 0.0112
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > returns a sanitized error when the provider supplies invalid JSON",
@@ -965,7 +965,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0007
+      "duration_seconds": 0.0009
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > truncates long generated narrative rather than emitting unlimited tokens",
@@ -974,7 +974,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0014
+      "duration_seconds": 0.0031
     },
     {
       "id": "frontend:app/api/reasoning/route.edge.test.ts::Non-leaking LLM prompt defaults > handles a report with missing summary and notes through a configured provider",
@@ -983,7 +983,7 @@
       "group": "app/api/reasoning/route.edge.test.ts",
       "file": "frontend/app/api/reasoning/route.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.001
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > calls only the allowlisted provider, without redirects or caching",
@@ -992,7 +992,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0011
+      "duration_seconds": 0.0012
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > does not claim to run an LLM without session credentials",
@@ -1001,7 +1001,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0012
+      "duration_seconds": 0.0014
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > does not leak secrets when the provider rejects the token",
@@ -1010,7 +1010,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0016
+      "duration_seconds": 0.0007
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > does not override SimPy verdicts when enriching a report",
@@ -1019,7 +1019,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.0007
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > fails closed if the provider cannot be reached",
@@ -1028,7 +1028,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0018
+      "duration_seconds": 0.0007
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > prevents overlong bodies before parsing sensitive configuration",
@@ -1037,7 +1037,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects invalid RPS for indeterminate explanations",
@@ -1046,7 +1046,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects missing API key on connection test",
@@ -1055,7 +1055,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects private-network endpoints (SSRF regression)",
@@ -1064,7 +1064,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.001
+      "duration_seconds": 0.0013
     },
     {
       "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects unsupported request types without provider calls",
@@ -1073,7 +1073,7 @@
       "group": "app/api/reasoning/route.test.ts",
       "file": "frontend/app/api/reasoning/route.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0078
+      "duration_seconds": 0.0076
     },
     {
       "id": "frontend:components/access-roles.test.tsx::Access & Roles permission matrix > shows actual permissions for all five roles across six workspace menus",
@@ -1082,7 +1082,7 @@
       "group": "components/access-roles.test.tsx",
       "file": "frontend/components/access-roles.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.2331
+      "duration_seconds": 0.3298
     },
     {
       "id": "frontend:components/access-roles.test.tsx::Access & Roles permission matrix > shows which role is active and switches perspective through the demo session",
@@ -1091,7 +1091,7 @@
       "group": "components/access-roles.test.tsx",
       "file": "frontend/components/access-roles.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.1308
+      "duration_seconds": 0.1801
     },
     {
       "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > allows returning a cycle to Development",
@@ -1100,7 +1100,7 @@
       "group": "components/alignment-decision.test.tsx",
       "file": "frontend/components/alignment-decision.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0536
+      "duration_seconds": 0.066
     },
     {
       "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > lets the reviewer edit the rationale before confirming",
@@ -1109,7 +1109,7 @@
       "group": "components/alignment-decision.test.tsx",
       "file": "frontend/components/alignment-decision.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0366
+      "duration_seconds": 0.0488
     },
     {
       "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > requires a review note before confirmation",
@@ -1118,7 +1118,7 @@
       "group": "components/alignment-decision.test.tsx",
       "file": "frontend/components/alignment-decision.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0881
+      "duration_seconds": 0.1042
     },
     {
       "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > shows confirmation before committing sign-off recommendation",
@@ -1127,7 +1127,7 @@
       "group": "components/alignment-decision.test.tsx",
       "file": "frontend/components/alignment-decision.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0629
+      "duration_seconds": 0.051
     },
     {
       "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > warns when forwarding an overloaded model outcome",
@@ -1136,7 +1136,7 @@
       "group": "components/alignment-decision.test.tsx",
       "file": "frontend/components/alignment-decision.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0258
+      "duration_seconds": 0.0316
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > clears visible replay failures after selecting another scenario",
@@ -1145,7 +1145,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.1027
+      "duration_seconds": 0.1215
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > does not display internal non-Error thrown objects to users",
@@ -1154,7 +1154,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0642
+      "duration_seconds": 0.0706
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > falls back to another available scenario if the selected one disappears",
@@ -1163,7 +1163,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.034
+      "duration_seconds": 0.0362
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > never offers synthetic playback for an unassessable workload",
@@ -1172,7 +1172,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0583
+      "duration_seconds": 0.0996
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > rejects an incomplete backend trace instead of fabricating animation",
@@ -1181,7 +1181,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0812
+      "duration_seconds": 0.0684
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > renders custom headings for saved release evidence",
@@ -1190,7 +1190,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0728
+      "duration_seconds": 0.1078
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > renders nothing for an empty scenario list",
@@ -1199,7 +1199,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0138
+      "duration_seconds": 0.0171
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > shows a progress state until an actual model inspection resolves",
@@ -1208,7 +1208,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.1341
+      "duration_seconds": 0.1216
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > shows a real trend for older scenarios that lack full replay fields",
@@ -1217,7 +1217,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.051
+      "duration_seconds": 0.112
     },
     {
       "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > shows the backend error and supports retry",
@@ -1226,7 +1226,7 @@
       "group": "components/alignment-scenario-replay.edge.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0809
+      "duration_seconds": 0.1136
     },
     {
       "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > can fetch an actual replay for older saved cases",
@@ -1235,7 +1235,7 @@
       "group": "components/alignment-scenario-replay.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0757
+      "duration_seconds": 0.0985
     },
     {
       "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > does not invent a replay for missing event data",
@@ -1244,7 +1244,7 @@
       "group": "components/alignment-scenario-replay.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0292
+      "duration_seconds": 0.0614
     },
     {
       "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > does not trigger a network replay without the user's click",
@@ -1253,7 +1253,7 @@
       "group": "components/alignment-scenario-replay.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0405
+      "duration_seconds": 0.0408
     },
     {
       "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > renders real timeline replay for normal load",
@@ -1262,7 +1262,7 @@
       "group": "components/alignment-scenario-replay.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0492
+      "duration_seconds": 0.0648
     },
     {
       "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > switches between normal, double and triple demand",
@@ -1271,7 +1271,7 @@
       "group": "components/alignment-scenario-replay.test.tsx",
       "file": "frontend/components/alignment-scenario-replay.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0948
+      "duration_seconds": 0.1577
     },
     {
       "id": "frontend:components/back-to-top.test.tsx::Back-to-top affordance > respects reduced motion and hides on short pages",
@@ -1280,7 +1280,7 @@
       "group": "components/back-to-top.test.tsx",
       "file": "frontend/components/back-to-top.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.011
+      "duration_seconds": 0.0246
     },
     {
       "id": "frontend:components/back-to-top.test.tsx::Back-to-top affordance > stays out of the way at the top and appears after scrolling a long page",
@@ -1289,7 +1289,7 @@
       "group": "components/back-to-top.test.tsx",
       "file": "frontend/components/back-to-top.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0951
+      "duration_seconds": 0.127
     },
     {
       "id": "frontend:components/demo-login.test.tsx::five-persona guided login > persists the selected persona and clears an error when the password changes",
@@ -1298,7 +1298,7 @@
       "group": "components/demo-login.test.tsx",
       "file": "frontend/components/demo-login.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0835
+      "duration_seconds": 0.1022
     },
     {
       "id": "frontend:components/demo-login.test.tsx::five-persona guided login > rejects an incorrect password without creating a session",
@@ -1307,7 +1307,7 @@
       "group": "components/demo-login.test.tsx",
       "file": "frontend/components/demo-login.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.1779
+      "duration_seconds": 0.1905
     },
     {
       "id": "frontend:components/demo-login.test.tsx::five-persona guided login > shows and hides password, then uses the provided demo credentials",
@@ -1316,7 +1316,7 @@
       "group": "components/demo-login.test.tsx",
       "file": "frontend/components/demo-login.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.1047
+      "duration_seconds": 0.1196
     },
     {
       "id": "frontend:components/engine-comparison.test.tsx::Engine cross-check visual comparison > highlights the largest difference while retaining exact model values",
@@ -1325,7 +1325,7 @@
       "group": "components/engine-comparison.test.tsx",
       "file": "frontend/components/engine-comparison.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.1134
+      "duration_seconds": 0.1446
     },
     {
       "id": "frontend:components/engine-comparison.test.tsx::Engine cross-check visual comparison > shows a clear message when verdicts disagree",
@@ -1334,7 +1334,7 @@
       "group": "components/engine-comparison.test.tsx",
       "file": "frontend/components/engine-comparison.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0156
+      "duration_seconds": 0.0146
     },
     {
       "id": "frontend:components/engine-comparison.test.tsx::Engine cross-check visual comparison > uses a shared scale for ratios over capacity, without hiding the percentage",
@@ -1343,7 +1343,7 @@
       "group": "components/engine-comparison.test.tsx",
       "file": "frontend/components/engine-comparison.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0266
+      "duration_seconds": 0.0224
     },
     {
       "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > groups six real modules by user goal instead of repeating equal-weight feature cards",
@@ -1352,7 +1352,7 @@
       "group": "components/platform-showcase.test.tsx",
       "file": "frontend/components/platform-showcase.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0394
+      "duration_seconds": 0.0529
     },
     {
       "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > presents a focused goal, an actionable route, and the existing role boundaries",
@@ -1361,7 +1361,7 @@
       "group": "components/platform-showcase.test.tsx",
       "file": "frontend/components/platform-showcase.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.353
+      "duration_seconds": 0.4646
     },
     {
       "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > provides a clearly labeled three-step live demonstration for an examiner",
@@ -1370,7 +1370,7 @@
       "group": "components/platform-showcase.test.tsx",
       "file": "frontend/components/platform-showcase.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0419
+      "duration_seconds": 0.0561
     },
     {
       "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > surfaces authentic CI/CD and API artifacts early with explicit source links",
@@ -1379,7 +1379,7 @@
       "group": "components/platform-showcase.test.tsx",
       "file": "frontend/components/platform-showcase.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.2191
+      "duration_seconds": 0.262
     },
     {
       "id": "frontend:components/trace-preview.test.tsx::recorded SimPy timeline preview > extends chart range above 100% without hiding an overloaded model sample",
@@ -1388,7 +1388,7 @@
       "group": "components/trace-preview.test.tsx",
       "file": "frontend/components/trace-preview.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0056
+      "duration_seconds": 0.0127
     },
     {
       "id": "frontend:components/trace-preview.test.tsx::recorded SimPy timeline preview > labels absent, empty and one-bucket traces as unavailable, never as a measured chart",
@@ -1397,7 +1397,7 @@
       "group": "components/trace-preview.test.tsx",
       "file": "frontend/components/trace-preview.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0236
+      "duration_seconds": 0.0387
     },
     {
       "id": "frontend:components/trace-preview.test.tsx::recorded SimPy timeline preview > renders three paths from actual saved CPU, RAM and network samples",
@@ -1406,7 +1406,7 @@
       "group": "components/trace-preview.test.tsx",
       "file": "frontend/components/trace-preview.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0361
+      "duration_seconds": 0.0724
     },
     {
       "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > does not accept decimal punctuation or exponent syntax",
@@ -1415,7 +1415,7 @@
       "group": "components/whole-number-input.test.tsx",
       "file": "frontend/components/whole-number-input.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0046
+      "duration_seconds": 0.0096
     },
     {
       "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > does not round numbers outside safe integer range",
@@ -1424,7 +1424,7 @@
       "group": "components/whole-number-input.test.tsx",
       "file": "frontend/components/whole-number-input.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0031
+      "duration_seconds": 0.0081
     },
     {
       "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > keeps a deleted field empty instead of inserting zero",
@@ -1433,7 +1433,7 @@
       "group": "components/whole-number-input.test.tsx",
       "file": "frontend/components/whole-number-input.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0633
+      "duration_seconds": 0.0932
     },
     {
       "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > normalizes leading zeroes",
@@ -1442,7 +1442,7 @@
       "group": "components/whole-number-input.test.tsx",
       "file": "frontend/components/whole-number-input.test.tsx",
       "status": "passed",
-      "duration_seconds": 0.0043
+      "duration_seconds": 0.0116
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment field-level validation feedback > attaches impossible per-request memory to its input",
@@ -1451,7 +1451,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment field-level validation feedback > identifies a missing workload field",
@@ -1460,7 +1460,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0001
+      "duration_seconds": 0.0002
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > accepts valid whole-number input",
@@ -1469,7 +1469,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0015
+      "duration_seconds": 0.0021
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > allows overload scenarios to reach SimPy",
@@ -1478,7 +1478,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0032
+      "duration_seconds": 0.0002
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > blocks one request that needs more memory than the server holds",
@@ -1487,7 +1487,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > does not accept fractional inputs",
@@ -1496,7 +1496,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0001
+      "duration_seconds": 0.0002
     },
     {
       "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > flags a cleared field",
@@ -1505,7 +1505,7 @@
       "group": "lib/alignment-input-validation.test.ts",
       "file": "frontend/lib/alignment-input-validation.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Defensive paths in browser workflow storage > exports partially missing fields safely as empty CSV cells",
@@ -1559,7 +1559,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > ignores unknown roles submitted to the role switcher",
@@ -1568,7 +1568,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > keeps incidents when updating alignment records",
@@ -1577,7 +1577,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > never returns another role for a forbidden menu",
@@ -1586,7 +1586,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0017
+      "duration_seconds": 0.0023
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > preserves valid alignments while ignoring a bad incident collection",
@@ -1595,7 +1595,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.0009
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > returns empty data if stored records have incorrect array types",
@@ -1613,7 +1613,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.002
+      "duration_seconds": 0.0016
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > upserts incidents by identity without removing another incident",
@@ -1631,7 +1631,7 @@
       "group": "lib/demo-records.test.ts",
       "file": "frontend/lib/demo-records.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0026
+      "duration_seconds": 0.0031
     },
     {
       "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > writes records and dispatches a workspace update event",
@@ -1649,7 +1649,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > backfills missing 1x/2x/3x traces without changing signed approvals",
@@ -1658,7 +1658,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0007
+      "duration_seconds": 0.0009
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > considers complete 1x/2x/3x proof ready and avoids replay",
@@ -1667,7 +1667,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not create a fake case when the initial SimPy evaluation fails",
@@ -1676,7 +1676,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not re-run a previously unassessable legacy stress scenario",
@@ -1685,7 +1685,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0008
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not repeat model calls for a fully completed seed",
@@ -1694,7 +1694,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0008
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not replay an old non-SimPy run as a SimPy result",
@@ -1703,7 +1703,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > keeps an older approved case if its original run is no longer available",
@@ -1712,7 +1712,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > marks failed follow-up scenarios indeterminate without changing the baseline",
@@ -1721,7 +1721,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0005
+      "duration_seconds": 0.002
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > never generates synthetic starter records when a shared cloud history is active",
@@ -1730,7 +1730,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.002
+      "duration_seconds": 0.0032
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > preserves existing partial cases on replay errors and flags missing ones",
@@ -1739,7 +1739,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0005
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > preserves old evidence when replaying a model changes the saved verdict",
@@ -1748,7 +1748,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0007
+      "duration_seconds": 0.0008
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > reuses an in-progress upgrade promise for an older case",
@@ -1757,7 +1757,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.0014
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > seeds the baseline and both stress levels using evaluated model results",
@@ -1766,7 +1766,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0019
+      "duration_seconds": 0.0032
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > shares one starter-generation promise across overlapping browser loads",
@@ -1775,7 +1775,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0007
     },
     {
       "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > uses the actual SimPy verdict and never fabricates passing results",
@@ -1784,7 +1784,7 @@
       "group": "lib/demo-starter.test.ts",
       "file": "frontend/lib/demo-starter.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0008
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > does not treat corrupted localStorage as valid case records",
@@ -1793,7 +1793,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0007
+      "duration_seconds": 0.0009
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > exposes five distinct demo personas",
@@ -1802,7 +1802,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0021
+      "duration_seconds": 0.0029
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > keeps previously saved release evidence when switching user roles",
@@ -1811,7 +1811,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > logs out and clears temporary LLM credentials",
@@ -1820,7 +1820,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0007
+      "duration_seconds": 0.0011
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > rejects incorrect demo passwords",
@@ -1829,7 +1829,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > restricts menus by role in the presentation layer",
@@ -1838,7 +1838,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > returns a known persona for a selected role",
@@ -1856,7 +1856,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0014
+      "duration_seconds": 0.002
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > supports switching role without overwriting existing case records",
@@ -1865,7 +1865,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0024
+      "duration_seconds": 0.0032
     },
     {
       "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > upserts a case while keeping unrelated records",
@@ -1874,7 +1874,7 @@
       "group": "lib/demo.test.ts",
       "file": "frontend/lib/demo.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > checks maximum model identifier length and whitespace-only tokens",
@@ -1883,7 +1883,7 @@
       "group": "lib/llm-session.edge.test.ts",
       "file": "frontend/lib/llm-session.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > does not expose browser credentials while rendering on the server",
@@ -1892,7 +1892,7 @@
       "group": "lib/llm-session.edge.test.ts",
       "file": "frontend/lib/llm-session.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > fails safely when API response is not JSON",
@@ -1901,7 +1901,7 @@
       "group": "lib/llm-session.edge.test.ts",
       "file": "frontend/lib/llm-session.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0017
+      "duration_seconds": 0.0025
     },
     {
       "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > rejects a successful HTTP status with no valid explanatory text",
@@ -1910,7 +1910,7 @@
       "group": "lib/llm-session.edge.test.ts",
       "file": "frontend/lib/llm-session.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > rejects client-side session save with an unsupported provider",
@@ -1919,7 +1919,7 @@
       "group": "lib/llm-session.edge.test.ts",
       "file": "frontend/lib/llm-session.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.001
+      "duration_seconds": 0.0011
     },
     {
       "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > rejects valid JSON that is not an approved session configuration",
@@ -1928,7 +1928,7 @@
       "group": "lib/llm-session.edge.test.ts",
       "file": "frontend/lib/llm-session.edge.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0017
+      "duration_seconds": 0.0053
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > accepts a supported provider and exact host",
@@ -1937,7 +1937,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0011
+      "duration_seconds": 0.0021
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > allows explicit credential cleanup",
@@ -1946,7 +1946,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > does not send credentials without a configured session",
@@ -1955,7 +1955,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0009
+      "duration_seconds": 0.0018
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > forwards a configured session only when requesting reasoning",
@@ -1964,7 +1964,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > propagates failed reasoning responses without echoing provider credentials",
@@ -1973,7 +1973,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0009
+      "duration_seconds": 0.0023
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > rejects arbitrary, local and private-network endpoints",
@@ -1982,7 +1982,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > rejects corrupted browser session JSON",
@@ -1991,7 +1991,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0001
+      "duration_seconds": 0.0002
     },
     {
       "id": "frontend:lib/llm-session.test.ts::LLM session security > rejects empty keys, empty models, and overlong credentials",
@@ -2009,7 +2009,7 @@
       "group": "lib/llm-session.test.ts",
       "file": "frontend/lib/llm-session.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0009
+      "duration_seconds": 0.0017
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > does not access browser storage when rendering on the server",
@@ -2018,7 +2018,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.001
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > exports a real CSV with escaped quote characters and revokes its object URL",
@@ -2027,7 +2027,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0027
+      "duration_seconds": 0.003
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > exports an empty CSV header when no evaluations match",
@@ -2036,7 +2036,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0006
+      "duration_seconds": 0.0007
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > handles failed JSON parsing without exposing a misleading provider result",
@@ -2045,7 +2045,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > handles object-valued API errors with an HTTP status",
@@ -2063,7 +2063,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > has a label and help text for every supported verdict",
@@ -2072,7 +2072,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0015
+      "duration_seconds": 0.0018
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > limits local history to 50 runs to protect browser storage",
@@ -2081,7 +2081,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0098
+      "duration_seconds": 0.0135
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > posts the typed model workload and returns the original verdict",
@@ -2090,7 +2090,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0006
+      "duration_seconds": 0.0009
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > preserves a validated API rejection message",
@@ -2099,7 +2099,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.001
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > rejects a successful HTTP response without a real SimPy timeline",
@@ -2117,7 +2117,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > saves actual runs, newest first, and broadcasts history changes",
@@ -2126,7 +2126,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0017
+      "duration_seconds": 0.0022
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > starts with empty local evaluation history",
@@ -2135,7 +2135,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0007
+      "duration_seconds": 0.0008
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > surfaces a typed backend inspect error",
@@ -2144,7 +2144,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > uses the production SimPy inspect endpoint with no caching",
@@ -2153,7 +2153,7 @@
       "group": "lib/model.test.ts",
       "file": "frontend/lib/model.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > allows QA creation but not manager forging QA evidence",
@@ -2162,7 +2162,7 @@
       "group": "lib/persistence-rules.test.ts",
       "file": "frontend/lib/persistence-rules.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0019
+      "duration_seconds": 0.0021
     },
     {
       "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > allows sign-off only after review",
@@ -2180,7 +2180,7 @@
       "group": "lib/persistence-rules.test.ts",
       "file": "frontend/lib/persistence-rules.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0005
     },
     {
       "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > permits incident creation by support and analysis by engineer",
@@ -2198,7 +2198,7 @@
       "group": "lib/persistence-rules.test.ts",
       "file": "frontend/lib/persistence-rules.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/quality-branch.test.ts::branch-specific verified engineering quality > counts only truly executed cases and excludes skips",
@@ -2207,7 +2207,7 @@
       "group": "lib/quality-branch.test.ts",
       "file": "frontend/lib/quality-branch.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/quality-branch.test.ts::branch-specific verified engineering quality > uses production evidence in main and local builds",
@@ -2225,7 +2225,7 @@
       "group": "lib/quality-branch.test.ts",
       "file": "frontend/lib/quality-branch.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0043
+      "duration_seconds": 0.0018
     },
     {
       "id": "frontend:lib/quality-evidence.test.ts::Hypothesis evidence > calculates totals only from recorded property cases",
@@ -2234,7 +2234,7 @@
       "group": "lib/quality-evidence.test.ts",
       "file": "frontend/lib/quality-evidence.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0008
+      "duration_seconds": 0.001
     },
     {
       "id": "frontend:lib/quality-evidence.test.ts::Hypothesis evidence > identifies Python property tests, not unrelated files",
@@ -2243,7 +2243,7 @@
       "group": "lib/quality-evidence.test.ts",
       "file": "frontend/lib/quality-evidence.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0018
+      "duration_seconds": 0.0022
     },
     {
       "id": "frontend:lib/quality-evidence.test.ts::Hypothesis evidence > returns zero counts when there is no evidence",
@@ -2270,7 +2270,7 @@
       "group": "lib/replay-step.test.ts",
       "file": "frontend/lib/replay-step.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0014
+      "duration_seconds": 0.0015
     },
     {
       "id": "frontend:lib/replay-step.test.ts::recorded replay stepping > stays at the end when repeat is turned off",
@@ -2288,7 +2288,7 @@
       "group": "lib/resource-pressure.test.ts",
       "file": "frontend/lib/resource-pressure.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0014
+      "duration_seconds": 0.0018
     },
     {
       "id": "frontend:lib/resource-pressure.test.ts::recorded resource pressure > labels occupancy without claiming that the server crashed",
@@ -2306,7 +2306,7 @@
       "group": "lib/resource-pressure.test.ts",
       "file": "frontend/lib/resource-pressure.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0004
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > identifies incomplete historical traces without inventing zero values",
@@ -2315,7 +2315,7 @@
       "group": "lib/trace.test.ts",
       "file": "frontend/lib/trace.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > limits user-requested samples to 200",
@@ -2324,7 +2324,7 @@
       "group": "lib/trace.test.ts",
       "file": "frontend/lib/trace.test.ts",
       "status": "passed",
-      "duration_seconds": 0.001
+      "duration_seconds": 0.0012
     },
     {
       "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > preserves optional animation fields for the hardware replay",
@@ -2351,7 +2351,7 @@
       "group": "lib/trace.test.ts",
       "file": "frontend/lib/trace.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0065
+      "duration_seconds": 0.0031
     },
     {
       "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > samples a bounded trace using actual endpoints and no fabricated buckets",
@@ -2360,7 +2360,7 @@
       "group": "lib/trace.test.ts",
       "file": "frontend/lib/trace.test.ts",
       "status": "passed",
-      "duration_seconds": 0.2145
+      "duration_seconds": 0.312
     },
     {
       "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > treats null, empty and single-point traces as non-replayable",
@@ -2378,7 +2378,7 @@
       "group": "lib/workspace-auth.test.ts",
       "file": "frontend/lib/workspace-auth.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0004
     },
     {
       "id": "frontend:lib/workspace-auth.test.ts::Signed demo session and request origin > enforces a same-origin browser write",
@@ -2387,7 +2387,7 @@
       "group": "lib/workspace-auth.test.ts",
       "file": "frontend/lib/workspace-auth.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0019
+      "duration_seconds": 0.002
     },
     {
       "id": "frontend:lib/workspace-auth.test.ts::Signed demo session and request origin > refuses cloud access until both staging secrets are available",
@@ -2396,7 +2396,7 @@
       "group": "lib/workspace-auth.test.ts",
       "file": "frontend/lib/workspace-auth.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0016
+      "duration_seconds": 0.0021
     },
     {
       "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > decodes the JSONB scalar string created by older Postgres bindings",
@@ -2405,7 +2405,7 @@
       "group": "lib/workspace-record.test.ts",
       "file": "frontend/lib/workspace-record.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0016
+      "duration_seconds": 0.0028
     },
     {
       "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > keeps new JSONB objects unchanged",
@@ -2414,7 +2414,7 @@
       "group": "lib/workspace-record.test.ts",
       "file": "frontend/lib/workspace-record.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0002
+      "duration_seconds": 0.0003
     },
     {
       "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > normalizes alignment, incident and report history",
@@ -2432,7 +2432,7 @@
       "group": "lib/workspace-record.test.ts",
       "file": "frontend/lib/workspace-record.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0003
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > hydrates all saved record kinds from the server and tracks report history",
@@ -2441,7 +2441,7 @@
       "group": "lib/workspace-sync.test.ts",
       "file": "frontend/lib/workspace-sync.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0024
+      "duration_seconds": 0.0032
     },
     {
       "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > preserves local records when the cloud is not configured",
@@ -2450,7 +2450,7 @@
       "group": "lib/workspace-sync.test.ts",
       "file": "frontend/lib/workspace-sync.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0046
+      "duration_seconds": 0.0076
     },
     {
       "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > repairs legacy browser cache before React mounts and retains a backup of invalid entries",
@@ -2459,7 +2459,7 @@
       "group": "lib/workspace-sync.test.ts",
       "file": "frontend/lib/workspace-sync.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0019
+      "duration_seconds": 0.0026
     },
     {
       "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > serializes writes and reports remote conflicts without claiming cloud success",
@@ -2468,7 +2468,7 @@
       "group": "lib/workspace-sync.test.ts",
       "file": "frontend/lib/workspace-sync.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0014
+      "duration_seconds": 0.0018
     },
     {
       "id": "frontend:next.config.test.ts::Next.js response hardening > applies security headers across application routes",
@@ -2477,7 +2477,7 @@
       "group": "next.config.test.ts",
       "file": "frontend/next.config.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0005
+      "duration_seconds": 0.0006
     },
     {
       "id": "frontend:next.config.test.ts::Next.js response hardening > enables React strict mode",
@@ -2486,7 +2486,7 @@
       "group": "next.config.test.ts",
       "file": "frontend/next.config.test.ts",
       "status": "passed",
-      "duration_seconds": 0.0011
+      "duration_seconds": 0.0021
     },
     {
       "id": "e2e:demo-journey.spec.ts::Green navigation accent is consistent without changing blue actions",
@@ -2495,7 +2495,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.279
+      "duration_seconds": 1.652
     },
     {
       "id": "e2e:demo-journey.spec.ts::Homepage keeps readable copy and uses green only as a small accent",
@@ -2504,7 +2504,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.644
+      "duration_seconds": 1.021
     },
     {
       "id": "e2e:demo-journey.spec.ts::Quality checks show their purpose and reveal the real CI command on demand",
@@ -2513,7 +2513,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.141
+      "duration_seconds": 1.6
     },
     {
       "id": "e2e:demo-journey.spec.ts::Showcase links expose original CI configuration and API reference",
@@ -2522,7 +2522,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.795
+      "duration_seconds": 1.131
     },
     {
       "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a QA can enter and navigate to the release alignment workspace",
@@ -2531,7 +2531,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.972
+      "duration_seconds": 1.219
     },
     {
       "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a Technical Lead can open the alignment evidence from its role perspective",
@@ -2540,7 +2540,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.648
+      "duration_seconds": 0.87
     },
     {
       "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a security response headers are present on public pages",
@@ -2549,7 +2549,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.017
+      "duration_seconds": 0.027
     },
     {
       "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a shows all five role choices on the entry screen",
@@ -2558,7 +2558,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.688
+      "duration_seconds": 0.85
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a Access & Roles can switch persona while retaining per-role permissions",
@@ -2567,7 +2567,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.247
+      "duration_seconds": 1.527
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a engineer sees the shared showcase and retains workflow boundaries",
@@ -2576,7 +2576,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.727
+      "duration_seconds": 1.622
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a lead sees the shared showcase and retains workflow boundaries",
@@ -2585,7 +2585,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.824
+      "duration_seconds": 1.954
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a manager sees the shared showcase and retains workflow boundaries",
@@ -2594,7 +2594,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.673
+      "duration_seconds": 1.871
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a mobile users can open the navigation and sign out of the guided session",
@@ -2603,7 +2603,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.019
+      "duration_seconds": 1.294
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a qa sees the shared showcase and retains workflow boundaries",
@@ -2612,7 +2612,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.425
+      "duration_seconds": 1.959
     },
     {
       "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a support sees the shared showcase and retains workflow boundaries",
@@ -2621,7 +2621,7 @@
       "group": "e2e/demo-journey.spec.ts",
       "file": "frontend/e2e/demo-journey.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.905
+      "duration_seconds": 2.138
     },
     {
       "id": "e2e:ui-01-landing.spec.ts::UI-01 landing page loads",
@@ -2630,7 +2630,7 @@
       "group": "e2e/ui-01-landing.spec.ts",
       "file": "frontend/e2e/ui-01-landing.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.722
+      "duration_seconds": 1.071
     },
     {
       "id": "e2e:ui-02-header-nav.spec.ts::UI-02 header navigation",
@@ -2639,7 +2639,7 @@
       "group": "e2e/ui-02-header-nav.spec.ts",
       "file": "frontend/e2e/ui-02-header-nav.spec.ts",
       "status": "passed",
-      "duration_seconds": 3.887
+      "duration_seconds": 3.783
     },
     {
       "id": "e2e:ui-03-rules.spec.ts::UI-03 example evaluation with Rules engine",
@@ -2648,7 +2648,7 @@
       "group": "e2e/ui-03-rules.spec.ts",
       "file": "frontend/e2e/ui-03-rules.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.966
+      "duration_seconds": 1.019
     },
     {
       "id": "e2e:ui-04-simpy.spec.ts::UI-04 example evaluation with SimPy engine",
@@ -2657,7 +2657,7 @@
       "group": "e2e/ui-04-simpy.spec.ts",
       "file": "frontend/e2e/ui-04-simpy.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.862
+      "duration_seconds": 1.909
     },
     {
       "id": "e2e:ui-05-featured.spec.ts::UI-05 featured scenario details",
@@ -2666,7 +2666,7 @@
       "group": "e2e/ui-05-featured.spec.ts",
       "file": "frontend/e2e/ui-05-featured.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.394
+      "duration_seconds": 1.513
     },
     {
       "id": "e2e:ui-06-main-website.spec.ts::UI-06 return to main website",
@@ -2675,7 +2675,7 @@
       "group": "e2e/ui-06-main-website.spec.ts",
       "file": "frontend/e2e/ui-06-main-website.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.797
+      "duration_seconds": 0.94
     },
     {
       "id": "e2e:ui-07-api-docs.spec.ts::UI-07 API documentation loads",
@@ -2684,7 +2684,7 @@
       "group": "e2e/ui-07-api-docs.spec.ts",
       "file": "frontend/e2e/ui-07-api-docs.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.177
+      "duration_seconds": 1.24
     },
     {
       "id": "e2e:ui-08-mobile.spec.ts::UI-08 homepage mobile navigation opens and closes accessibly",
@@ -2693,7 +2693,7 @@
       "group": "e2e/ui-08-mobile.spec.ts",
       "file": "frontend/e2e/ui-08-mobile.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.736
+      "duration_seconds": 0.916
     },
     {
       "id": "e2e:ui-08-mobile.spec.ts::UI-08 mobile layout on demo page",
@@ -2702,7 +2702,7 @@
       "group": "e2e/ui-08-mobile.spec.ts",
       "file": "frontend/e2e/ui-08-mobile.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.467
+      "duration_seconds": 0.751
     },
     {
       "id": "e2e:ui-08-mobile.spec.ts::UI-08 mobile layout on landing page",
@@ -2711,7 +2711,7 @@
       "group": "e2e/ui-08-mobile.spec.ts",
       "file": "frontend/e2e/ui-08-mobile.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.597
+      "duration_seconds": 0.725
     },
     {
       "id": "e2e:ui-09-qa-simulation.spec.ts::UI-09 QA Tester runs a simulation",
@@ -2720,7 +2720,7 @@
       "group": "e2e/ui-09-qa-simulation.spec.ts",
       "file": "frontend/e2e/ui-09-qa-simulation.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.799
+      "duration_seconds": 3.092
     },
     {
       "id": "e2e:ui-10-support-incident.spec.ts::UI-10 Support & Monitoring fills in the incident form",
@@ -2729,16 +2729,7 @@
       "group": "e2e/ui-10-support-incident.spec.ts",
       "file": "frontend/e2e/ui-10-support-incident.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.073
-    },
-    {
-      "id": "e2e:ui-10-support-incident.spec.ts::UI-10b Record & escalate creates an incident",
-      "suite": "e2e",
-      "name": "UI-10b Record & escalate creates an incident",
-      "group": "e2e/ui-10-support-incident.spec.ts",
-      "file": "frontend/e2e/ui-10-support-incident.spec.ts",
-      "status": "skipped",
-      "duration_seconds": 0.0
+      "duration_seconds": 1.45
     },
     {
       "id": "e2e:ui-11-pm-signoff.spec.ts::UI-11 Project Manager opens the sign-off queue",
@@ -2747,16 +2738,7 @@
       "group": "e2e/ui-11-pm-signoff.spec.ts",
       "file": "frontend/e2e/ui-11-pm-signoff.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.842
-    },
-    {
-      "id": "e2e:ui-11-pm-signoff.spec.ts::UI-11b Project Manager approves a release candidate",
-      "suite": "e2e",
-      "name": "UI-11b Project Manager approves a release candidate",
-      "group": "e2e/ui-11-pm-signoff.spec.ts",
-      "file": "frontend/e2e/ui-11-pm-signoff.spec.ts",
-      "status": "skipped",
-      "duration_seconds": 0.0
+      "duration_seconds": 1.178
     },
     {
       "id": "e2e:ui-12-lead-alignment.spec.ts::UI-12 Technical Lead runs the release alignment analysis",
@@ -2765,7 +2747,7 @@
       "group": "e2e/ui-12-lead-alignment.spec.ts",
       "file": "frontend/e2e/ui-12-lead-alignment.spec.ts",
       "status": "passed",
-      "duration_seconds": 2.529
+      "duration_seconds": 3.297
     },
     {
       "id": "e2e:ui-13-engineer-mitigation.spec.ts::UI-13 Integration Engineer tests a mitigation",
@@ -2774,16 +2756,7 @@
       "group": "e2e/ui-13-engineer-mitigation.spec.ts",
       "file": "frontend/e2e/ui-13-engineer-mitigation.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.966
-    },
-    {
-      "id": "e2e:ui-13-engineer-mitigation.spec.ts::UI-13b Download incident PDF",
-      "suite": "e2e",
-      "name": "UI-13b Download incident PDF",
-      "group": "e2e/ui-13-engineer-mitigation.spec.ts",
-      "file": "frontend/e2e/ui-13-engineer-mitigation.spec.ts",
-      "status": "skipped",
-      "duration_seconds": 0.0
+      "duration_seconds": 2.787
     },
     {
       "id": "e2e:validation-navigation.spec.ts::QA blocks impossible memory input without sending a SimPy request",
@@ -2792,7 +2765,7 @@
       "group": "e2e/validation-navigation.spec.ts",
       "file": "frontend/e2e/validation-navigation.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.163
+      "duration_seconds": 1.374
     },
     {
       "id": "e2e:validation-navigation.spec.ts::Showcase returns to its source without duplicating module routes",
@@ -2801,7 +2774,7 @@
       "group": "e2e/validation-navigation.spec.ts",
       "file": "frontend/e2e/validation-navigation.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.818
+      "duration_seconds": 1.022
     },
     {
       "id": "e2e:validation-navigation.spec.ts::SimPy invalid input highlights its field and scrolls the notification into view",
@@ -2810,7 +2783,7 @@
       "group": "e2e/validation-navigation.spec.ts",
       "file": "frontend/e2e/validation-navigation.spec.ts",
       "status": "passed",
-      "duration_seconds": 1.54
+      "duration_seconds": 1.618
     },
     {
       "id": "e2e:validation-navigation.spec.ts::whole-number field stays empty, strips leading zeroes, and rejects decimals",
@@ -2819,7 +2792,7 @@
       "group": "e2e/validation-navigation.spec.ts",
       "file": "frontend/e2e/validation-navigation.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.57
+      "duration_seconds": 0.694
     },
     {
       "id": "e2e:workspace-corrupt-cache.spec.ts::dashboard recovers double-encoded local and remote JSONB history without a crash",
@@ -2828,7 +2801,7 @@
       "group": "e2e/workspace-corrupt-cache.spec.ts",
       "file": "frontend/e2e/workspace-corrupt-cache.spec.ts",
       "status": "passed",
-      "duration_seconds": 0.643
+      "duration_seconds": 0.874
     }
   ],
   "suites": {
@@ -2838,7 +2811,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_seconds": 35.229,
+      "duration_seconds": 48.826,
       "status": "reported"
     },
     "frontend": {
@@ -2847,16 +2820,16 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_seconds": 3.399,
+      "duration_seconds": 4.43,
       "status": "reported"
     },
     "e2e": {
-      "total": 38,
+      "total": 35,
       "passed": 35,
       "failed": 0,
-      "skipped": 3,
+      "skipped": 0,
       "errors": 0,
-      "duration_seconds": 42.552,
+      "duration_seconds": 51.988,
       "status": "reported"
     }
   },
