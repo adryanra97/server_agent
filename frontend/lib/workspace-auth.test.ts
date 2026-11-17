@@ -7,13 +7,13 @@ function request(token:string,origin='https://twin.example.com'){
 }
 describe('Signed demo session and request origin',()=>{
   it('refuses cloud access until both staging secrets are available',()=>{
-    vi.stubEnv('DATABASE_URL','');
+    vi.stubEnv('TWINPEAK_DATABASE_URL','');
     vi.stubEnv('TWINPEAK_SESSION_SECRET','');
     expect(workspaceConfigured()).toBe(false);
     expect(getSessionRole(request(makeSession('qa')))).toBeNull();
   });
   it('authenticates only valid, untampered role cookies',()=>{
-    vi.stubEnv('DATABASE_URL','postgresql://local.test/demo');
+    vi.stubEnv('TWINPEAK_DATABASE_URL','postgresql://local.test/demo');
     vi.stubEnv('TWINPEAK_SESSION_SECRET','not-a-shared-demo-password-use-random');
     const signed=makeSession('lead');
     expect(getSessionRole(request(signed))).toBe('lead');
