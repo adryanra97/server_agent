@@ -1,5 +1,5 @@
-import {getSavedReports,storeReport} from '../lib/workspace-sync';
 'use client';
+import {getSavedReports,storeReport} from '../lib/workspace-sync';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ChevronDown, Download, FileClock, Filter, Search } from 'lucide-react';

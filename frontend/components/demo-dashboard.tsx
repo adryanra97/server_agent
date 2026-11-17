@@ -1,5 +1,5 @@
-import {getSavedReports} from '../lib/workspace-sync';
 'use client';
+import {getSavedReports} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

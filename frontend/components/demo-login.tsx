@@ -1,5 +1,5 @@
-import {startWorkspaceSession} from '../lib/workspace-sync';
 'use client';
+import {startWorkspaceSession} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

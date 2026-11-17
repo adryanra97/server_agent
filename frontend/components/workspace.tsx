@@ -1,5 +1,5 @@
-import {startWorkspaceSession,refreshWorkspace,storageStatus,type WorkspaceStorage} from '../lib/workspace-sync';
 'use client';
+import {startWorkspaceSession,refreshWorkspace,storageStatus,type WorkspaceStorage} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
