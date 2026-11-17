@@ -3,7 +3,7 @@ import type {NextRequest} from 'next/server';
 import {isActor,type DemoActor} from './persistence-rules';
 const COOKIE='tp-demo-session';
 const TTL_SECONDS=60*60*12;
-export const workspaceConfigured=()=>Boolean((process.env.DATABASE_URL||process.env.POSTGRES_URL)&&process.env.TWINPEAK_SESSION_SECRET);
+export const workspaceConfigured=()=>Boolean(process.env.TWINPEAK_DATABASE_URL&&process.env.TWINPEAK_SESSION_SECRET);
 function sign(payload:string){
   return createHmac('sha256',process.env.TWINPEAK_SESSION_SECRET||'unconfigured').update(payload).digest('hex');
 }
