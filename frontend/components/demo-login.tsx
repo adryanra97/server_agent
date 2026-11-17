@@ -1,5 +1,4 @@
 'use client';
-import {startWorkspaceSession} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -21,10 +20,10 @@ export default function DemoLogin(){
   const [showPassword,setShowPassword]=useState(false);
   const [error,setError]=useState('');
   const persona=getPersona(role);
-  async function submit(event:React.FormEvent<HTMLFormElement>){
+  function submit(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setError('');
     if(!demoLogin(role,password)){setError('Password demo tidak sesuai. Gunakan demo123 untuk semua persona.');return;}
-    await startWorkspaceSession(role,password);
+    // demoLogin already initializes the optional server session in parallel.
     router.push('/dashboard');
   }
   return <div className="demo-login">
