@@ -240,7 +240,7 @@ export default function DemoWorkflows({section}:{section:Section}){
           }}>
             <summary className="tp-case-summary">
               <div className="role-record-heading"><div><span className="role-eyebrow">{item.release} · CYCLE {item.cycle} · {item.service}</span><h4>{item.result.engine.toUpperCase()} capacity assessment · {item.rps} RPS</h4><small>Submitted {date(item.createdAt)}</small></div><StateTag value={item.status}/></div>
-              <div className="tp-case-preview"><Outcome verdict={item.result.verdict}/><span>Bottleneck: {item.result.bottleneck??'None'}</span>{item.qaNotes?.trim()&&<span className="tp-qa-preview-marker"><ClipboardCheck size={14} aria-hidden="true"/> QA notes attached</span>}<span className="tp-case-open">View case details <ChevronDown size={17}/></span></div>
+              <div className="tp-case-preview"><Outcome verdict={item.result.verdict}/><span>Bottleneck: {item.result.bottleneck??'None'}</span>{typeof item.qaNotes==='string'&&item.qaNotes.trim()&&<span className="tp-qa-preview-marker"><ClipboardCheck size={14} aria-hidden="true"/> QA notes attached</span>}<span className="tp-case-open">View case details <ChevronDown size={17}/></span></div>
             </summary>
             <div className="tp-case-body">
               <QaSubmissionNotes item={item}/>
