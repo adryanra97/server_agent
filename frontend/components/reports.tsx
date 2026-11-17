@@ -1,3 +1,4 @@
+import {getSavedReports,storeReport} from '../lib/workspace-sync';
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -10,6 +11,8 @@ import { requestReasoning } from '../lib/llm-session';
 import { demoRecords, demoCsv, getDemoRole, type DemoRecords } from '../lib/demo';
 export default function Reports(){
   const [runs,setRuns]=useState<HistoryItem[]>([]);
+  const [savedReports,setSavedReports]=useState<Record<string,unknown>[]>([]);
+  useEffect(()=>{const update=()=>setSavedReports(getSavedReports());update();window.addEventListener('twinpeak-report-history',update);return()=>window.removeEventListener('twinpeak-report-history',update);},[]);
   const [workflow,setWorkflow]=useState<DemoRecords>({alignments:[],incidents:[]});
   const [role,setRole]=useState<string|null>(null);
   const [selected,setSelected]=useState<string|null>(null);
@@ -39,8 +42,23 @@ export default function Reports(){
   const reportCount=filteredWorkflows.alignments.length+filteredWorkflows.incidents.length;
   const canDownload=role==='support'||role==='manager'||role==='lead';
   async function makePdf(){
-    try{setReportNotice('');await downloadTwinPeakPDF(filteredWorkflows,filtered,insight??undefined);}
-    catch{setReportNotice('PDF export is unavailable. Please retry.');}
+    try{
+      setReportNotice('');
+      await downloadTwinPeakPDF(filteredWorkflows,filtered,insight??undefined);
+      // Save an export manifest, not the binary PDF itself.
+      const actor=getDemoRole();
+      if(actor){
+        storeReport({
+          id:crypto.randomUUID(),createdAt:new Date().toISOString(),createdBy:actor,
+          title:'TwinPeak release & capacity report',
+          runIds:filtered.map(x=>x.id),
+          alignmentIds:filteredWorkflows.alignments.map(x=>x.id),
+          incidentIds:filteredWorkflows.incidents.map(x=>x.id),
+          filters:{reportType,serviceQuery,cycleQuery,reportDate,verdict,query},
+        });
+      }
+      setReportNotice('PDF downloaded. Export recorded in report history; cloud sync status appears at the top of the workspace.');
+    }catch{setReportNotice('PDF export is unavailable. Please retry.');}
   }
   async function explainReport(){
     setAiBusy(true);setReportNotice('');
@@ -106,6 +124,13 @@ export default function Reports(){
       </div>
       {insight&&<div className="tp-report-insight"><strong>{insight.generated?'AI-assisted report narrative':'Report interpretation'}</strong><p>{insight.text}</p></div>}
       {reportNotice&&<p className="tp-error" role="status">{reportNotice}</p>}
+    </section>
+    <section className="tp-saved-exports" aria-labelledby="tp-saved-exports-title">
+      <div className="tp-saved-exports-heading"><div><span className="role-eyebrow">REPORT ACTIVITY</span><h3 id="tp-saved-exports-title">Recorded PDF exports</h3><p>Export metadata is saved with record references. Downloaded PDF files remain on your device.</p></div><strong>{savedReports.length} exports</strong></div>
+      {savedReports.length?<div className="tp-saved-exports-list">{savedReports.slice(0,20).map(item=><div className="tp-saved-export" key={String(item.id)}>
+        <div><strong>{String(item.title)}</strong><small>{String(item.createdBy).toUpperCase()} · {new Date(String(item.createdAt)).toLocaleString()} · {Array.isArray(item.runIds)?item.runIds.length:0} runs · {Array.isArray(item.alignmentIds)?item.alignmentIds.length:0} alignments · {Array.isArray(item.incidentIds)?item.incidentIds.length:0} incidents</small></div>
+        <span>Exported</span>
+      </div>)}</div>:<p className="tp-saved-export-empty">No PDF exports recorded yet. Download a report to create an entry.</p>}
     </section>
     <section className="panel report-list-panel"><SectionHead eyebrow="CAPACITY EVALUATIONS" title="Saved evaluations" action={<button className="btn btn-outline btn-small" disabled={!filtered.length} onClick={()=>csvHistory(filtered)}><Download size={15}/>Export CSV</button>}/>
       <div className="report-toolbar"><label className="search-field"><Search size={15}/><input aria-label="Search runs" placeholder="Search runs..." value={query} onChange={e=>setQuery(e.target.value)}/></label><label className="filter-select"><Filter size={15}/><select aria-label="Filter by verdict" value={verdict} onChange={e=>setVerdict(e.target.value)}><option value="all">All verdicts</option><option value="will_survive">Will survive</option><option value="at_risk">At risk</option><option value="will_crash">Will crash</option></select></label></div>

@@ -1,3 +1,4 @@
+import {getSavedReports} from '../lib/workspace-sync';
 'use client';
 
 import Link from 'next/link';
@@ -40,16 +41,19 @@ export default function DemoRoleDashboard(){
   const mission=missions[role];
   const [records,setRecords]=useState<DemoRecords>({alignments:[],incidents:[]});
   const [runs,setRuns]=useState<HistoryItem[]>([]);
+  const [savedReports,setSavedReports]=useState<Record<string,unknown>[]>([]);
   const [engineStatus,setEngineStatus]=useState('Checking');
   useEffect(()=>{
-    const update=()=>{setRecords(demoRecords());setRuns(history());};
+    const update=()=>{setRecords(demoRecords());setRuns(history());setSavedReports(getSavedReports());};
     update();
     window.addEventListener('serveragent-demo-records',update);
     window.addEventListener('serveragent-history',update);
+    window.addEventListener('twinpeak-report-history',update);
     fetch('/health').then(r=>r.json()).then(d=>setEngineStatus(d.status==='ok'?'Online':'Offline')).catch(()=>setEngineStatus('Offline'));
     return()=>{
       window.removeEventListener('serveragent-demo-records',update);
       window.removeEventListener('serveragent-history',update);
+      window.removeEventListener('twinpeak-report-history',update);
     };
   },[]);
   const pendingReview=records.alignments.filter(x=>x.status==='review').length;
@@ -58,6 +62,18 @@ export default function DemoRoleDashboard(){
   const queue=role==='qa'?runs.length:role==='lead'?pendingReview:role==='manager'?signoffPending:pendingIncidents;
   const queueLabel=role==='qa'?'Saved simulations':role==='lead'?'Review requests':role==='manager'?'Awaiting sign-off':'Incident cases to inspect';
   const visiblePages=allowedPages(role);
+  const activity=[
+    ...runs.map(x=>({id:'run-'+x.id,title:x.label,kind:'Simulation',date:x.created_at,state:x.result.verdict})),
+    ...records.alignments.map(x=>({id:'alignment-'+x.id,title:x.service+' · '+x.release,kind:'Alignment',date:x.updatedAt,state:x.status})),
+    ...records.incidents.map(x=>({id:'incident-'+x.id,title:x.service+' · '+x.incidentType,kind:'Incident',date:x.updatedAt,state:x.status})),
+    ...savedReports.map(x=>({id:'report-'+String(x.id),title:String(x.title),kind:'Report export',date:String(x.createdAt),state:'recorded'})),
+  ].sort((a,b)=>b.date.localeCompare(a.date));
+  const verdictCounts=[
+    {label:'Survive',count:runs.filter(x=>x.result.verdict==='will_survive').length},
+    {label:'At risk',count:runs.filter(x=>x.result.verdict==='at_risk').length},
+    {label:'Crash',count:runs.filter(x=>x.result.verdict==='will_crash').length},
+    {label:'Unassessable',count:runs.filter(x=>x.result.verdict==='not_assessable').length},
+  ];
   return <div className="role-dashboard">
     <section className="role-hero">
       <div className="role-hero-copy"><span className="role-hero-eyebrow"><span/> {mission.eyebrow}</span>
@@ -90,6 +106,23 @@ export default function DemoRoleDashboard(){
         <div className="role-quick-links">{visiblePages.filter(x=>x.href!=='/dashboard').map(page=><Link href={page.href} key={page.href}><span>{page.label}</span><ArrowUpRight size={17}/></Link>)}</div>
       </section>
     </div>
+    <section className="tp-history-overview" aria-label="Recorded evaluation and workflow activity">
+      <div className="tp-history-panel"><div className="tp-history-panel-title"><div><span className="role-eyebrow">DECISION RECORDS</span><h3>Recent activity</h3></div><Link href="/reports">View all records <ArrowUpRight size={16}/></Link></div>
+        <div className="tp-history-stats"><span><strong>{records.alignments.filter(x=>x.status==='approved').length}</strong> approved sign-offs</span><span><strong>{savedReports.length}</strong> report exports</span></div>
+        {activity.length?<ul className="tp-history-events">{activity.slice(0,6).map(x=><li key={x.id}>
+          <span className="tp-history-event-dot" aria-hidden="true"/>
+          <div><strong>{x.title}</strong><small>{x.kind} · {x.state.replaceAll('_',' ')}</small></div>
+          <time dateTime={x.date}>{new Date(x.date).toLocaleDateString()}</time>
+        </li>)}</ul>:<p className="tp-history-empty">No submitted activity yet. Run a model or submit an alignment to begin the shared timeline.</p>}
+      </div>
+      <div className="tp-history-panel"><div className="tp-history-panel-title"><div><span className="role-eyebrow">EVALUATION ANALYTICS</span><h3>Recorded capacity verdicts</h3></div><span>{runs.length} runs</span></div>
+        <div className="tp-verdict-bars">{verdictCounts.map(x=><div key={x.label} className="tp-verdict-row">
+          <div><span>{x.label}</span><strong>{x.count}</strong></div>
+          <div className="tp-verdict-rail" role="meter" aria-label={x.label+' evaluations'} aria-valuemin={0} aria-valuemax={Math.max(1,runs.length)} aria-valuenow={x.count}><span style={{width:(runs.length?x.count/runs.length*100:0)+'%'}}/></div>
+        </div>)}</div>
+        <p className="tp-verdict-foot">Aggregated from saved evaluation outcomes, not estimated values.</p>
+      </div>
+    </section>
     <section className="role-latest"><div><span className="role-eyebrow">RECENT MODEL EVIDENCE</span><h3>{runs[0]?'Latest simulation result':'No simulation results yet'}</h3><p>{runs[0]?'The most recent SimPy capacity evaluation.':'Run a simulation to prepare evidence for QA review.'}</p></div>
       {runs[0]?<div className="role-latest-outcome"><Outcome verdict={runs[0].result.verdict}/><strong>{runs[0].request.load.rps} RPS</strong><span>{runs[0].result.engine.toUpperCase()} · bottleneck {runs[0].result.bottleneck??'none'}</span></div>:<Waves size={34}/>}
     </section>
