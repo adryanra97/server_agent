@@ -1,3 +1,4 @@
+import {normalizeWorkspaceRecord,type WorkspaceKind} from './workspace-record';
 /** Browser-side cache and cloud sync for the guided demo.
  * The server is authoritative only after a validated cloud session and successful read.
  * Local-only entries are deliberately NOT imported automatically.
@@ -13,12 +14,57 @@ let pendingWrites=0;
 const localRuns='serveragent-copdash-runs';
 const localRecords='serveragent-demo-records-v1';
 const localReports='twinpeak-report-export-records-v1';
+function normalizedList(kind:WorkspaceKind,value:unknown):Record<string,unknown>[]{
+  if(!Array.isArray(value))return [];
+  return value.flatMap(item=>{
+    const data=normalizeWorkspaceRecord(kind,item);
+    return data?[data]:[];
+  });
+}
+/** Recover browser history written by the previous double-encoded JSONB response.
+ * Run before mounting the role dashboard, even when network/cloud sync is unavailable.
+ */
+export function repairLocalWorkspaceCache():void{
+  if(typeof window==='undefined')return;
+  function repairList(key:string,kind:WorkspaceKind){
+    const original=window.localStorage.getItem(key);
+    if(!original)return;
+    try{
+      const raw=JSON.parse(original) as unknown;
+      if(!Array.isArray(raw))return;
+      const fixed=normalizedList(kind,raw);
+      if(fixed.length<raw.length){
+        try{window.localStorage.setItem(key+'-unreadable-backup-v1',original);}catch{/* keep visible history available */}
+      }
+      const encoded=JSON.stringify(fixed);
+      if(encoded!==original)window.localStorage.setItem(key,encoded);
+    }catch{/* a corrupt local cache must not take down navigation */}
+  }
+  repairList(localRuns,'run');
+  repairList(localReports,'report');
+  const original=window.localStorage.getItem(localRecords);
+  if(!original)return;
+  try{
+    const parsed=JSON.parse(original) as unknown;
+    if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))return;
+    const stored=parsed as Record<string,unknown>;
+    const alignments=normalizedList('alignment',stored.alignments);
+    const incidents=normalizedList('incident',stored.incidents);
+    if((Array.isArray(stored.alignments)&&alignments.length<stored.alignments.length)||
+       (Array.isArray(stored.incidents)&&incidents.length<stored.incidents.length)){
+      try{window.localStorage.setItem(localRecords+'-unreadable-backup-v1',original);}catch{/* backup is best effort */}
+    }
+    const fixed=JSON.stringify({...stored,alignments,incidents});
+    if(fixed!==original)window.localStorage.setItem(localRecords,fixed);
+  }catch{/* malformed cache must not crash the dashboard */}
+}
+
 export const storageStatus=()=>state;
 const notify=()=>{if(typeof window!=='undefined')window.dispatchEvent(new Event('twinpeak-storage-status'));};
 function change(next:WorkspaceStorage){state=next;notify();}
 function installSnapshot(items:Item[]){
   if(typeof window==='undefined')return;
-  const pick=(kind:PersistedKind)=>items.filter(item=>item.kind===kind).map(item=>item.data);
+  const pick=(kind:PersistedKind)=>normalizedList(kind,items.filter(item=>item.kind===kind).map(item=>item.data));
   const runs=pick('run').sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
   const alignments=pick('alignment').sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
   const incidents=pick('incident').sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
