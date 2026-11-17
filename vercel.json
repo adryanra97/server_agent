@@ -55,6 +55,12 @@
       }
     },
     {
+      "source": "/api/workspace/:path*",
+      "destination": {
+        "service": "frontend"
+      }
+    },
+    {
       "source": "/api/:path*",
       "destination": {
         "service": "backend"
