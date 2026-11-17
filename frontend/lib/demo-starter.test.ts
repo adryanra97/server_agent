@@ -5,6 +5,11 @@ import {
   type SimPyInspection, type HistoryItem, type VerdictResult,
 } from './model';
 import type { TraceSample } from './trace';
+import {storageStatus} from './workspace-sync';
+vi.mock('./workspace-sync',async imported=>{
+  const actual=await imported<typeof import('./workspace-sync')>();
+  return {...actual,storageStatus:vi.fn(()=> 'local')};
+});
 
 vi.mock('./model',async imported=>{
   const actual=await imported<typeof import('./model')>();
@@ -44,8 +49,15 @@ const model=vi.mocked(inspectSimPy);
 beforeEach(()=>{
   window.localStorage.clear();window.sessionStorage.clear();
   model.mockReset();
+  vi.mocked(storageStatus).mockReturnValue('local');
 });
 describe('Guided QRIS case generation using real SimPy evidence',()=>{
+  it('never generates synthetic starter records when a shared cloud history is active',async()=>{
+    vi.mocked(storageStatus).mockReturnValue('cloud');
+    expect(await ensureDemoStarter()).toBe(true);
+    expect(model).not.toHaveBeenCalled();
+    expect(demoRecords()).toEqual({alignments:[],incidents:[]});
+  });
   it('seeds the baseline and both stress levels using evaluated model results',async()=>{
     model.mockImplementation(async request=>inspection(request.load.rps));
     expect(await ensureDemoStarter()).toBe(true);
