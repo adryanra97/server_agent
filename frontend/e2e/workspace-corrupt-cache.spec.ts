@@ -2,7 +2,7 @@ import {expect,test} from '@playwright/test';
 
 test('dashboard recovers double-encoded local and remote JSONB history without a crash',async({page})=>{
   const legacy={id:'old-run',label:'Old SimPy',created_at:'2026-11-17T06:00:00Z',
-    request:{engine:'simpy',spec:{},load:{}},result:{verdict:'will_survive'}};
+    request:{engine:'simpy',spec:{cpu:{},ram:{},network:{}},load:{rps:45}},result:{engine:'simpy',verdict:'will_survive',bottleneck:null}};
   const cloud={...legacy,id:'cloud-run',label:'Cloud SimPy'};
   await page.addInitScript(value=>{
     sessionStorage.setItem('serveragent-demo-identity-v1','qa');
