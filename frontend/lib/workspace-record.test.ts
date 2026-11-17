@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {decodeWorkspaceRecord,normalizeWorkspaceRecord} from './workspace-record';
 
-const run={id:'run-1',created_at:'2026-11-17T00:00:00Z',label:'QRIS',result:{verdict:'will_survive'}};
+const run={id:'run-1',created_at:'2026-11-17T00:00:00Z',label:'QRIS',request:{engine:'simpy',spec:{cpu:{}},load:{rps:45}},result:{engine:'simpy',verdict:'will_survive'}};
 describe('Workspace JSONB and legacy browser payloads',()=>{
   it('decodes the JSONB scalar string created by older Postgres bindings',()=>{
     expect(decodeWorkspaceRecord(JSON.stringify(run))).toEqual(run);
@@ -22,6 +22,8 @@ describe('Workspace JSONB and legacy browser payloads',()=>{
       expect(normalizeWorkspaceRecord('run',invalid)).toBeNull();
     }
     expect(normalizeWorkspaceRecord('run',{id:'run-2',created_at:'2026-11-17'})).toBeNull();
+    expect(normalizeWorkspaceRecord('run',{...run,result:{verdict:'will_survive'}})).toBeNull();
+    expect(normalizeWorkspaceRecord('run',{...run,request:{load:{}}})).toBeNull();
     expect(normalizeWorkspaceRecord('alignment',{id:'a',status:'review'})).toBeNull();
     expect(normalizeWorkspaceRecord('report',{id:'r'})).toBeNull();
   });
