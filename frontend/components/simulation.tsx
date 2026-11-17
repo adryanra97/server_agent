@@ -14,6 +14,7 @@ import {
 import { Outcome, ResourceBars } from './ui';
 import { compactTimeline } from '../lib/trace';
 import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
+import { WholeNumberInput } from './whole-number-input';
 
 type SimulationEvidence = {
   arrival_process: string;
@@ -48,15 +49,14 @@ const flow = [
   {number:'05', label:'Payload transfer',detail:'Release & complete',icon:Send},
 ];
 
-function NumberInput({label,unit,value,onChange,min=0,step='any',note}:{
+function NumberInput({label,unit,value,onChange,min=0,note}:{
   label:string;unit:string;value:number;onChange:(value:number)=>void;
   min?:number;step?:number|string;note?:string;
 }){
   return <label className="simpy-field">
     <span className="simpy-field-top"><strong>{label}</strong>{note&&<small>{note}</small>}</span>
-    <span className="simpy-input"><input type="number" value={value} min={min} step={step}
-      onChange={e=>onChange(Number(e.target.value))}
-      aria-label={label}/><span>{unit}</span></span>
+    <span className="simpy-input"><WholeNumberInput value={value} min={min}
+      onChange={onChange} aria-label={label}/><span>{unit}</span></span>
   </label>;
 }
 const pct=(v:number)=>`${(v*100).toFixed(1)}%`;
@@ -103,13 +103,16 @@ export default function Simulation(){
     const values=[spec.cpu.cores,spec.cpu.clock_ghz,spec.ram.total_mb,
       spec.network.bandwidth_mbps,spec.network.max_connections,load.rps,
       load.avg_cpu_ms_per_req,load.avg_mem_mb_per_req,load.concurrent_connections,load.payload_kb];
-    if(values.some(v=>!Number.isFinite(v)))return 'Complete every numeric field before running the simulation.';
+    if(values.some(v=>!Number.isFinite(v)))return 'Input needs correction: complete every whole-number field before running the simulation.';
+    if([spec.cpu.cores,spec.ram.total_mb,spec.network.bandwidth_mbps,spec.network.max_connections,
+      load.rps,load.avg_cpu_ms_per_req,load.avg_mem_mb_per_req,load.concurrent_connections,load.payload_kb]
+      .some(v=>!Number.isSafeInteger(v)))return 'Input needs correction: enter whole numbers only (no decimal points or commas).';
     if(values.slice(0,5).some(v=>v<=0)||values.slice(5).some(v=>v<0))
       return 'Server capacity must be greater than zero. Traffic and request costs cannot be negative.';
     if(!Number.isInteger(spec.network.max_connections)||!Number.isInteger(load.concurrent_connections))
       return 'Connection limits and concurrent connections must be whole numbers.';
     if(load.rps>0&&load.avg_mem_mb_per_req>spec.ram.total_mb)
-      return 'Memory per request exceeds total available RAM. Reduce the memory requirement or increase server RAM.';
+      return 'Input needs correction: memory per request exceeds total server RAM. A request cannot reserve more than the server has. Reduce per-request memory or increase server RAM. No request was sent to SimPy.';
     return '';
   }
   async function run(){
@@ -182,12 +185,12 @@ export default function Simulation(){
 
     <div className="simpy-columns qa-simpy-main">
       <section id="simpy-scenario" className="simpy-config" aria-label="Simulation configuration">
-        <div className="simpy-config-head"><div><span className="simpy-section-number">01 / INPUT</span><h3>Build your scenario.</h3><p>Adjust capacity and traffic before you run. All active inputs affect the evaluation.</p></div><Server size={23}/></div>
+        <div className="simpy-config-head"><div><span className="simpy-section-number">01 / CONFIGURE</span><h3>Build your scenario.</h3><p>Adjust capacity and traffic before you run. All active inputs affect the evaluation.</p></div><Server size={23}/></div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>SERVER CAPACITY</span><span>WHAT IS AVAILABLE</span></div>
           <div className="simpy-fields simpy-fields-capacity">
-            <NumberInput label="CPU cores" unit="cores" min={0.01} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
-            <NumberInput label="Total RAM" unit="MB" min={0.01} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
-            <NumberInput label="Network bandwidth" unit="Mbps" min={0.01} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
+            <NumberInput label="CPU cores" unit="cores" min={1} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
+            <NumberInput label="Total RAM" unit="MB" min={1} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
+            <NumberInput label="Network bandwidth" unit="Mbps" min={1} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
             <NumberInput label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
           </div>
         </div>
@@ -210,7 +213,7 @@ export default function Simulation(){
           <ArrowRight size={18}/>
         </button>
         <div className="simpy-reset-row"><span><ShieldCheck size={15}/> Model-based evaluation · No production traffic</span><button onClick={reset}><RotateCcw size={14}/> Reset</button></div>
-        {error&&<div role="alert" className="simpy-error"><CircleAlert size={18}/><span>{error}</span></div>}
+        {error&&<div role="alert" className={error.startsWith('Input needs correction')?'simpy-error simpy-input-warning':'simpy-error'}><CircleAlert size={18}/><span>{error}</span></div>}
       </section>
 
       <div className="simpy-main-column">
