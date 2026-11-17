@@ -207,7 +207,7 @@ export default function DemoWorkflows({section}:{section:Section}){
           <Link href="/simulation" onClick={()=>setSubmissionBlock('')}>Open SimPy workbench <ArrowUpRight size={16}/></Link>
         </div>
       </div>
-    </div>
+    </div>}
 
     {section==='alignment'&&<>
       {(role==='qa'||role==='lead')&&<AlignmentWorkbench onEvaluated={(cases,issue)=>{setAnalysisCases(cases);setAssessmentIssue(issue??'');setRunId('');}}/>}
