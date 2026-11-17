@@ -1,5 +1,5 @@
 'use client';
-import {startWorkspaceSession,refreshWorkspace,storageStatus,type WorkspaceStorage} from '../lib/workspace-sync';
+import {startWorkspaceSession,refreshWorkspace} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
@@ -59,8 +59,6 @@ export default function Workspace({children}:{children:ReactNode}){
   const [loaded,setLoaded]=useState(false);
   const [mobileOpen,setMobileOpen]=useState(false);
   const [fromShowcase,setFromShowcase]=useState(false);
-  const [storage,setStorage]=useState<WorkspaceStorage>('local');
-  useEffect(()=>{const update=()=>setStorage(storageStatus());update();window.addEventListener('twinpeak-storage-status',update);return()=>window.removeEventListener('twinpeak-storage-status',update);},[]);
   useEffect(()=>{if(role)void refreshWorkspace();},[pathname,role]);
   useEffect(()=>{const sync=()=>{if(document.visibilityState==='visible')void refreshWorkspace();};document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
   useEffect(()=>{setFromShowcase(new URLSearchParams(window.location.search).get('from')==='showcase');},[pathname]);
@@ -131,10 +129,6 @@ export default function Workspace({children}:{children:ReactNode}){
     </header>
     <main className={'sa-main sa-section-'+section}>
       <div className="sa-breadcrumb"><Link href="/demo" aria-label="TwinPeak demo">TwinPeak</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
-      <div className={'tp-storage-indicator tp-storage-'+storage} role="status">
-        <span aria-hidden="true"/>
-        {storage==='cloud'?'Cloud history active · shared demo records':storage==='connecting'?'Connecting shared history…':storage==='error'?'Cloud sync unavailable · browser-only changes':'Browser-only demo · records stay on this device'}
-      </div>
       {fromShowcase&&section!=='showcase'&&allowed&&<div className="sa-showcase-return">
         <Link href="/showcase"><ArrowLeft size={16}/> Back to Platform Showcase</Link>
       </div>}
