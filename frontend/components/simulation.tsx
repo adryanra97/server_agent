@@ -207,7 +207,7 @@ export default function Simulation(){
             <NumberInput issue={fieldIssues['CPU cores']} label="CPU cores" unit="cores" min={1} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
             <NumberInput issue={fieldIssues['Total RAM']} label="Total RAM" unit="MB" min={1} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
             <NumberInput issue={fieldIssues['Network bandwidth']} label="Network bandwidth" unit="Mbps" min={1} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
-            <NumberInput issue={fieldIssues['Maximum connections']} label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
+            <NumberInput issue={fieldIssues['Maximum connections']} label="Maximum connections" unit="connections" min={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
           </div>
         </div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>REQUEST WORKLOAD</span><span>WHAT IS DEMANDED</span></div>
@@ -216,7 +216,7 @@ export default function Simulation(){
             <NumberInput issue={fieldIssues['Arrival rate']} label="Arrival rate" unit="RPS" value={body.load.rps} onChange={v=>updateLoad('rps',v)}/>
             <NumberInput issue={fieldIssues['CPU time / request']} label="CPU time / request" unit="ms" value={body.load.avg_cpu_ms_per_req} onChange={v=>updateLoad('avg_cpu_ms_per_req',v)}/>
             <NumberInput issue={fieldIssues['RAM / request']} label="RAM / request" unit="MB" value={body.load.avg_mem_mb_per_req} onChange={v=>updateLoad('avg_mem_mb_per_req',v)}/>
-            <NumberInput issue={fieldIssues['Concurrent connections']} label="Concurrent connections" unit="connections" step={1} value={body.load.concurrent_connections} onChange={v=>updateLoad('concurrent_connections',v)}/>
+            <NumberInput issue={fieldIssues['Concurrent connections']} label="Concurrent connections" unit="connections" value={body.load.concurrent_connections} onChange={v=>updateLoad('concurrent_connections',v)}/>
             <NumberInput issue={fieldIssues['Response payload']} label="Response payload" unit="KB" value={body.load.payload_kb} onChange={v=>updateLoad('payload_kb',v)}/>
           </div>
           <p className="simpy-preset-note">Presets adjust arrival rate only. Other workload assumptions stay as you entered them.</p>
