@@ -57,7 +57,7 @@ const PBT_ISSUES='https://github.com/adryanra97/server_agent/issues?q=is%3Aissue
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
 const fallback:QualityEvidence={
-  source:'GitHub Actions',repository:'adryanra97/server_agent',branch,status:'unavailable',conclusion:null,
+  source:'GitHub Actions',repository:'adryanra97/server_agent',branch:'main',status:'unavailable',conclusion:null,
   url:workflow,run_id:null,coverage:null,coverage_line:null,coverage_branch:null,coverage_status:'not-reported',
   bandit:{high:null,medium:null,low:null,status:'not-reported'},jobs:[],data_status:'unavailable',
 };
