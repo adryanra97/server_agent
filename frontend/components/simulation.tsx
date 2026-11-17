@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Activity, ArrowRight, ArrowUpRight, CheckCircle2, CircleAlert, Clock3, Cpu,
@@ -14,6 +14,9 @@ import {
 import { Outcome, ResourceBars } from './ui';
 import { compactTimeline } from '../lib/trace';
 import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
+import { WholeNumberInput } from './whole-number-input';
+import { simulationFieldIssues } from '../lib/simulation-input-validation';
+import EngineComparison from './engine-comparison';
 
 type SimulationEvidence = {
   arrival_process: string;
@@ -48,15 +51,17 @@ const flow = [
   {number:'05', label:'Payload transfer',detail:'Release & complete',icon:Send},
 ];
 
-function NumberInput({label,unit,value,onChange,min=0,step='any',note}:{
+function NumberInput({label,unit,value,onChange,min=0,note,issue}:{
   label:string;unit:string;value:number;onChange:(value:number)=>void;
-  min?:number;step?:number|string;note?:string;
+  min?:number;note?:string;issue?:string;
 }){
-  return <label className="simpy-field">
+  const issueId='simpy-input-'+label.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  return <label className={'simpy-field '+(issue?'simpy-field-invalid':'')}>
     <span className="simpy-field-top"><strong>{label}</strong>{note&&<small>{note}</small>}</span>
-    <span className="simpy-input"><input type="number" value={value} min={min} step={step}
-      onChange={e=>onChange(Number(e.target.value))}
-      aria-label={label}/><span>{unit}</span></span>
+    <span className="simpy-input"><WholeNumberInput value={value} min={min}
+      onChange={onChange} aria-label={label} aria-invalid={!!issue}
+      aria-describedby={issue?issueId:undefined}/><span>{unit}</span></span>
+    {issue&&<small className="simpy-field-issue" id={issueId}>{issue}</small>}
   </label>;
 }
 const pct=(v:number)=>`${(v*100).toFixed(1)}%`;
@@ -79,6 +84,18 @@ export default function Simulation(){
   const [error,setError]=useState('');
   const [comparisonError,setComparisonError]=useState('');
   const [rawOpen,setRawOpen]=useState(false);
+  const errorRef=useRef<HTMLDivElement|null>(null);
+  const fieldIssues=simulationFieldIssues(body);
+  const revealError=()=>{
+    const element=errorRef.current;
+    if(!element)return;
+    element.focus({preventScroll:true});
+    element.scrollIntoView({
+      behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+      block:'center',
+    });
+  };
+  useEffect(()=>{if(error)revealError();},[error]);
 
   function updateSpec(section:keyof ServerSpec,field:string,value:number){
     setBody(prev=>({
@@ -103,18 +120,25 @@ export default function Simulation(){
     const values=[spec.cpu.cores,spec.cpu.clock_ghz,spec.ram.total_mb,
       spec.network.bandwidth_mbps,spec.network.max_connections,load.rps,
       load.avg_cpu_ms_per_req,load.avg_mem_mb_per_req,load.concurrent_connections,load.payload_kb];
-    if(values.some(v=>!Number.isFinite(v)))return 'Complete every numeric field before running the simulation.';
+    if(values.some(v=>!Number.isFinite(v)))return 'Input needs correction: complete every whole-number field before running the simulation.';
+    if([spec.cpu.cores,spec.ram.total_mb,spec.network.bandwidth_mbps,spec.network.max_connections,
+      load.rps,load.avg_cpu_ms_per_req,load.avg_mem_mb_per_req,load.concurrent_connections,load.payload_kb]
+      .some(v=>!Number.isSafeInteger(v)))return 'Input needs correction: enter whole numbers only (no decimal points or commas).';
     if(values.slice(0,5).some(v=>v<=0)||values.slice(5).some(v=>v<0))
       return 'Server capacity must be greater than zero. Traffic and request costs cannot be negative.';
     if(!Number.isInteger(spec.network.max_connections)||!Number.isInteger(load.concurrent_connections))
       return 'Connection limits and concurrent connections must be whole numbers.';
     if(load.rps>0&&load.avg_mem_mb_per_req>spec.ram.total_mb)
-      return 'Memory per request exceeds total available RAM. Reduce the memory requirement or increase server RAM.';
+      return 'Input needs correction: memory per request exceeds total server RAM. A request cannot reserve more than the server has. Reduce per-request memory or increase server RAM. No request was sent to SimPy.';
     return '';
   }
   async function run(){
     const validation=validate();
-    if(validation){setError(validation);return;}
+    if(validation){
+      setError(validation);
+      window.requestAnimationFrame(revealError);
+      return;
+    }
     setBusy(true);setError('');setComparisonError('');setReport(null);setRules(null);setRawOpen(false);
     // Move to the visual replay immediately after a valid Simulate click.
     // The timeline first shows COMPUTING MODEL, then auto-plays the recorded
@@ -156,11 +180,6 @@ export default function Simulation(){
   const details=report?.simulation;
   const verdict=report?.result;
   const affected=verdict?.bottleneck??null;
-  const difference=rules&&verdict?
-    (['cpu','ram','network'] as const).map(key=>({
-      label:key.toUpperCase(),simpy:verdict.resources[key].utilization,
-      rules:rules.resources[key].utilization,
-    })):[];
 
   return <div className="simpy-page">
     <section className="simpy-intro" aria-labelledby="simpy-intro-title">
@@ -182,23 +201,23 @@ export default function Simulation(){
 
     <div className="simpy-columns qa-simpy-main">
       <section id="simpy-scenario" className="simpy-config" aria-label="Simulation configuration">
-        <div className="simpy-config-head"><div><span className="simpy-section-number">01 / INPUT</span><h3>Build your scenario.</h3><p>Adjust capacity and traffic before you run. All active inputs affect the evaluation.</p></div><Server size={23}/></div>
+        <div className="simpy-config-head"><div><span className="simpy-section-number">01 / CONFIGURE</span><h3>Build your scenario.</h3><p>Adjust capacity and traffic before you run. All active inputs affect the evaluation.</p></div><Server size={23}/></div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>SERVER CAPACITY</span><span>WHAT IS AVAILABLE</span></div>
           <div className="simpy-fields simpy-fields-capacity">
-            <NumberInput label="CPU cores" unit="cores" min={0.01} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
-            <NumberInput label="Total RAM" unit="MB" min={0.01} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
-            <NumberInput label="Network bandwidth" unit="Mbps" min={0.01} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
-            <NumberInput label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
+            <NumberInput issue={fieldIssues['CPU cores']} label="CPU cores" unit="cores" min={1} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
+            <NumberInput issue={fieldIssues['Total RAM']} label="Total RAM" unit="MB" min={1} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
+            <NumberInput issue={fieldIssues['Network bandwidth']} label="Network bandwidth" unit="Mbps" min={1} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
+            <NumberInput issue={fieldIssues['Maximum connections']} label="Maximum connections" unit="connections" min={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
           </div>
         </div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>REQUEST WORKLOAD</span><span>WHAT IS DEMANDED</span></div>
           <div className="simpy-preset-row"><span>Request-rate examples</span>{[{rps:100,label:'Normal'},{rps:360,label:'Peak'},{rps:900,label:'Stress'}].map(p=><button type="button" key={p.rps} className={body.load.rps===p.rps?'active':''} onClick={()=>preset(p.rps)}>{p.label} <small>{p.rps} RPS</small></button>)}</div>
           <div className="simpy-fields simpy-fields-workload">
-            <NumberInput label="Arrival rate" unit="RPS" value={body.load.rps} onChange={v=>updateLoad('rps',v)}/>
-            <NumberInput label="CPU time / request" unit="ms" value={body.load.avg_cpu_ms_per_req} onChange={v=>updateLoad('avg_cpu_ms_per_req',v)}/>
-            <NumberInput label="RAM / request" unit="MB" value={body.load.avg_mem_mb_per_req} onChange={v=>updateLoad('avg_mem_mb_per_req',v)}/>
-            <NumberInput label="Concurrent connections" unit="connections" step={1} value={body.load.concurrent_connections} onChange={v=>updateLoad('concurrent_connections',v)}/>
-            <NumberInput label="Response payload" unit="KB" value={body.load.payload_kb} onChange={v=>updateLoad('payload_kb',v)}/>
+            <NumberInput issue={fieldIssues['Arrival rate']} label="Arrival rate" unit="RPS" value={body.load.rps} onChange={v=>updateLoad('rps',v)}/>
+            <NumberInput issue={fieldIssues['CPU time / request']} label="CPU time / request" unit="ms" value={body.load.avg_cpu_ms_per_req} onChange={v=>updateLoad('avg_cpu_ms_per_req',v)}/>
+            <NumberInput issue={fieldIssues['RAM / request']} label="RAM / request" unit="MB" value={body.load.avg_mem_mb_per_req} onChange={v=>updateLoad('avg_mem_mb_per_req',v)}/>
+            <NumberInput issue={fieldIssues['Concurrent connections']} label="Concurrent connections" unit="connections" value={body.load.concurrent_connections} onChange={v=>updateLoad('concurrent_connections',v)}/>
+            <NumberInput issue={fieldIssues['Response payload']} label="Response payload" unit="KB" value={body.load.payload_kb} onChange={v=>updateLoad('payload_kb',v)}/>
           </div>
           <p className="simpy-preset-note">Presets adjust arrival rate only. Other workload assumptions stay as you entered them.</p>
         </div>
@@ -210,7 +229,7 @@ export default function Simulation(){
           <ArrowRight size={18}/>
         </button>
         <div className="simpy-reset-row"><span><ShieldCheck size={15}/> Model-based evaluation · No production traffic</span><button onClick={reset}><RotateCcw size={14}/> Reset</button></div>
-        {error&&<div role="alert" className="simpy-error"><CircleAlert size={18}/><span>{error}</span></div>}
+        {error&&<div ref={errorRef} tabIndex={-1} role="alert" className={error.startsWith('Input needs correction')?'simpy-error simpy-input-warning':'simpy-error'}><CircleAlert size={18}/><span>{error}</span></div>}
       </section>
 
       <div className="simpy-main-column">
@@ -253,10 +272,8 @@ export default function Simulation(){
 
     {report&&compare&&<section className="simpy-compare-card" aria-label="Engine parity comparison">
       <div className="simpy-card-header"><div><span className="simpy-section-number">06 / CROSS-CHECK</span><h3>Two engines. One scenario.</h3><p>Compare both engines using the same server capacity and workload.</p></div><GitCompareArrows size={22}/></div>
-      {rules&&verdict?<><div className="simpy-compare-grid"><div><span>DISCRETE-EVENT</span><strong>SimPy</strong><Outcome verdict={verdict.verdict}/></div><div><span>DETERMINISTIC</span><strong>Rules</strong><Outcome verdict={rules.verdict}/></div><div className="simpy-agreement">{rules.verdict===verdict.verdict?<><CheckCircle2 size={17}/> Verdicts agree</>:<><CircleAlert size={17}/> Model verdicts differ</>}</div></div>
-        <div className="simpy-difference-grid">{difference.map(row=><div key={row.label}><strong>{row.label}</strong><span>SimPy {pct(row.simpy)}</span><span>Rules {pct(row.rules)}</span></div>)}</div>
-        <p className="simpy-compare-caption">Results can differ near capacity thresholds because SimPy models request arrivals over time.</p>
-      </>:<p className="simpy-compare-caption">{comparisonError||'The rules comparison has not been completed.'}</p>}
+      {rules&&verdict?<EngineComparison simpy={verdict} rules={rules}/>:
+        <p className="simpy-compare-caption">{comparisonError||'The rules comparison has not been completed.'}</p>}
     </section>}
 
     {report&&<details className="simpy-raw" open={rawOpen} onToggle={e=>setRawOpen(e.currentTarget.open)}><summary><Terminal size={17}/> Inspect the complete model JSON <span>EVALUATION OUTPUT</span></summary><pre><code>{JSON.stringify(report,null,2)}</code></pre></details>}

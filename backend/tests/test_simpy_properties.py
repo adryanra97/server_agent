@@ -6,6 +6,8 @@ analytic rules engine on loads whose peak offered utilization is clearly
 separated from the decision thresholds.
 """
 
+import math
+
 import pytest
 from hypothesis import given
 
@@ -44,8 +46,37 @@ def _utilizations(result) -> dict[str, float]:
 def test_simulation_accounts_for_all_arrivals(input):
     result, details = SimPyEngine().inspect(input)
     assert details["arrived"] == details["planned_arrivals"]
-    assert 0 <= details["completed"] <= details["arrived"]
+    assert details["completed"] == details["arrived"]
     assert 0.5 <= result.confidence <= 1.0
+
+
+@given(evaluation_inputs())
+@SIMPY
+def test_evaluate_matches_inspect_for_every_generated_input(input):
+    evaluated = SimPyEngine().evaluate(input)
+    inspected, _ = SimPyEngine().inspect(input)
+    assert evaluated == inspected
+
+
+@given(evaluation_inputs())
+@SIMPY
+def test_simulation_details_are_finite_and_non_negative(input):
+    result, details = SimPyEngine().inspect(input)
+
+    assert details["planned_arrivals"] >= 0
+    assert details["arrived"] >= 0
+    assert details["completed"] >= 0
+    assert details["completed"] == details["arrived"]
+    assert details["simulated_elapsed_seconds"] >= 0
+
+    for utilization in result.resources.model_dump().values():
+        assert utilization["utilization"] >= 0
+        assert math.isfinite(utilization["utilization"])
+
+    for group in ("measured_utilization", "offered_utilization"):
+        for utilization in details[group].values():
+            assert utilization >= 0
+            assert math.isfinite(utilization)
 
 
 @given(evaluation_inputs())

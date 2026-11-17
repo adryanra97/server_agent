@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import QualityTestReport from './quality-test-report';
 import { hypothesisCaseStats } from '../lib/quality-evidence';
+import { executedTestTotal, githubRunsUrl, type QualityBranch } from '../lib/quality-branch';
 import {
   Activity, ArrowUpRight, CheckCircle2, ChevronDown, Clock3, Code2, GitBranch,
   GitCommitHorizontal, Info, LoaderCircle, RefreshCw, ShieldAlert,
@@ -20,7 +21,7 @@ type QualityEvidence={
 };
 
 type PublishedQuality={
-  run_id:number;commit_sha:string;
+  run_id:number;commit_sha:string;branch:string;
   summary?:{total:number;passed:number;failed:number;skipped:number;errors:number};
   tests:{
     id:string;name:string;group:string;file:string;status:string;suite?:string;
@@ -33,32 +34,30 @@ type PublishedQuality={
   };
 };
 type CheckKind='dynamic'|'analysis'|'build';
-type CheckComplexity='high'|'medium'|'low';
-type CheckDefinition={key:string;name:string;short:string;description:string;job:string;step:string;command:string;kind:CheckKind;complexity:CheckComplexity;complexityNote:string};
+type CheckDefinition={key:string;name:string;short:string;description:string;job:string;step:string;command:string;kind:CheckKind};
 const checks:CheckDefinition[]=[
-  {key:'hypothesis',kind:'dynamic',complexity:'high',complexityNote:'Generates and shrinks thousands of inputs to surface edge cases',short:'Generated-input property tests',name:'Hypothesis · Property-based',description:'Property-based tests that generate inputs, then shrink any failure to a minimal counterexample',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest backend/tests/test_*_properties.py'},
-  {key:'pytest',kind:'dynamic',complexity:'medium',complexityNote:'Full simulation and API regression suite with measured branch coverage',short:'Backend & API testing',name:'Pytest',description:'Simulation and API regression tests with Python branch coverage',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest --cov=app --cov=main --cov-branch'},
-  {key:'vitest',kind:'dynamic',complexity:'medium',complexityNote:'Component, contract, and security regression across the frontend',short:'Frontend logic & components',name:'Vitest · Frontend',description:'TypeScript logic, React interactions, API contracts, LLM security regression',job:'Frontend unit & component tests',step:'Run Vitest component, contract and security regression tests',command:'npm run test:coverage'},
-  {key:'playwright',kind:'dynamic',complexity:'high',complexityNote:'Drives a real Chromium browser through multi-step user journeys',short:'Real browser testing',name:'Playwright · Browser',description:'Chromium demo journey, role navigation and security headers',job:'Browser end-to-end tests',step:'Run real Chromium user journeys',command:'npm run test:e2e'},
-  {key:'ruff',kind:'analysis',complexity:'medium',complexityNote:'Many-category lint rules applied across the Python tree',short:'Python code quality',name:'Ruff',description:'Python lint and static conventions',job:'Python formatting & lint',step:'Ruff',command:'ruff check'},
-  {key:'bandit',kind:'analysis',complexity:'medium',complexityNote:'Source-level security analysis gated on severity and confidence',short:'Python security scanning',name:'Bandit',description:'Python static analysis with a medium-severity security gate',job:'Bandit security analysis',step:'Enforce security gate (medium severity and confidence or higher)',command:'bandit -r app main.py --severity-level medium'},
-  {key:'typescript',kind:'analysis',complexity:'medium',complexityNote:'Type-level analysis across the whole frontend',short:'Type safety checks',name:'TypeScript',description:'Typed frontend validation',job:'TypeScript & Next.js',step:'Typecheck',command:'npm run lint'},
-  {key:'npm-audit',kind:'analysis',complexity:'low',complexityNote:'Registry advisory lookup against a vulnerability database',short:'JavaScript dependency security',name:'npm audit · Dependencies',description:'Production JavaScript dependency vulnerabilities; high/critical fail the gate',job:'Frontend dependency audit',step:'Read severity counts and enforce high/critical gate',command:'npm audit --omit=dev'},
-  {key:'pip-audit',kind:'analysis',complexity:'low',complexityNote:'Registry advisory lookup against a vulnerability database',short:'Python dependency security',name:'pip-audit · Dependencies',description:'Known vulnerability checks for declared Python dependencies',job:'Python dependency audit',step:'Audit declared Python dependencies',command:'pip-audit -r requirements.txt'},
-  {key:'black',kind:'build',complexity:'low',complexityNote:'Deterministic reformatting against a canonical style',short:'Python code formatting',name:'Black',description:'Python code formatting',job:'Python formatting & lint',step:'Black',command:'black --check'},
-  {key:'nextjs',kind:'build',complexity:'medium',complexityNote:'Production compile of the entire Next.js app',short:'Production build validation',name:'Next.js build',description:'Production build validation',job:'TypeScript & Next.js',step:'Build',command:'npm run build'},
+  {key:'hypothesis',kind:'dynamic',short:'Generated-input property tests',name:'Hypothesis · Property-based',description:'Property-based tests that generate inputs, then shrink any failure to a minimal counterexample',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest backend/tests/test_*_properties.py'},
+  {key:'pytest',kind:'dynamic',short:'Backend & API testing',name:'Pytest',description:'Simulation and API regression tests with Python branch coverage',job:'Backend tests & coverage',step:'Run model and API tests with coverage',command:'pytest --cov=app --cov=main --cov-branch'},
+  {key:'vitest',kind:'dynamic',short:'Frontend logic & components',name:'Vitest · Frontend',description:'TypeScript logic, React interactions, API contracts, LLM security regression',job:'Frontend unit & component tests',step:'Run Vitest component, contract and security regression tests',command:'npm run test:coverage'},
+  {key:'playwright',kind:'dynamic',short:'Real browser testing',name:'Playwright · Browser',description:'Chromium demo journey, role navigation and security headers',job:'Browser end-to-end tests',step:'Run real Chromium user journeys',command:'npm run test:e2e'},
+  {key:'ruff',kind:'analysis',short:'Python code quality',name:'Ruff',description:'Python lint and static conventions',job:'Python formatting & lint',step:'Ruff',command:'ruff check'},
+  {key:'bandit',kind:'analysis',short:'Python security scanning',name:'Bandit',description:'Python static analysis with a medium-severity security gate',job:'Bandit security analysis',step:'Enforce security gate (medium severity and confidence or higher)',command:'bandit -r app main.py --severity-level medium'},
+  {key:'typescript',kind:'analysis',short:'Type safety checks',name:'TypeScript',description:'Typed frontend validation',job:'TypeScript & Next.js',step:'Typecheck',command:'npm run lint'},
+  {key:'npm-audit',kind:'analysis',short:'JavaScript dependency security',name:'npm audit · Dependencies',description:'Production JavaScript dependency vulnerabilities; high/critical fail the gate',job:'Frontend dependency audit',step:'Read severity counts and enforce high/critical gate',command:'npm audit --omit=dev'},
+  {key:'pip-audit',kind:'analysis',short:'Python dependency security',name:'pip-audit · Dependencies',description:'Known vulnerability checks for declared Python dependencies',job:'Python dependency audit',step:'Audit declared Python dependencies',command:'pip-audit -r requirements.txt'},
+  {key:'black',kind:'build',short:'Python code formatting',name:'Black',description:'Python code formatting',job:'Python formatting & lint',step:'Black',command:'black --check'},
+  {key:'nextjs',kind:'build',short:'Production build validation',name:'Next.js build',description:'Production build validation',job:'TypeScript & Next.js',step:'Build',command:'npm run build'},
 ];
 const CHECK_GROUPS:{kind:CheckKind;label:string;note:string}[]=[
-  {kind:'dynamic',label:'Dynamic checks',note:'execute the code'},
-  {kind:'analysis',label:'Static analysis',note:'inspect source & dependencies'},
-  {kind:'build',label:'Formatting & build',note:'enforce form & prove compilation'},
+  {kind:'dynamic',label:'Dynamic checks',note:'Execute the code.'},
+  {kind:'analysis',label:'Static analysis',note:'Inspect source & dependencies.'},
+  {kind:'build',label:'Formatting & build',note:'Enforce form & prove compilation.'},
 ];
 const PBT_ISSUES='https://github.com/adryanra97/server_agent/issues?q=is%3Aissue+label%3Afound-by-pbt';
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
-const branch='main';
 const fallback:QualityEvidence={
-  source:'GitHub Actions',repository:'adryanra97/server_agent',branch,status:'unavailable',conclusion:null,
+  source:'GitHub Actions',repository:'adryanra97/server_agent',branch:'main',status:'unavailable',conclusion:null,
   url:workflow,run_id:null,coverage:null,coverage_line:null,coverage_branch:null,coverage_status:'not-reported',
   bandit:{high:null,medium:null,low:null,status:'not-reported'},jobs:[],data_status:'unavailable',
 };
@@ -82,17 +81,17 @@ function enrich(raw:QualityEvidence, jobs:QualityJob[]):QualityEvidence{
   }
   return out;
 }
-async function readGitHub():Promise<QualityEvidence>{
+async function readGitHub(branch:QualityBranch):Promise<QualityEvidence>{
   const fetchJson=async (url:string)=>{
     const res=await fetch(url,{headers:{Accept:'application/vnd.github+json'},cache:'no-store',signal:AbortSignal.timeout(8000)});
     if(!res.ok)throw new Error('GitHub status request failed (HTTP '+res.status+').');
     return res.json();
   };
-  const payload=await fetchJson(GITHUB+'/actions/workflows/quality.yml/runs?branch='+encodeURIComponent(branch)+'&per_page=1');
+  const payload=await fetchJson(githubRunsUrl(branch));
   const run=payload.workflow_runs?.[0];
-  if(!run)return {...fallback,status:'not-run',data_status:'no-runs'};
+  if(!run)return {...fallback,branch,status:'not-run',data_status:'no-runs'};
   const quality:QualityEvidence={
-    ...fallback,status:run.status??'unknown',conclusion:run.conclusion??null,
+    ...fallback,branch,status:run.status??'unknown',conclusion:run.conclusion??null,
     run_id:run.id,commit_sha:run.head_sha,run_started_at:run.run_started_at,
     run_updated_at:run.updated_at,
     url:'https://github.com/adryanra97/server_agent/actions/runs/'+run.id,
@@ -124,8 +123,8 @@ function dateTime(value:string|null|undefined){
   const parsed=new Date(value);
   return Number.isNaN(parsed.getTime())?'Not available':parsed.toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
 }
-export default function Quality(){
-  const [quality,setQuality]=useState<QualityEvidence>(fallback);
+export default function Quality({branch='main'}:{branch?:QualityBranch}){
+  const [quality,setQuality]=useState<QualityEvidence>({...fallback,branch});
   const [loading,setLoading]=useState(true);
   const [issue,setIssue]=useState('');
   const [origin,setOrigin]=useState<'service'|'github'|'unavailable'>('unavailable');
@@ -133,22 +132,26 @@ export default function Quality(){
   const refresh=useCallback(async()=>{
     setLoading(true);setIssue('');
     let service:QualityEvidence|null=null;
-    try{
-      const response=await fetch('/api/v1/quality',{cache:'no-store',signal:AbortSignal.timeout(7000)});
-      if(!response.ok)throw new Error('Service returned HTTP '+response.status);
-      service=await response.json() as QualityEvidence;
-    }catch{}
+    // The current FastAPI quality endpoint is production-only. For staging,
+    // query the exact staging push run instead of displaying main's metrics.
+    if(branch==='main'){
+      try{
+        const response=await fetch('/api/v1/quality',{cache:'no-store',signal:AbortSignal.timeout(7000)});
+        if(!response.ok)throw new Error('Service returned HTTP '+response.status);
+        service=await response.json() as QualityEvidence;
+      }catch{}
+    }
     if(service?.jobs?.length){
       setQuality(enrich(service,service.jobs));setOrigin('service');setLoading(false);return;
     }
     try{
-      const github=await readGitHub();setQuality(github);setOrigin('github');
+      const github=await readGitHub(branch);setQuality(github);setOrigin('github');
     }catch(error){
-      setQuality(service??fallback);
+      setQuality(service??{...fallback,branch});
       setOrigin(service?.status!=='unavailable'&&service?.status!==undefined?'service':'unavailable');
       setIssue(error instanceof Error?error.message:'Could not retrieve job details.');
     }finally{setLoading(false);}
-  },[]);
+  },[branch]);
   useEffect(()=>{void refresh();},[refresh]);
   useEffect(()=>{
     const run=quality.run_id;
@@ -165,7 +168,7 @@ export default function Quality(){
           const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(9500)});
           if(!response.ok)continue;
           const data=await response.json() as PublishedQuality;
-          if(data.run_id===run&&data.commit_sha===quality.commit_sha&&Array.isArray(data.tests)){
+          if(data.run_id===run&&data.commit_sha===quality.commit_sha&&data.branch===branch&&Array.isArray(data.tests)){
             if(active)setPublished(data);return;
           }
         }catch{}
@@ -173,7 +176,7 @@ export default function Quality(){
     }
     void load();
     return()=>{active=false;};
-  },[quality.run_id,quality.commit_sha]);
+  },[quality.run_id,quality.commit_sha,branch]);
 
   const jobs=quality.jobs??[];
   const ready=quality.run_id!==null;
@@ -200,9 +203,7 @@ export default function Quality(){
   const pipAudit=published?.security?.pip;
   const frontendCoverage=published?.frontend_coverage;
   const suiteStats=published?.suites;
-  const executedTests=published?.summary
-    ? published.summary.passed+published.summary.failed+published.summary.errors
-    : null;
+  const executedTests=published?.summary?executedTestTotal(published.summary):null;
   const browserSuite=suiteStats?.e2e?.status==='reported'?suiteStats.e2e:null;
   const propertyCases=hypothesisCaseStats(published?.tests??[]);
   const regressionCases=published?.tests.filter(test=>
@@ -222,7 +223,7 @@ export default function Quality(){
     <div className="eq-trust">
       <div className={'eq-trust-indicator '+statusClass(overall)}>{loading?<LoaderCircle className="spin" size={22}/>:overall==='success'?<CheckCircle2 size={22}/>:overall==='failure'?<ShieldAlert size={22}/>:<Clock3 size={22}/>}</div>
       <div><strong>{loading&& !ready?'Connecting to engineering pipeline…':ready?summary:'No verified execution available'}</strong>
-        <p>{ready?'Run #'+quality.run_id+' · '+(origin==='github'?'Live GitHub API fallback':'Engineering service')+' · '+(quality.status==='completed'?'Completed execution':'Running or queued execution'):'Check the latest execution status in GitHub Actions.'}</p>
+        <p>{ready?'Run #'+quality.run_id+' · '+(origin==='github'?'Verified GitHub Actions':'Engineering service')+' · '+(quality.status==='completed'?'Completed execution':'Running or queued execution'):'Check the latest execution status in GitHub Actions.'}</p>
       </div>
       <span className={'eq-trust-badge '+statusClass(overall)}>{ready?labelStatus(overall):'Awaiting evidence'}</span>
     </div>
@@ -241,22 +242,21 @@ export default function Quality(){
 
     <div className="eq-content eq-content-pipeline">
       <section className="eq-checks">
-        <div className="eq-section-head"><div><span>01 / ENGINEERING PIPELINE</span><h3>Eleven quality checks. One verifiable pipeline.</h3><p>See what each check does, then open its command and GitHub Actions evidence. Checks are grouped by whether they execute code, analyze source, or enforce form and build.</p></div><Workflow size={23}/></div>
+        <div className="eq-section-head"><div><span>01 / VERIFICATIONS</span></div><Workflow size={23}/></div>
         <div className="eq-check-groups">{groups.map(group=><div className="eq-check-group" key={group.kind}>
-          <div className="eq-check-group-title"><strong>{group.label}</strong><span>{group.note}</span></div>
+          <div className="eq-check-group-title"><strong>{group.label}</strong><span className="eq-hint" data-tip={group.note} tabIndex={0} aria-label={group.label+': '+group.note}><Info size={13}/></span></div>
           <div className="eq-check-list">{group.items.map(check=><details className="eq-check" key={check.key}>
             <summary className="eq-check-summary">
               <span className="eq-check-number">{String(check.number).padStart(2,'0')}</span>
               <span className="eq-check-text"><strong>{check.name}</strong><span className="eq-check-short"> · {check.short}</span></span>
               <span className="eq-check-pills">
                 <span className={'eq-check-pill '+statusClass(check.status)}>{check.status==='success'?<CheckCircle2 size={15}/>:check.status==='failure'?<XCircle size={15}/>:<Clock3 size={15}/>} {labelStatus(check.status)}</span>
-                <span className={'eq-check-complexity '+check.complexity}>{check.complexity.toUpperCase()}</span>
               </span>
               <ChevronDown size={17} className="eq-check-chevron" aria-hidden="true"/>
             </summary>
             <div className="eq-check-detail">
               <p>{check.description}</p>
-              <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span><span>Complexity: <strong>{check.complexityNote}</strong></span></div>
+              <div className="eq-check-detail-meta"><span>CI job: <strong>{check.job?.name??'Not reported'}</strong></span><span>Command: <code>{check.command}</code></span></div>
               <div className="eq-check-actions">
                 {check.job?.url?<a href={check.job.url} target="_blank" rel="noopener noreferrer" aria-label={'View '+check.name+' job'}>View GitHub Actions job <ArrowUpRight size={15}/></a>:<span className="eq-check-unavailable">Job evidence is not available for this run.</span>}
                 {check.key==='hypothesis'&&<a href={PBT_ISSUES} target="_blank" rel="noopener noreferrer">View Hypothesis findings <ArrowUpRight size={15}/></a>}
@@ -268,7 +268,7 @@ export default function Quality(){
       </section>
     </div>
 
-    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null}/>
+    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null} branch={branch}/>
 
     <div className="eq-content eq-content-security">
       <section className="eq-security">

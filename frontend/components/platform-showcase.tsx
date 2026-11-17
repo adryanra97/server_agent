@@ -72,6 +72,8 @@ const references=[
     description:'Inspect the service response',icon:ShieldCheck},
 ];
 
+/** Share existing feature routes; the query only reveals a contextual return link. */
+export const showcaseHref=(href:string)=>href+'?from=showcase';
 export default function PlatformShowcase(){
   return <div className="tp-showcase">
     <section className="tp-showcase-hero" aria-labelledby="tp-showcase-title">
@@ -80,8 +82,8 @@ export default function PlatformShowcase(){
         <h1 id="tp-showcase-title">From simulation<br/><span>to evidence.</span></h1>
         <p>Not just a demo of what TwinPeak does. See how it is modeled, tested and verified—using the actual tools and engineering artifacts.</p>
         <div className="tp-showcase-hero-actions">
-          <Link className="tp-showcase-primary" href="/simulation">Try the simulation <ArrowRight size={18}/></Link>
-          <Link className="tp-showcase-secondary" href="/quality">View engineering evidence <ArrowUpRight size={17}/></Link>
+          <Link className="tp-showcase-primary" href={showcaseHref('/simulation')}>Try the simulation <ArrowRight size={18}/></Link>
+          <Link className="tp-showcase-secondary" href={showcaseHref('/quality')}>View engineering evidence <ArrowUpRight size={17}/></Link>
         </div>
         <div className="tp-showcase-hero-meta"><CheckCircle2 size={15}/> Shared technical access for all five demo roles</div>
       </div>
@@ -94,17 +96,17 @@ export default function PlatformShowcase(){
           <li>
             <span className="tp-showcase-step">01</span>
             <div><strong>Run an evaluation</strong><p>Change the workload. Run SimPy.</p></div>
-            <Link href="/simulation" aria-label="Step 1: Open SimPy Workbench"><ArrowUpRight size={18}/></Link>
+            <Link href={showcaseHref('/simulation')} aria-label="Step 1: Open SimPy Workbench"><ArrowUpRight size={18}/></Link>
           </li>
           <li>
             <span className="tp-showcase-step">02</span>
             <div><strong>Inspect the decision</strong><p>Compare scenarios and the trace.</p></div>
-            <Link href="/compare" aria-label="Step 2: Compare workload scenarios"><ArrowUpRight size={18}/></Link>
+            <Link href={showcaseHref('/compare')} aria-label="Step 2: Compare workload scenarios"><ArrowUpRight size={18}/></Link>
           </li>
           <li>
             <span className="tp-showcase-step">03</span>
             <div><strong>Verify the engineering</strong><p>Open test results, CI/CD and security checks.</p></div>
-            <Link href="/quality" aria-label="Step 3: Inspect real engineering evidence"><ArrowUpRight size={18}/></Link>
+            <Link href={showcaseHref('/quality')} aria-label="Step 3: Inspect real engineering evidence"><ArrowUpRight size={18}/></Link>
           </li>
         </ol>
         <div className="tp-showcase-walkthrough-foot"><ShieldCheck size={16}/> Every destination opens a working tool, not an illustrative slide.</div>
@@ -117,7 +119,7 @@ export default function PlatformShowcase(){
           <h2 id="tp-evidence-title">Evidence, one click away.</h2>
           <p>For examiners: inspect the pipeline, its published test data, or the original API contract.</p>
         </div>
-        <Link href="/quality" className="tp-showcase-inline-link">All quality checks <ArrowUpRight size={16}/></Link>
+        <Link href={showcaseHref('/quality')} className="tp-showcase-inline-link">All quality checks <ArrowUpRight size={16}/></Link>
       </div>
       <div className="tp-showcase-evidence-grid">
         {evidence.map(item=>{
@@ -158,7 +160,7 @@ export default function PlatformShowcase(){
           <div className="tp-showcase-group-links">
             {group.capabilities.map(item=>{
               const Icon=item.icon;
-              return <Link className="tp-showcase-card" key={item.href} href={item.href}>
+              return <Link className="tp-showcase-card" key={item.href} href={showcaseHref(item.href)}>
                 <Icon size={18}/><span><strong>{item.title}</strong><small>{item.description}</small></span><ArrowUpRight size={17}/>
               </Link>;
             })}

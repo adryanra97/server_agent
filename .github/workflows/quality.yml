@@ -1,7 +1,7 @@
 name: Engineering quality
 on:
   push:
-    branches: [main, feat/serveragent-platform]
+    branches: [main, staging, feat/serveragent-platform]
   pull_request:
     branches: [main, staging]
   workflow_dispatch:
@@ -331,7 +331,18 @@ jobs:
           fi
           mkdir -p "$report_dir/runs"
           cp consolidated-quality.json "$report_dir/runs/$RUN_ID.json"
-          cp consolidated-quality.json "$report_dir/latest.json"
-          git -C "$report_dir" add "runs/$RUN_ID.json" latest.json
+          git -C "$report_dir" add "runs/$RUN_ID.json"
+          # Keep production and staging evidence isolated. Never overwrite
+          # production's latest.json with a staging (or feature branch) result.
+          case "$GITHUB_REF_NAME" in
+            main)
+              cp consolidated-quality.json "$report_dir/latest.json"
+              git -C "$report_dir" add latest.json
+              ;;
+            staging)
+              cp consolidated-quality.json "$report_dir/staging-latest.json"
+              git -C "$report_dir" add staging-latest.json
+              ;;
+          esac
           git -C "$report_dir" commit -m "Publish CI quality evidence for run $RUN_ID"
           git -C "$report_dir" push origin HEAD:quality-reports

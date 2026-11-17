@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { isHypothesisCase } from '../lib/quality-evidence';
+import type {QualityBranch} from '../lib/quality-branch';
 import {
   ArrowUpRight, CheckCircle2, ChevronDown, ChevronRight, CircleAlert,
   Clock3, FileCode2, Info, LoaderCircle, Search, TestTube2, XCircle,
@@ -33,10 +34,10 @@ const GITHUB_REPORT='https://raw.githubusercontent.com/adryanra97/server_agent/q
 const statusText:Record<TestStatus,string>={passed:'Passed',failed:'Failed',skipped:'Skipped',error:'Error'};
 const pretty=(value:string)=>value.replace(/^test_/,'').replace(/_/g,' ').replace(/\[(.*?)\]/g,' · $1');
 const formatSeconds=(n:number)=>n<1?Math.round(n*1000)+' ms':n.toFixed(2)+' s';
-function validReport(value:unknown,run:number,sha:string|null):value is TestReport{
+function validReport(value:unknown,run:number,sha:string|null,branch:QualityBranch):value is TestReport{
   if(!value||typeof value!=='object')return false;
   const v=value as Partial<TestReport>;
-  return v.schema_version===1&&v.run_id===run&&
+  return v.schema_version===1&&v.run_id===run&&v.branch===branch&&
     (!sha||v.commit_sha===sha)&&Array.isArray(v.tests)&&v.summary!==undefined&&
     typeof v.summary?.total==='number'&&v.tests.length===v.summary.total;
 }
@@ -46,7 +47,7 @@ async function loadJson(url:string){
   return response.json() as Promise<unknown>;
 }
 
-export default function QualityTestReport({runId,commitSha}:{runId:number|null;commitSha:string|null}){
+export default function QualityTestReport({runId,commitSha,branch='main'}:{runId:number|null;commitSha:string|null;branch?:QualityBranch}){
   const [report,setReport]=useState<TestReport|null>(null);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
@@ -66,7 +67,7 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
         let raw:unknown;
         try{raw=await loadJson('/api/v1/quality/tests?run_id='+run);}
         catch{raw=await loadJson(GITHUB_REPORT+'/runs/'+run+'.json');}
-        if(!validReport(raw,run,commitSha))throw new Error('The published test report does not match this run.');
+        if(!validReport(raw,run,commitSha,branch))throw new Error('The published test report does not match this run and branch.');
         if(active)setReport(raw);
       }catch{
         if(active)setError('Per-test report is not available for this execution yet. Open the CI artifacts or refresh when publication completes.');
@@ -74,7 +75,7 @@ export default function QualityTestReport({runId,commitSha}:{runId:number|null;c
     }
     void retrieve();
     return()=>{active=false;};
-  },[runId,commitSha,retry]);
+  },[runId,commitSha,branch,retry]);
 
   const visible=useMemo(()=>{
     if(!report)return [];

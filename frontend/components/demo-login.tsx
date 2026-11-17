@@ -23,6 +23,7 @@ export default function DemoLogin(){
   function submit(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setError('');
     if(!demoLogin(role,password)){setError('Password demo tidak sesuai. Gunakan demo123 untuk semua persona.');return;}
+    // demoLogin already initializes the optional server session in parallel.
     router.push('/dashboard');
   }
   return <div className="demo-login">

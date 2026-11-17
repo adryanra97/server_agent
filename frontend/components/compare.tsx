@@ -11,6 +11,7 @@ import {
   type ServerSpec, type Load, type Engine, type VerdictResult, type VerdictRequest,
 } from '../lib/model';
 import { Outcome, ResourceBars } from './ui';
+import { WholeNumberInput } from './whole-number-input';
 
 type Profile = {
   id:'baseline'|'spike'|'scale';
@@ -31,9 +32,9 @@ const baseProfiles:Profile[]=[
 type ProfileField='multiplier'|'cores'|'ramMB'|'bandwidthMbps'|'maxConnections';
 type CapacityField={label:string;key:ProfileField;unit:string;min:number;step?:number;hint:string};
 const capacityFields:CapacityField[]=[
-  {label:'CPU cores',key:'cores',unit:'cores',min:.01,hint:'Available compute slots'},
-  {label:'Memory',key:'ramMB',unit:'MB',min:.01,hint:'Total server memory'},
-  {label:'Bandwidth',key:'bandwidthMbps',unit:'Mbps',min:.01,hint:'Network link capacity'},
+  {label:'CPU cores',key:'cores',unit:'cores',min:1,hint:'Available compute slots'},
+  {label:'Memory',key:'ramMB',unit:'MB',min:1,hint:'Total server memory'},
+  {label:'Bandwidth',key:'bandwidthMbps',unit:'Mbps',min:1,hint:'Network link capacity'},
   {label:'Max connections',key:'maxConnections',unit:'slots',min:1,step:1,hint:'Concurrent connection slots'},
 ];
 const loadFields:{label:string;key:keyof Load;unit:string;min:number;step?:number;hint:string}[]=[
@@ -43,12 +44,12 @@ const loadFields:{label:string;key:keyof Load;unit:string;min:number;step?:numbe
   {label:'Concurrent connections',key:'concurrent_connections',unit:'slots',min:0,step:1,hint:'Declared concurrency'},
   {label:'Response payload',key:'payload_kb',unit:'KB',min:0,hint:'Bytes per completed response'},
 ];
-const n=(value:number)=>value.toLocaleString('en-US',{maximumFractionDigits:1});
+const n=(value:number)=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:1}):'—';
 const percent=(value:number)=>n(value*100)+'%';
 const peak=(result:VerdictResult)=>Math.max(...Object.values(result.resources).map(x=>x.utilization));
-function CountInput({value,onChange,label,unit,min,step=0.1,disabled=false}:{value:number;onChange:(v:number)=>void;label:string;unit:string;min:number;step?:number;disabled?:boolean}){
+function CountInput({value,onChange,label,unit,min,disabled=false}:{value:number;onChange:(v:number)=>void;label:string;unit:string;min:number;step?:number;disabled?:boolean}){
   return <label className="qa-compare-input">
-    <span>{label}</span><span className="qa-compare-value"><input type="number" value={value} min={min} step={step} disabled={disabled} onChange={e=>onChange(Number(e.target.value))} aria-label={label}/><small>{unit}</small></span>
+    <span>{label}</span><span className="qa-compare-value"><WholeNumberInput value={value} min={min} disabled={disabled} onChange={onChange} aria-label={label}/><small>{unit}</small></span>
   </label>;
 }
 function ProfileStatus({record}:{record:Evaluated|undefined}){
@@ -83,12 +84,12 @@ export default function Compare(){
     setProfiles(baseProfiles.map(p=>({...p})));setEvaluated([]);setError('');
   }
   function validate():string|null{
-    if(Object.values(load).some(x=>!Number.isFinite(x)||x<0))return 'All workload values must be non-negative numbers.';
+    if(Object.values(load).some(x=>!Number.isSafeInteger(x)||x<0))return 'Input needs correction: all workload values must be whole numbers of zero or greater.';
     if(!Number.isInteger(load.concurrent_connections))return 'Concurrent connections must be a whole number.';
     for(const p of profiles){
-      if(!Number.isFinite(p.multiplier)||p.multiplier<0)return p.label+': request multiplier must be at least zero.';
-      if(!Number.isFinite(p.cores)||p.cores<=0||!Number.isFinite(p.ramMB)||p.ramMB<=0||!Number.isFinite(p.bandwidthMbps)||p.bandwidthMbps<=0||!Number.isInteger(p.maxConnections)||p.maxConnections<=0)return p.label+': server capacity must contain valid positive values.';
-      if(load.rps*p.multiplier>0&&load.avg_mem_mb_per_req>p.ramMB&&engine==='simpy')return p.label+': request memory exceeds the server RAM allocation.';
+      if(!Number.isSafeInteger(p.multiplier)||p.multiplier<0)return 'Input needs correction: '+p.label+' multiplier must be a non-negative whole number.';
+      if(!Number.isSafeInteger(p.cores)||p.cores<=0||!Number.isSafeInteger(p.ramMB)||p.ramMB<=0||!Number.isSafeInteger(p.bandwidthMbps)||p.bandwidthMbps<=0||!Number.isSafeInteger(p.maxConnections)||p.maxConnections<=0)return 'Input needs correction: '+p.label+' server capacity needs positive whole numbers.';
+      if(load.rps*p.multiplier>0&&load.avg_mem_mb_per_req>p.ramMB&&engine==='simpy')return 'Input needs correction: '+p.label+' memory per request exceeds the total RAM allocation. No SimPy request was sent.';
       if(load.concurrent_connections*p.multiplier>100000000)return p.label+': concurrent connections exceeds the supported comparison range.';
     }
     return null;
@@ -195,7 +196,7 @@ export default function Compare(){
         <small>Current configuration · sampled outcomes, not live infrastructure measurements</small></div>
       <button type="button" onClick={run} disabled={loading}>{loading?<><LoaderCircle className="spin" size={19}/> Evaluating scenarios…</>:<><Play size={18} fill="currentColor"/> Compare all scenarios <ArrowRight size={18}/></>}</button>
     </div>
-    {error&&<div role="alert" className="qa-compare-error"><CircleAlert size={18}/>{error}</div>}
+    {error&&<div role="alert" className={error.startsWith('Input needs correction')?'qa-compare-error qa-compare-input-warning':'qa-compare-error'}><CircleAlert size={18}/>{error}</div>}
 
     {hasResults&&<section className="qa-compare-analysis">
       <div className="qa-compare-section-title"><span className="role-eyebrow">03 / DECISION EVIDENCE</span><h3>See what changed — and why.</h3>

@@ -1,4 +1,5 @@
 'use client';
+import {startWorkspaceSession,refreshWorkspace,storageStatus,type WorkspaceStorage} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
@@ -6,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText,
   ClipboardCheck, FileClock, FileSignature, FlaskConical, Layers3,
-  LogOut, Menu, Settings2, ShieldCheck, Terminal, UserRound, Waves, X,
+  ArrowLeft, LogOut, Menu, Settings2, ShieldCheck, Terminal, UserRound, Waves, X,
 } from 'lucide-react';
 import { Brand, Eyebrow } from './ui';
 import { getDemoRole, getPersona, allowedPages, canVisit, demoLogout, type DemoRole } from '../lib/demo';
@@ -57,11 +58,18 @@ export default function Workspace({children}:{children:ReactNode}){
   const [role,setRole]=useState<DemoRole|null>(null);
   const [loaded,setLoaded]=useState(false);
   const [mobileOpen,setMobileOpen]=useState(false);
+  const [fromShowcase,setFromShowcase]=useState(false);
+  const [storage,setStorage]=useState<WorkspaceStorage>('local');
+  useEffect(()=>{const update=()=>setStorage(storageStatus());update();window.addEventListener('twinpeak-storage-status',update);return()=>window.removeEventListener('twinpeak-storage-status',update);},[]);
+  useEffect(()=>{if(role)void refreshWorkspace();},[pathname,role]);
+  useEffect(()=>{const sync=()=>{if(document.visibilityState==='visible')void refreshWorkspace();};document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
+  useEffect(()=>{setFromShowcase(new URLSearchParams(window.location.search).get('from')==='showcase');},[pathname]);
 
   useEffect(()=>{
     const update=()=>{setRole(getDemoRole());setLoaded(true);};
     update();
-    if(getDemoRole())void ensureDemoStarter();
+    const current=getDemoRole();
+    if(current)void startWorkspaceSession(current).then(connected=>{if(!connected)void ensureDemoStarter();});
     window.addEventListener('serveragent-demo-user',update);
     return()=>window.removeEventListener('serveragent-demo-user',update);
   },[]);
@@ -123,6 +131,13 @@ export default function Workspace({children}:{children:ReactNode}){
     </header>
     <main className={'sa-main sa-section-'+section}>
       <div className="sa-breadcrumb"><Link href="/demo" aria-label="TwinPeak demo">TwinPeak</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
+      <div className={'tp-storage-indicator tp-storage-'+storage} role="status">
+        <span aria-hidden="true"/>
+        {storage==='cloud'?'Cloud history active · shared demo records':storage==='connecting'?'Connecting shared history…':storage==='error'?'Cloud sync unavailable · browser-only changes':'Browser-only demo · records stay on this device'}
+      </div>
+      {fromShowcase&&section!=='showcase'&&allowed&&<div className="sa-showcase-return">
+        <Link href="/showcase"><ArrowLeft size={16}/> Back to Platform Showcase</Link>
+      </div>}
       {allowed?<>{section!=='showcase'&&<div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>}
         {children}
       </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>

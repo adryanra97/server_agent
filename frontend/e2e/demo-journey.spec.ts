@@ -122,7 +122,6 @@ test('Quality checks show their purpose and reveal the real CI command on demand
   await page.goto('/demo',{waitUntil:'domcontentloaded'});
   await page.locator('.tp-persona-card').first().click();
   await page.goto('/quality',{waitUntil:'domcontentloaded'});
-  await expect(page.getByRole('heading',{name:/Eleven quality checks\. One verifiable pipeline\./})).toBeVisible();
   const checks=page.locator('.eq-check-list .eq-check');
   await expect(checks).toHaveCount(11);
   const hypothesis=checks.first();

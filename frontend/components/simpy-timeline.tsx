@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { pressureLevel, pressureLabel } from '../lib/resource-pressure';
+import { nextReplayIndex } from '../lib/replay-step';
 import {
   Activity, ArrowDownToLine, ChevronLeft, ChevronRight, Cpu, Database,
   Info, Network, Pause, Play, RotateCcw, Waves, Server, HardDrive, Router, CircleCheck, Gauge,
@@ -83,6 +84,7 @@ export default function SimulationTimeline({
   const [mode,setMode]=useState<Mode>('compute');
   const [playing,setPlaying]=useState(false);
   const [speed,setSpeed]=useState(1);
+  const [looping,setLooping]=useState(true);
   const hasTrace=trace.length>0;
   const last=Math.max(0,trace.length-1);
   const firstSecond=trace[0]?.second??0;
@@ -103,15 +105,14 @@ export default function SimulationTimeline({
     if(!playing||trace.length<2)return;
     const interval=window.setInterval(()=>{
       setIndex(current=>{
-        if(current>=trace.length-1){
-          setPlaying(false);
-          return current;
-        }
-        return current+1;
+        return nextReplayIndex(current,trace.length-1,looping);
       });
     },Math.round(520/speed));
     return()=>window.clearInterval(interval);
-  },[playing,speed,trace.length]);
+  },[playing,speed,trace.length,looping]);
+  useEffect(()=>{
+    if(!looping&&playing&&index>=last)setPlaying(false);
+  },[looping,playing,index,last]);
 
   const selected=modes[mode];
   const maxValue=useMemo(()=>{
@@ -230,11 +231,18 @@ export default function SimulationTimeline({
         <button type="button" className="timeline-step" disabled={!hasTrace||index===last} aria-label="Next second" onClick={()=>chooseSecond(index+1)}><ChevronRight size={20}/></button>
         <div className="timeline-current"><strong>{hasTrace?'T + '+String(point?.second??0).padStart(2,'0')+'s':'T + —'}</strong><span>{hasTrace?String(trace.length)+' recorded sample buckets':'Run a simulation to activate replay'}</span></div>
       </div>
+      <div className="timeline-playback-options">
+        <button type="button" className={'timeline-loop '+(looping?'is-on':'')}
+          onClick={()=>setLooping(value=>!value)}
+          aria-pressed={looping} aria-label="Loop replay">
+          <RotateCcw size={16}/> Loop {looping?'on':'off'}
+        </button>
       <label className="timeline-speed">SPEED
         <select value={speed} onChange={e=>setSpeed(Number(e.target.value))} aria-label="Replay speed">
           <option value={1}>1×</option><option value={2}>2×</option><option value={4}>4×</option>
         </select>
       </label>
+      </div>
     </div>
 
     <input type="range" className="timeline-scrubber" min={0} max={last} step={1} disabled={!hasTrace} value={Math.min(index,last)} onChange={e=>chooseSecond(Number(e.target.value))} aria-label="Simulation second" />
