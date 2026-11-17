@@ -1,5 +1,5 @@
 'use client';
-import {startWorkspaceSession,refreshWorkspace} from '../lib/workspace-sync';
+import {startWorkspaceSession,refreshWorkspace,repairLocalWorkspaceCache} from '../lib/workspace-sync';
 
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
@@ -64,7 +64,7 @@ export default function Workspace({children}:{children:ReactNode}){
   useEffect(()=>{setFromShowcase(new URLSearchParams(window.location.search).get('from')==='showcase');},[pathname]);
 
   useEffect(()=>{
-    const update=()=>{setRole(getDemoRole());setLoaded(true);};
+    const update=()=>{repairLocalWorkspaceCache();setRole(getDemoRole());setLoaded(true);};
     update();
     const current=getDemoRole();
     if(current)void startWorkspaceSession(current).then(connected=>{if(!connected)void ensureDemoStarter();});
