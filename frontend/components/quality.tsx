@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import QualityTestReport from './quality-test-report';
 import { hypothesisCaseStats } from '../lib/quality-evidence';
+import { executedTestTotal, githubRunsUrl, type QualityBranch } from '../lib/quality-branch';
 import {
   Activity, ArrowUpRight, CheckCircle2, ChevronDown, Clock3, Code2, GitBranch,
   GitCommitHorizontal, Info, LoaderCircle, RefreshCw, ShieldAlert,
@@ -20,7 +21,7 @@ type QualityEvidence={
 };
 
 type PublishedQuality={
-  run_id:number;commit_sha:string;
+  run_id:number;commit_sha:string;branch:string;
   summary?:{total:number;passed:number;failed:number;skipped:number;errors:number};
   tests:{
     id:string;name:string;group:string;file:string;status:string;suite?:string;
@@ -55,9 +56,8 @@ const CHECK_GROUPS:{kind:CheckKind;label:string;note:string}[]=[
 const PBT_ISSUES='https://github.com/adryanra97/server_agent/issues?q=is%3Aissue+label%3Afound-by-pbt';
 const GITHUB='https://api.github.com/repos/adryanra97/server_agent';
 const workflow='https://github.com/adryanra97/server_agent/actions/workflows/quality.yml';
-const branch='main';
 const fallback:QualityEvidence={
-  source:'GitHub Actions',repository:'adryanra97/server_agent',branch,status:'unavailable',conclusion:null,
+  source:'GitHub Actions',repository:'adryanra97/server_agent',branch:'main',status:'unavailable',conclusion:null,
   url:workflow,run_id:null,coverage:null,coverage_line:null,coverage_branch:null,coverage_status:'not-reported',
   bandit:{high:null,medium:null,low:null,status:'not-reported'},jobs:[],data_status:'unavailable',
 };
@@ -81,17 +81,17 @@ function enrich(raw:QualityEvidence, jobs:QualityJob[]):QualityEvidence{
   }
   return out;
 }
-async function readGitHub():Promise<QualityEvidence>{
+async function readGitHub(branch:QualityBranch):Promise<QualityEvidence>{
   const fetchJson=async (url:string)=>{
     const res=await fetch(url,{headers:{Accept:'application/vnd.github+json'},cache:'no-store',signal:AbortSignal.timeout(8000)});
     if(!res.ok)throw new Error('GitHub status request failed (HTTP '+res.status+').');
     return res.json();
   };
-  const payload=await fetchJson(GITHUB+'/actions/workflows/quality.yml/runs?branch='+encodeURIComponent(branch)+'&per_page=1');
+  const payload=await fetchJson(githubRunsUrl(branch));
   const run=payload.workflow_runs?.[0];
-  if(!run)return {...fallback,status:'not-run',data_status:'no-runs'};
+  if(!run)return {...fallback,branch,status:'not-run',data_status:'no-runs'};
   const quality:QualityEvidence={
-    ...fallback,status:run.status??'unknown',conclusion:run.conclusion??null,
+    ...fallback,branch,status:run.status??'unknown',conclusion:run.conclusion??null,
     run_id:run.id,commit_sha:run.head_sha,run_started_at:run.run_started_at,
     run_updated_at:run.updated_at,
     url:'https://github.com/adryanra97/server_agent/actions/runs/'+run.id,
@@ -123,8 +123,8 @@ function dateTime(value:string|null|undefined){
   const parsed=new Date(value);
   return Number.isNaN(parsed.getTime())?'Not available':parsed.toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
 }
-export default function Quality(){
-  const [quality,setQuality]=useState<QualityEvidence>(fallback);
+export default function Quality({branch='main'}:{branch?:QualityBranch}){
+  const [quality,setQuality]=useState<QualityEvidence>({...fallback,branch});
   const [loading,setLoading]=useState(true);
   const [issue,setIssue]=useState('');
   const [origin,setOrigin]=useState<'service'|'github'|'unavailable'>('unavailable');
@@ -132,22 +132,26 @@ export default function Quality(){
   const refresh=useCallback(async()=>{
     setLoading(true);setIssue('');
     let service:QualityEvidence|null=null;
-    try{
-      const response=await fetch('/api/v1/quality',{cache:'no-store',signal:AbortSignal.timeout(7000)});
-      if(!response.ok)throw new Error('Service returned HTTP '+response.status);
-      service=await response.json() as QualityEvidence;
-    }catch{}
+    // The current FastAPI quality endpoint is production-only. For staging,
+    // query the exact staging push run instead of displaying main's metrics.
+    if(branch==='main'){
+      try{
+        const response=await fetch('/api/v1/quality',{cache:'no-store',signal:AbortSignal.timeout(7000)});
+        if(!response.ok)throw new Error('Service returned HTTP '+response.status);
+        service=await response.json() as QualityEvidence;
+      }catch{}
+    }
     if(service?.jobs?.length){
       setQuality(enrich(service,service.jobs));setOrigin('service');setLoading(false);return;
     }
     try{
-      const github=await readGitHub();setQuality(github);setOrigin('github');
+      const github=await readGitHub(branch);setQuality(github);setOrigin('github');
     }catch(error){
-      setQuality(service??fallback);
+      setQuality(service??{...fallback,branch});
       setOrigin(service?.status!=='unavailable'&&service?.status!==undefined?'service':'unavailable');
       setIssue(error instanceof Error?error.message:'Could not retrieve job details.');
     }finally{setLoading(false);}
-  },[]);
+  },[branch]);
   useEffect(()=>{void refresh();},[refresh]);
   useEffect(()=>{
     const run=quality.run_id;
@@ -164,7 +168,7 @@ export default function Quality(){
           const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(9500)});
           if(!response.ok)continue;
           const data=await response.json() as PublishedQuality;
-          if(data.run_id===run&&data.commit_sha===quality.commit_sha&&Array.isArray(data.tests)){
+          if(data.run_id===run&&data.commit_sha===quality.commit_sha&&data.branch===branch&&Array.isArray(data.tests)){
             if(active)setPublished(data);return;
           }
         }catch{}
@@ -172,7 +176,7 @@ export default function Quality(){
     }
     void load();
     return()=>{active=false;};
-  },[quality.run_id,quality.commit_sha]);
+  },[quality.run_id,quality.commit_sha,branch]);
 
   const jobs=quality.jobs??[];
   const ready=quality.run_id!==null;
@@ -199,9 +203,7 @@ export default function Quality(){
   const pipAudit=published?.security?.pip;
   const frontendCoverage=published?.frontend_coverage;
   const suiteStats=published?.suites;
-  const executedTests=published?.summary
-    ? published.summary.passed+published.summary.failed+published.summary.errors
-    : null;
+  const executedTests=published?.summary?executedTestTotal(published.summary):null;
   const browserSuite=suiteStats?.e2e?.status==='reported'?suiteStats.e2e:null;
   const propertyCases=hypothesisCaseStats(published?.tests??[]);
   const regressionCases=published?.tests.filter(test=>
@@ -221,7 +223,7 @@ export default function Quality(){
     <div className="eq-trust">
       <div className={'eq-trust-indicator '+statusClass(overall)}>{loading?<LoaderCircle className="spin" size={22}/>:overall==='success'?<CheckCircle2 size={22}/>:overall==='failure'?<ShieldAlert size={22}/>:<Clock3 size={22}/>}</div>
       <div><strong>{loading&& !ready?'Connecting to engineering pipeline…':ready?summary:'No verified execution available'}</strong>
-        <p>{ready?'Run #'+quality.run_id+' · '+(origin==='github'?'Live GitHub API fallback':'Engineering service')+' · '+(quality.status==='completed'?'Completed execution':'Running or queued execution'):'Check the latest execution status in GitHub Actions.'}</p>
+        <p>{ready?'Run #'+quality.run_id+' · '+(origin==='github'?'Verified GitHub Actions':'Engineering service')+' · '+(quality.status==='completed'?'Completed execution':'Running or queued execution'):'Check the latest execution status in GitHub Actions.'}</p>
       </div>
       <span className={'eq-trust-badge '+statusClass(overall)}>{ready?labelStatus(overall):'Awaiting evidence'}</span>
     </div>
@@ -266,7 +268,7 @@ export default function Quality(){
       </section>
     </div>
 
-    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null}/>
+    <QualityTestReport runId={quality.run_id} commitSha={quality.commit_sha??null} branch={branch}/>
 
     <div className="eq-content eq-content-security">
       <section className="eq-security">
