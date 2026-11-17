@@ -1,7 +1,7 @@
 /** Preflight for demo inputs, independent of the SimPy engine's status. */
 export type AlignmentInputs={
   peak:number;cores:number;ram:number;cpuMs:number;memPerReq:number;
-  concurrent:number;payload:number;bandwidth:number;maxConnections:number;
+  concurrent:number;payload:number;bandwidth:number;maxConnections:number;clockGhz:number;
 };
 export function validateAlignmentInputs(values:AlignmentInputs):string|null{
   const fields:{label:string;value:number;min:number}[]=[
@@ -21,6 +21,9 @@ export function validateAlignmentInputs(values:AlignmentInputs):string|null{
         (field.min===0?' of zero or greater.':' greater than zero.')+
         ' No request was sent to SimPy.';
     }
+  }
+  if(!Number.isFinite(values.clockGhz)||values.clockGhz<=0){
+    return 'Input needs correction: CPU clock speed must be a number greater than zero. No request was sent to SimPy.';
   }
   if(values.memPerReq>values.ram){
     return 'Input needs correction: memory per request ('+values.memPerReq+
@@ -49,6 +52,9 @@ export function alignmentFieldIssues(values:AlignmentInputs):Partial<Record<keyo
     if(!Number.isSafeInteger(values[key])||values[key]<min){
       issues[key]=label+' requires a whole number '+(min===0?'of zero or greater.':'greater than zero.');
     }
+  }
+  if(!Number.isFinite(values.clockGhz)||values.clockGhz<=0){
+    issues.clockGhz='CPU clock speed must be greater than zero GHz.';
   }
   if(!issues.memPerReq&&!issues.ram&&values.memPerReq>values.ram){
     issues.memPerReq='Exceeds production RAM ('+values.ram+' MB). Reduce this value or increase RAM.';
