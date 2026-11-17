@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CircleAlert, CircleHelp, Cpu, Play, RefreshCw } from 'lucide-react';
+import { ArrowRight, CircleAlert, CircleHelp, Cpu, Play, RefreshCw, History, CheckCircle2 } from 'lucide-react';
 import {
   defaultLoad, defaultSpec, inspectSimPy, saveRun,
   type VerdictResult, type Verdict, type VerdictRequest,
@@ -12,6 +12,7 @@ import { downloadUnassessablePDF } from '../lib/report-pdf';
 import AlignmentScenarioReplay from './alignment-scenario-replay';
 import { WholeNumberInput } from './whole-number-input';
 import { alignmentFieldIssues, validateAlignmentInputs } from '../lib/alignment-input-validation';
+import {lastSimulationSettings,type SessionSimulation} from '../lib/simulation-session';
 
 export type AnalysisCase={
   factor:number;rps:number;verdict:Verdict;
@@ -24,6 +25,7 @@ const noteFor=(rps:number)=>'SimPy could not complete the '+rps+
 export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:AnalysisCase[],issue?:string)=>void}){
   const [peak,setPeak]=useState(45);
   const [cores,setCores]=useState(4);
+  const [clockGhz,setClockGhz]=useState(defaultSpec.cpu.clock_ghz);
   const [ram,setRam]=useState(16384);
   const [cpuMs,setCpuMs]=useState(15);
   const [memPerReq,setMemPerReq]=useState(defaultLoad.avg_mem_mb_per_req);
@@ -32,6 +34,14 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
   const [bandwidth,setBandwidth]=useState(defaultSpec.network.bandwidth_mbps);
   const [maxConnections,setMaxConnections]=useState(defaultSpec.network.max_connections);
   const [calibrationSource,setCalibrationSource]=useState<'sample'|'measured'>('sample');
+  const [lastSimulation,setLastSimulation]=useState<SessionSimulation|null>(null);
+  const [reuseMessage,setReuseMessage]=useState('');
+  useEffect(()=>{
+    const update=()=>setLastSimulation(lastSimulationSettings());
+    update();
+    window.addEventListener('twinpeak-last-simpy-settings',update);
+    return()=>window.removeEventListener('twinpeak-last-simpy-settings',update);
+  },[]);
   const [cases,setCases]=useState<AnalysisCase[]>([]);
   const resultsRef=useRef<HTMLDivElement|null>(null);
   const warningRef=useRef<HTMLDivElement|null>(null);
@@ -46,7 +56,7 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
   },[cases.length]);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
-  const inputValues={peak,cores,ram,cpuMs,memPerReq,concurrent,payload,bandwidth,maxConnections};
+  const inputValues={peak,cores,ram,cpuMs,memPerReq,concurrent,payload,bandwidth,maxConnections,clockGhz};
   const inputIssue=validateAlignmentInputs(inputValues);
   const fieldIssues=alignmentFieldIssues(inputValues);
   const bringIntoView=(element:HTMLElement|null)=>{
@@ -56,8 +66,20 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
   };
   useEffect(()=>{if(error)bringIntoView(errorRef.current);},[error]);
   function edit(setter:(value:number)=>void,value:number){
-    setter(value);setCases([]);setError('');
+    setter(value);setCases([]);setError('');setReuseMessage('');
     onEvaluated([],'Configuration changed. Run the three SimPy scenarios again before submitting release evidence.');
+  }
+  function reuseSettings(){
+    const latest=lastSimulationSettings();
+    if(!latest)return;
+    const {spec,load}=latest.request;
+    setCores(spec.cpu.cores);setClockGhz(spec.cpu.clock_ghz);setRam(spec.ram.total_mb);
+    setBandwidth(spec.network.bandwidth_mbps);setMaxConnections(spec.network.max_connections);
+    setPeak(load.rps);setCpuMs(load.avg_cpu_ms_per_req);setMemPerReq(load.avg_mem_mb_per_req);
+    setConcurrent(load.concurrent_connections);setPayload(load.payload_kb);
+    setCases([]);setError('');
+    onEvaluated([],'Settings copied from your last SimPy run. Run the three new scenarios before submitting alignment evidence.');
+    setReuseMessage('Settings copied. Review the fields, then run a new analysis. Previous simulation results were not copied.');
   }
   async function run(){
     if(inputIssue){
@@ -68,7 +90,7 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
     setBusy(true);setError('');setCases([]);
     const spec={
       ...structuredClone(defaultSpec),
-      cpu:{cores,clock_ghz:defaultSpec.cpu.clock_ghz},
+      cpu:{cores,clock_ghz:clockGhz},
       ram:{total_mb:ram},network:{bandwidth_mbps:bandwidth,max_connections:maxConnections},
     };
     const load={
@@ -131,6 +153,18 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
     <div className="tp-panel-heading"><div><span>01 / RELEASE ALIGNMENT</span><h3>Evaluate production capacity.</h3>
       <p>Compare normal, 2×, and 3× demand using the same server and workload profile. Every valid scenario is sent to SimPy.</p>
     </div><Cpu size={24}/></div>
+    {lastSimulation&&<div className="tp-reuse-settings">
+      <div className="tp-reuse-settings-copy"><History size={19} aria-hidden="true"/>
+        <div><strong>Continue with your last SimPy settings</strong>
+          <span>{lastSimulation.request.load.rps.toLocaleString('en-US')} RPS · {lastSimulation.request.spec.cpu.cores} CPU cores · {lastSimulation.request.spec.ram.total_mb.toLocaleString('en-US')} MB RAM</span>
+          <small>Completed in this tab at {new Date(lastSimulation.completedAt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} · Only parameters are reused</small>
+        </div>
+      </div>
+      <button type="button" className="tp-reuse-settings-button" onClick={reuseSettings} disabled={busy}>
+        Use last simulation settings <ArrowRight size={16}/>
+      </button>
+    </div>}
+    {reuseMessage&&<p className="tp-reuse-feedback" role="status"><CheckCircle2 size={16} aria-hidden="true"/>{reuseMessage}</p>}
     <div className="tp-analysis-form">
       <label className={fieldIssues.cores?'tp-field-invalid':undefined}>Production CPU cores<WholeNumberInput min={1} value={cores} onChange={v=>edit(setCores,v)} aria-invalid={!!fieldIssues.cores} aria-describedby={fieldIssues.cores?'tp-alignment-cores-issue':undefined}/>{fieldIssues.cores&&<small className="tp-field-issue" id="tp-alignment-cores-issue">{fieldIssues.cores}</small>}</label>
       <label className={fieldIssues.ram?'tp-field-invalid':undefined}>Production RAM (MB)<WholeNumberInput min={1} value={ram} onChange={v=>edit(setRam,v)} aria-invalid={!!fieldIssues.ram} aria-describedby={fieldIssues.ram?'tp-alignment-ram-issue':undefined}/>{fieldIssues.ram&&<small className="tp-field-issue" id="tp-alignment-ram-issue">{fieldIssues.ram}</small>}</label>
@@ -140,6 +174,12 @@ export default function AlignmentWorkbench({onEvaluated}:{onEvaluated:(cases:Ana
       <summary>Advanced Settings &amp; Workload Profile</summary>
       <p>Different applications can consume very different resources at the same RPS. Adjust these assumptions to match the workload being assessed.</p>
       <div className="tp-analysis-form tp-calibration-fields">
+        <label className={fieldIssues.clockGhz?'tp-field-invalid':undefined}>CPU clock speed (GHz)
+          <input type="number" inputMode="decimal" min="0.1" step="0.1"
+            value={Number.isFinite(clockGhz)?clockGhz:''} onChange={e=>edit(setClockGhz,e.target.value===''?NaN:Number(e.target.value))}
+            aria-invalid={!!fieldIssues.clockGhz} aria-describedby={fieldIssues.clockGhz?'tp-alignment-clock-issue':undefined}/>
+          {fieldIssues.clockGhz&&<small className="tp-field-issue" id="tp-alignment-clock-issue">{fieldIssues.clockGhz}</small>}
+        </label>
         <label className={fieldIssues.cpuMs?'tp-field-invalid':undefined}>CPU time / request (ms)<WholeNumberInput min={1} value={cpuMs} onChange={v=>edit(setCpuMs,v)} aria-invalid={!!fieldIssues.cpuMs} aria-describedby={fieldIssues.cpuMs?'tp-alignment-cpuMs-issue':undefined}/>{fieldIssues.cpuMs&&<small className="tp-field-issue" id="tp-alignment-cpuMs-issue">{fieldIssues.cpuMs}</small>}</label>
         <label className={fieldIssues.memPerReq?'tp-field-invalid':undefined}>Memory / request (MB)<WholeNumberInput min={0} value={memPerReq} onChange={v=>edit(setMemPerReq,v)} aria-invalid={!!fieldIssues.memPerReq} aria-describedby={fieldIssues.memPerReq?'tp-alignment-memPerReq-issue':undefined}/>{fieldIssues.memPerReq&&<small className="tp-field-issue" id="tp-alignment-memPerReq-issue">{fieldIssues.memPerReq}</small>}</label>
         <label className={fieldIssues.concurrent?'tp-field-invalid':undefined}>Concurrent connections<WholeNumberInput min={0} value={concurrent} onChange={v=>edit(setConcurrent,v)} aria-invalid={!!fieldIssues.concurrent} aria-describedby={fieldIssues.concurrent?'tp-alignment-concurrent-issue':undefined}/>{fieldIssues.concurrent&&<small className="tp-field-issue" id="tp-alignment-concurrent-issue">{fieldIssues.concurrent}</small>}</label>
