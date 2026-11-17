@@ -12,3 +12,16 @@ describe('Alignment input preflight',()=>{
   it('does not accept fractional inputs',()=>expect(validateAlignmentInputs({...good,cpuMs:1.5})).toMatch(/CPU time.*whole number/));
   it('allows overload scenarios to reach SimPy',()=>expect(validateAlignmentInputs({...good,concurrent:100000,maxConnections:10})).toBeNull());
 });
+
+// Visual error feedback should identify the actual field, not blame the engine.
+import {alignmentFieldIssues} from './alignment-input-validation';
+describe('Alignment field-level validation feedback',()=>{
+  it('attaches impossible per-request memory to its input',()=>{
+    const issues=alignmentFieldIssues({...good,ram:512,memPerReq:2312312});
+    expect(issues.memPerReq).toMatch(/Exceeds production RAM/);
+    expect(issues.ram).toBeUndefined();
+  });
+  it('identifies a missing workload field',()=>{
+    expect(alignmentFieldIssues({...good,peak:NaN}).peak).toMatch(/whole number/);
+  });
+});

@@ -25,6 +25,20 @@ test('UI-09 QA Tester runs a simulation', async ({ page }) => {
   await expect(page.locator('.simpy-result-content')).toBeVisible({ timeout: 30000 });
   await expect(page.getByText('Capacity remains within the defined envelope.')).toBeVisible();
 
+  // Cross-check must reveal scannable numeric differences, not just matching verdict badges.
+  const crosscheck=page.getByRole('region',{name:'Engine parity comparison'});
+  await expect(crosscheck.getByText('Resource-by-resource comparison')).toBeVisible();
+  await expect(crosscheck.getByRole('group',{name:'CPU comparison'})).toBeVisible();
+  await expect(crosscheck.getByRole('group',{name:'RAM comparison'})).toBeVisible();
+  await expect(crosscheck.getByText(/pp apart/)).toHaveCount(3);
+  // Replay repeats by default; QA can disable looping and take manual control.
+  const loop=page.getByRole('button',{name:'Loop replay'}).first();
+  await expect(loop).toHaveAttribute('aria-pressed','true');
+  await loop.click();
+  await expect(loop).toHaveAttribute('aria-pressed','false');
+  await loop.click();
+  await expect(loop).toHaveAttribute('aria-pressed','true');
+
   // Limiting resource CPU, semua request selesai diproses
   const body = page.locator('body');
   await expect(body).toContainText(/Limiting resource\s*CPU/i);
