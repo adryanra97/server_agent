@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Activity, ArrowRight, ArrowUpRight, CheckCircle2, CircleAlert, Clock3, Cpu,
@@ -15,6 +15,7 @@ import { Outcome, ResourceBars } from './ui';
 import { compactTimeline } from '../lib/trace';
 import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
 import { WholeNumberInput } from './whole-number-input';
+import { simulationFieldIssues } from '../lib/simulation-input-validation';
 
 type SimulationEvidence = {
   arrival_process: string;
@@ -49,14 +50,17 @@ const flow = [
   {number:'05', label:'Payload transfer',detail:'Release & complete',icon:Send},
 ];
 
-function NumberInput({label,unit,value,onChange,min=0,note}:{
+function NumberInput({label,unit,value,onChange,min=0,note,issue}:{
   label:string;unit:string;value:number;onChange:(value:number)=>void;
-  min?:number;step?:number|string;note?:string;
+  min?:number;note?:string;issue?:string;
 }){
-  return <label className="simpy-field">
+  const issueId='simpy-input-'+label.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  return <label className={'simpy-field '+(issue?'simpy-field-invalid':'')}>
     <span className="simpy-field-top"><strong>{label}</strong>{note&&<small>{note}</small>}</span>
     <span className="simpy-input"><WholeNumberInput value={value} min={min}
-      onChange={onChange} aria-label={label}/><span>{unit}</span></span>
+      onChange={onChange} aria-label={label} aria-invalid={!!issue}
+      aria-describedby={issue?issueId:undefined}/><span>{unit}</span></span>
+    {issue&&<small className="simpy-field-issue" id={issueId}>{issue}</small>}
   </label>;
 }
 const pct=(v:number)=>`${(v*100).toFixed(1)}%`;
@@ -79,6 +83,18 @@ export default function Simulation(){
   const [error,setError]=useState('');
   const [comparisonError,setComparisonError]=useState('');
   const [rawOpen,setRawOpen]=useState(false);
+  const errorRef=useRef<HTMLDivElement|null>(null);
+  const fieldIssues=simulationFieldIssues(body);
+  const revealError=()=>{
+    const element=errorRef.current;
+    if(!element)return;
+    element.focus({preventScroll:true});
+    element.scrollIntoView({
+      behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+      block:'center',
+    });
+  };
+  useEffect(()=>{if(error)revealError();},[error]);
 
   function updateSpec(section:keyof ServerSpec,field:string,value:number){
     setBody(prev=>({
@@ -117,7 +133,11 @@ export default function Simulation(){
   }
   async function run(){
     const validation=validate();
-    if(validation){setError(validation);return;}
+    if(validation){
+      setError(validation);
+      window.requestAnimationFrame(revealError);
+      return;
+    }
     setBusy(true);setError('');setComparisonError('');setReport(null);setRules(null);setRawOpen(false);
     // Move to the visual replay immediately after a valid Simulate click.
     // The timeline first shows COMPUTING MODEL, then auto-plays the recorded
@@ -188,20 +208,20 @@ export default function Simulation(){
         <div className="simpy-config-head"><div><span className="simpy-section-number">01 / CONFIGURE</span><h3>Build your scenario.</h3><p>Adjust capacity and traffic before you run. All active inputs affect the evaluation.</p></div><Server size={23}/></div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>SERVER CAPACITY</span><span>WHAT IS AVAILABLE</span></div>
           <div className="simpy-fields simpy-fields-capacity">
-            <NumberInput label="CPU cores" unit="cores" min={1} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
-            <NumberInput label="Total RAM" unit="MB" min={1} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
-            <NumberInput label="Network bandwidth" unit="Mbps" min={1} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
-            <NumberInput label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
+            <NumberInput issue={fieldIssues['CPU cores']} label="CPU cores" unit="cores" min={1} value={body.spec.cpu.cores} onChange={v=>updateSpec('cpu','cores',v)}/>
+            <NumberInput issue={fieldIssues['Total RAM']} label="Total RAM" unit="MB" min={1} value={body.spec.ram.total_mb} onChange={v=>updateSpec('ram','total_mb',v)}/>
+            <NumberInput issue={fieldIssues['Network bandwidth']} label="Network bandwidth" unit="Mbps" min={1} value={body.spec.network.bandwidth_mbps} onChange={v=>updateSpec('network','bandwidth_mbps',v)}/>
+            <NumberInput issue={fieldIssues['Maximum connections']} label="Maximum connections" unit="connections" min={1} step={1} value={body.spec.network.max_connections} onChange={v=>updateSpec('network','max_connections',v)}/>
           </div>
         </div>
         <div className="simpy-form-section"><div className="simpy-form-heading"><span>REQUEST WORKLOAD</span><span>WHAT IS DEMANDED</span></div>
           <div className="simpy-preset-row"><span>Request-rate examples</span>{[{rps:100,label:'Normal'},{rps:360,label:'Peak'},{rps:900,label:'Stress'}].map(p=><button type="button" key={p.rps} className={body.load.rps===p.rps?'active':''} onClick={()=>preset(p.rps)}>{p.label} <small>{p.rps} RPS</small></button>)}</div>
           <div className="simpy-fields simpy-fields-workload">
-            <NumberInput label="Arrival rate" unit="RPS" value={body.load.rps} onChange={v=>updateLoad('rps',v)}/>
-            <NumberInput label="CPU time / request" unit="ms" value={body.load.avg_cpu_ms_per_req} onChange={v=>updateLoad('avg_cpu_ms_per_req',v)}/>
-            <NumberInput label="RAM / request" unit="MB" value={body.load.avg_mem_mb_per_req} onChange={v=>updateLoad('avg_mem_mb_per_req',v)}/>
-            <NumberInput label="Concurrent connections" unit="connections" step={1} value={body.load.concurrent_connections} onChange={v=>updateLoad('concurrent_connections',v)}/>
-            <NumberInput label="Response payload" unit="KB" value={body.load.payload_kb} onChange={v=>updateLoad('payload_kb',v)}/>
+            <NumberInput issue={fieldIssues['Arrival rate']} label="Arrival rate" unit="RPS" value={body.load.rps} onChange={v=>updateLoad('rps',v)}/>
+            <NumberInput issue={fieldIssues['CPU time / request']} label="CPU time / request" unit="ms" value={body.load.avg_cpu_ms_per_req} onChange={v=>updateLoad('avg_cpu_ms_per_req',v)}/>
+            <NumberInput issue={fieldIssues['RAM / request']} label="RAM / request" unit="MB" value={body.load.avg_mem_mb_per_req} onChange={v=>updateLoad('avg_mem_mb_per_req',v)}/>
+            <NumberInput issue={fieldIssues['Concurrent connections']} label="Concurrent connections" unit="connections" step={1} value={body.load.concurrent_connections} onChange={v=>updateLoad('concurrent_connections',v)}/>
+            <NumberInput issue={fieldIssues['Response payload']} label="Response payload" unit="KB" value={body.load.payload_kb} onChange={v=>updateLoad('payload_kb',v)}/>
           </div>
           <p className="simpy-preset-note">Presets adjust arrival rate only. Other workload assumptions stay as you entered them.</p>
         </div>
@@ -213,7 +233,7 @@ export default function Simulation(){
           <ArrowRight size={18}/>
         </button>
         <div className="simpy-reset-row"><span><ShieldCheck size={15}/> Model-based evaluation · No production traffic</span><button onClick={reset}><RotateCcw size={14}/> Reset</button></div>
-        {error&&<div role="alert" className={error.startsWith('Input needs correction')?'simpy-error simpy-input-warning':'simpy-error'}><CircleAlert size={18}/><span>{error}</span></div>}
+        {error&&<div ref={errorRef} tabIndex={-1} role="alert" className={error.startsWith('Input needs correction')?'simpy-error simpy-input-warning':'simpy-error'}><CircleAlert size={18}/><span>{error}</span></div>}
       </section>
 
       <div className="simpy-main-column">

@@ -30,3 +30,28 @@ export function validateAlignmentInputs(values:AlignmentInputs):string|null{
   }
   return null;
 }
+
+// Identify the exact fields needing attention, including cross-field memory constraints.
+export function alignmentFieldIssues(values:AlignmentInputs):Partial<Record<keyof AlignmentInputs,string>>{
+  const fields:{key:keyof AlignmentInputs;label:string;min:number}[]=[
+    {key:'peak',label:'Normal demand',min:1},
+    {key:'cores',label:'CPU cores',min:1},
+    {key:'ram',label:'Production RAM',min:1},
+    {key:'cpuMs',label:'CPU time per request',min:1},
+    {key:'memPerReq',label:'Memory per request',min:0},
+    {key:'concurrent',label:'Concurrent connections',min:0},
+    {key:'payload',label:'Response payload',min:0},
+    {key:'bandwidth',label:'Network bandwidth',min:1},
+    {key:'maxConnections',label:'Maximum connections',min:1},
+  ];
+  const issues:Partial<Record<keyof AlignmentInputs,string>>={};
+  for(const {key,label,min} of fields){
+    if(!Number.isSafeInteger(values[key])||values[key]<min){
+      issues[key]=label+' requires a whole number '+(min===0?'of zero or greater.':'greater than zero.');
+    }
+  }
+  if(!issues.memPerReq&&!issues.ram&&values.memPerReq>values.ram){
+    issues.memPerReq='Exceeds production RAM ('+values.ram+' MB). Reduce this value or increase RAM.';
+  }
+  return issues;
+}
