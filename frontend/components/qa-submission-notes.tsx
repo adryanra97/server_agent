@@ -7,7 +7,7 @@ import type { DemoAlignment } from '../lib/demo';
 export default function QaSubmissionNotes({item}:{
   item:Pick<DemoAlignment,'qaNotes'|'createdAt'|'createdBy'>;
 }){
-  const note=item.qaNotes?.trim();
+  const note=typeof item.qaNotes==='string'?item.qaNotes.trim():'';
   const timestamp=Date.parse(item.createdAt);
   const submitted=Number.isFinite(timestamp)
     ?new Date(timestamp).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})
