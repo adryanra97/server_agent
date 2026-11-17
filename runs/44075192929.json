@@ -1,0 +1,2887 @@
+{
+  "schema_version": 1,
+  "run_id": 44075192929,
+  "commit_sha": "9007604dfd9aee93df8cd2e0a92def552afe4146",
+  "branch": "main",
+  "generated_at": "2026-11-17T11:35:55.824388+00:00",
+  "summary": {
+    "total": 313,
+    "passed": 310,
+    "failed": 0,
+    "skipped": 3,
+    "errors": 0,
+    "duration_seconds": 81.18
+  },
+  "tests": [
+    {
+      "id": "backend:tests.test_platform::test_original_engine_registry",
+      "name": "test_original_engine_registry",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_original_health",
+      "name": "test_original_health",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.011,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_original_openapi_document",
+      "name": "test_original_openapi_document",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.086,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_original_rules_engine",
+      "name": "test_original_rules_engine",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_original_schema_validation",
+      "name": "test_original_schema_validation",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_original_simpy_engine",
+      "name": "test_original_simpy_engine",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.167,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_quality_does_not_fabricate_coverage",
+      "name": "test_quality_does_not_fabricate_coverage",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.006,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_quality_empty_runs",
+      "name": "test_quality_empty_runs",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_platform::test_quality_reports_latest_run",
+      "name": "test_quality_reports_latest_run",
+      "group": "test_platform",
+      "file": "backend/tests/test_platform.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_pytest_report_properties::test_report_summary_counts_and_sanitization",
+      "name": "test_report_summary_counts_and_sanitization",
+      "group": "test_pytest_report_properties",
+      "file": "backend/tests/test_pytest_report_properties.py",
+      "status": "passed",
+      "duration_seconds": 6.549,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_pytest_report_publisher::test_report_distinguishes_outcomes_and_source",
+      "name": "test_report_distinguishes_outcomes_and_source",
+      "group": "test_pytest_report_publisher",
+      "file": "backend/tests/test_pytest_report_publisher.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_pytest_report_publisher::test_report_handles_invalid_duration_and_blank_module",
+      "name": "test_report_handles_invalid_duration_and_blank_module",
+      "group": "test_pytest_report_publisher",
+      "file": "backend/tests/test_pytest_report_publisher.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_evidence::test_github_quality_url_is_not_dynamic",
+      "name": "test_github_quality_url_is_not_dynamic",
+      "group": "test_quality_evidence",
+      "file": "backend/tests/test_quality_evidence.py",
+      "status": "passed",
+      "duration_seconds": 0.002,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_evidence::test_quality_fetch_restricts_to_api_github",
+      "name": "test_quality_fetch_restricts_to_api_github",
+      "group": "test_quality_evidence",
+      "file": "backend/tests/test_quality_evidence.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_evidence::test_quality_job_api_failure_retains_run_status",
+      "name": "test_quality_job_api_failure_retains_run_status",
+      "group": "test_quality_evidence",
+      "file": "backend/tests/test_quality_evidence.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_evidence::test_quality_missing_metric_is_not_zero",
+      "name": "test_quality_missing_metric_is_not_zero",
+      "group": "test_quality_evidence",
+      "file": "backend/tests/test_quality_evidence.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_evidence::test_quality_missing_run_fields_are_reported_unavailable",
+      "name": "test_quality_missing_run_fields_are_reported_unavailable",
+      "group": "test_quality_evidence",
+      "file": "backend/tests/test_quality_evidence.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_evidence::test_quality_returns_measured_jobs_and_metrics",
+      "name": "test_quality_returns_measured_jobs_and_metrics",
+      "group": "test_quality_evidence",
+      "file": "backend/tests/test_quality_evidence.py",
+      "status": "passed",
+      "duration_seconds": 0.008,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_properties::test_fetch_rejects_non_github_api_urls",
+      "name": "test_fetch_rejects_non_github_api_urls",
+      "group": "test_quality_properties",
+      "file": "backend/tests/test_quality_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.101,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_properties::test_quality_survives_arbitrary_step_names",
+      "name": "test_quality_survives_arbitrary_step_names",
+      "group": "test_quality_properties",
+      "file": "backend/tests/test_quality_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.807,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_tests::test_quality_tests_default_reads_latest",
+      "name": "test_quality_tests_default_reads_latest",
+      "group": "test_quality_tests",
+      "file": "backend/tests/test_quality_tests.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_tests::test_quality_tests_delivers_real_report",
+      "name": "test_quality_tests_delivers_real_report",
+      "group": "test_quality_tests",
+      "file": "backend/tests/test_quality_tests.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_tests::test_quality_tests_does_not_claim_unavailable_evidence",
+      "name": "test_quality_tests_does_not_claim_unavailable_evidence",
+      "group": "test_quality_tests",
+      "file": "backend/tests/test_quality_tests.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_tests::test_quality_tests_rejects_invalid_run",
+      "name": "test_quality_tests_rejects_invalid_run",
+      "group": "test_quality_tests",
+      "file": "backend/tests/test_quality_tests.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_tests::test_quality_tests_rejects_invalid_schema",
+      "name": "test_quality_tests_rejects_invalid_schema",
+      "group": "test_quality_tests",
+      "file": "backend/tests/test_quality_tests.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_quality_tests::test_quality_tests_rejects_wrong_report_run",
+      "name": "test_quality_tests_rejects_wrong_report_run",
+      "group": "test_quality_tests",
+      "file": "backend/tests/test_quality_tests.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_rules_properties::test_bottleneck_is_max_utilization",
+      "name": "test_bottleneck_is_max_utilization",
+      "group": "test_rules_properties",
+      "file": "backend/tests/test_rules_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.291,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_rules_properties::test_confidence_bounded",
+      "name": "test_confidence_bounded",
+      "group": "test_rules_properties",
+      "file": "backend/tests/test_rules_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.342,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_rules_properties::test_threshold_consistency",
+      "name": "test_threshold_consistency",
+      "group": "test_rules_properties",
+      "file": "backend/tests/test_rules_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.289,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_rules_properties::test_utilization_and_severity_monotone_in_load",
+      "name": "test_utilization_and_severity_monotone_in_load",
+      "group": "test_rules_properties",
+      "file": "backend/tests/test_rules_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.499,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_schemas_properties::test_negative_load_field_rejected",
+      "name": "test_negative_load_field_rejected",
+      "group": "test_schemas_properties",
+      "file": "backend/tests/test_schemas_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.251,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_schemas_properties::test_nonpositive_spec_field_rejected",
+      "name": "test_nonpositive_spec_field_rejected",
+      "group": "test_schemas_properties",
+      "file": "backend/tests/test_schemas_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.299,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_schemas_properties::test_valid_inputs_validate",
+      "name": "test_valid_inputs_validate",
+      "group": "test_schemas_properties",
+      "file": "backend/tests/test_schemas_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.274,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy::test_simpy_agrees_with_rules",
+      "name": "test_simpy_agrees_with_rules",
+      "group": "test_simpy",
+      "file": "backend/tests/test_simpy.py",
+      "status": "passed",
+      "duration_seconds": 2.099,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy::test_simpy_crash_cpu",
+      "name": "test_simpy_crash_cpu",
+      "group": "test_simpy",
+      "file": "backend/tests/test_simpy.py",
+      "status": "passed",
+      "duration_seconds": 1.259,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy::test_simpy_crash_ram",
+      "name": "test_simpy_crash_ram",
+      "group": "test_simpy",
+      "file": "backend/tests/test_simpy.py",
+      "status": "passed",
+      "duration_seconds": 0.165,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy::test_simpy_no_load",
+      "name": "test_simpy_no_load",
+      "group": "test_simpy",
+      "file": "backend/tests/test_simpy.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy::test_simpy_survive",
+      "name": "test_simpy_survive",
+      "group": "test_simpy",
+      "file": "backend/tests/test_simpy.py",
+      "status": "passed",
+      "duration_seconds": 0.17,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_connection_limit_without_contention_remains_consistent",
+      "name": "test_connection_limit_without_contention_remains_consistent",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.169,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_inspection_matches_original_verdict",
+      "name": "test_inspection_matches_original_verdict",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.378,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_less_than_one_expected_arrival_is_not_forced",
+      "name": "test_less_than_one_expected_arrival_is_not_forced",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_nonfinite_request_rates_are_rejected[-inf]",
+      "name": "test_nonfinite_request_rates_are_rejected[-inf]",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_nonfinite_request_rates_are_rejected[inf]",
+      "name": "test_nonfinite_request_rates_are_rejected[inf]",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_nonfinite_request_rates_are_rejected[nan]",
+      "name": "test_nonfinite_request_rates_are_rejected[nan]",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_oversized_memory_rejected_in_both_endpoints",
+      "name": "test_oversized_memory_rejected_in_both_endpoints",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.007,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_diagnostics_are_repeatable",
+      "name": "test_simpy_diagnostics_are_repeatable",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.417,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_direct_engine_blocks_unfulfillable_allocation",
+      "name": "test_simpy_direct_engine_blocks_unfulfillable_allocation",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_idle_includes_zero_arrivals",
+      "name": "test_simpy_idle_includes_zero_arrivals",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_inspection_exposes_offered_and_measured",
+      "name": "test_simpy_inspection_exposes_offered_and_measured",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 1.693,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_inspection_obeys_api_key",
+      "name": "test_simpy_inspection_obeys_api_key",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.212,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_inspection_requires_simpy_engine",
+      "name": "test_simpy_inspection_requires_simpy_engine",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_simpy_zero_memory_is_a_valid_workload",
+      "name": "test_simpy_zero_memory_is_a_valid_workload",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.012,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_single_connection_explains_rules_simpy_difference",
+      "name": "test_single_connection_explains_rules_simpy_difference",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.172,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_inspection::test_tiny_positive_rps_does_not_create_an_infinite_arrival",
+      "name": "test_tiny_positive_rps_does_not_create_an_infinite_arrival",
+      "group": "test_simpy_inspection",
+      "file": "backend/tests/test_simpy_inspection.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_agrees_with_rules_when_clearly_separated",
+      "name": "test_agrees_with_rules_when_clearly_separated",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 3.518,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_deterministic",
+      "name": "test_deterministic",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 2.441,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_evaluate_matches_inspect_for_every_generated_input",
+      "name": "test_evaluate_matches_inspect_for_every_generated_input",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 4.354,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_ram_guard_rejects_oversized_requests",
+      "name": "test_ram_guard_rejects_oversized_requests",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.031,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_simulation_accounts_for_all_arrivals",
+      "name": "test_simulation_accounts_for_all_arrivals",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 1.483,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_simulation_details_are_finite_and_non_negative",
+      "name": "test_simulation_details_are_finite_and_non_negative",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 1.501,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_properties::test_threshold_and_bottleneck_consistency",
+      "name": "test_threshold_and_bottleneck_consistency",
+      "group": "test_simpy_properties",
+      "file": "backend/tests/test_simpy_properties.py",
+      "status": "passed",
+      "duration_seconds": 1.164,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_confidence_is_bounded_at_decision_boundaries[0.0-will_survive]",
+      "name": "test_confidence_is_bounded_at_decision_boundaries[0.0-will_survive]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_confidence_is_bounded_at_decision_boundaries[0.8-will_survive]",
+      "name": "test_confidence_is_bounded_at_decision_boundaries[0.8-will_survive]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_confidence_is_bounded_at_decision_boundaries[0.9-at_risk]",
+      "name": "test_confidence_is_bounded_at_decision_boundaries[0.9-at_risk]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_confidence_is_bounded_at_decision_boundaries[1.0-will_crash]",
+      "name": "test_confidence_is_bounded_at_decision_boundaries[1.0-will_crash]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_confidence_is_bounded_at_decision_boundaries[2.0-will_crash]",
+      "name": "test_confidence_is_bounded_at_decision_boundaries[2.0-will_crash]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_evaluate_returns_the_same_result_as_inspect",
+      "name": "test_evaluate_returns_the_same_result_as_inspect",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.326,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_status_boundaries[0.0-ok]",
+      "name": "test_status_boundaries[0.0-ok]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_status_boundaries[0.7999-ok]",
+      "name": "test_status_boundaries[0.7999-ok]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_status_boundaries[0.8-warning]",
+      "name": "test_status_boundaries[0.8-warning]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_status_boundaries[1.0-warning]",
+      "name": "test_status_boundaries[1.0-warning]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_status_boundaries[1.0001-critical]",
+      "name": "test_status_boundaries[1.0001-critical]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_tiny_fractional_memory_requests_complete",
+      "name": "test_tiny_fractional_memory_requests_complete",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.002,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[0.25-0.9-0.25]",
+      "name": "test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[0.25-0.9-0.25]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[0.99-1.0-0.99]",
+      "name": "test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[0.99-1.0-0.99]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[0.99-1.01-1.01]",
+      "name": "test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[0.99-1.01-1.01]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_simpy_unit::test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[1.0-2.0-2.0]",
+      "name": "test_utilization_uses_measured_value_until_offered_load_is_oversubscribed[1.0-2.0-2.0]",
+      "group": "test_simpy_unit",
+      "file": "backend/tests/test_simpy_unit.py",
+      "status": "passed",
+      "duration_seconds": 0.001,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline::test_api_idle_trace_one_zero_bucket",
+      "name": "test_api_idle_trace_one_zero_bucket",
+      "group": "test_timeline",
+      "file": "backend/tests/test_timeline.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline::test_api_trace_reproducible_and_same_original_verdict",
+      "name": "test_api_trace_reproducible_and_same_original_verdict",
+      "group": "test_timeline",
+      "file": "backend/tests/test_timeline.py",
+      "status": "passed",
+      "duration_seconds": 0.595,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline::test_api_trace_uses_real_simpy_counters",
+      "name": "test_api_trace_uses_real_simpy_counters",
+      "group": "test_timeline",
+      "file": "backend/tests/test_timeline.py",
+      "status": "passed",
+      "duration_seconds": 0.214,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline::test_recorder_caps_response_and_ignores_outside_events",
+      "name": "test_recorder_caps_response_and_ignores_outside_events",
+      "group": "test_timeline",
+      "file": "backend/tests/test_timeline.py",
+      "status": "passed",
+      "duration_seconds": 0.002,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline::test_recorder_integrates_intervals_across_second_boundaries",
+      "name": "test_recorder_integrates_intervals_across_second_boundaries",
+      "group": "test_timeline",
+      "file": "backend/tests/test_timeline.py",
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline_properties::test_finish_structural_invariants",
+      "name": "test_finish_structural_invariants",
+      "group": "test_timeline_properties",
+      "file": "backend/tests/test_timeline_properties.py",
+      "status": "passed",
+      "duration_seconds": 2.345,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline_properties::test_interval_clipping_matches_explicit_clamp",
+      "name": "test_interval_clipping_matches_explicit_clamp",
+      "group": "test_timeline_properties",
+      "file": "backend/tests/test_timeline_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.146,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_timeline_properties::test_interval_fully_in_range_is_lossless",
+      "name": "test_interval_fully_in_range_is_lossless",
+      "group": "test_timeline_properties",
+      "file": "backend/tests/test_timeline_properties.py",
+      "status": "passed",
+      "duration_seconds": 0.207,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_api_key_optional",
+      "name": "test_api_key_optional",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.012,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_crash_cpu",
+      "name": "test_crash_cpu",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_crash_network",
+      "name": "test_crash_network",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_crash_ram",
+      "name": "test_crash_ram",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_engines",
+      "name": "test_engines",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_health",
+      "name": "test_health",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_openapi_json",
+      "name": "test_openapi_json",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.003,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_rules_no_load",
+      "name": "test_rules_no_load",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.005,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_survive",
+      "name": "test_survive",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_unknown_engine",
+      "name": "test_unknown_engine",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_unknown_route_404",
+      "name": "test_unknown_route_404",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.003,
+      "suite": "backend"
+    },
+    {
+      "id": "backend:tests.test_verdict::test_validation_error",
+      "name": "test_validation_error",
+      "group": "test_verdict",
+      "file": "backend/tests/test_verdict.py",
+      "status": "passed",
+      "duration_seconds": 0.004,
+      "suite": "backend"
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > defaults an incomplete report context to a non-LLM explanation",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > defaults an incomplete report context to a non-LLM explanation",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0009
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > describes a genuinely indeterminate SimPy result without inventing a verdict",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > describes a genuinely indeterminate SimPy result without inventing a verdict",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0017
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > does not replace an indeterminate verdict when returning LLM explanation",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > does not replace an indeterminate verdict when returning LLM explanation",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > fails closed when the provider sends an empty or incompatible response",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > fails closed when the provider sends an empty or incompatible response",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0019
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > fails validation for a partial model provider session",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > fails validation for a partial model provider session",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0031
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > rejects a missing or nonfinite workload before attempting model reasoning",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > rejects a missing or nonfinite workload before attempting model reasoning",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0012
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > rejects null, nonobject and missing request kinds",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > rejects null, nonobject and missing request kinds",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0019
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > rejects unparseable request bodies and does not contact providers",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > rejects unparseable request bodies and does not contact providers",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0084
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > returns a sanitized error when the provider supplies invalid JSON",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > returns a sanitized error when the provider supplies invalid JSON",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::LLM route defensive paths and interpretation safety > truncates long generated narrative rather than emitting unlimited tokens",
+      "suite": "frontend",
+      "name": "LLM route defensive paths and interpretation safety > truncates long generated narrative rather than emitting unlimited tokens",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0014
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.edge.test.ts::Non-leaking LLM prompt defaults > handles a report with missing summary and notes through a configured provider",
+      "suite": "frontend",
+      "name": "Non-leaking LLM prompt defaults > handles a report with missing summary and notes through a configured provider",
+      "group": "app/api/reasoning/route.edge.test.ts",
+      "file": "frontend/app/api/reasoning/route.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > calls only the allowlisted provider, without redirects or caching",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > calls only the allowlisted provider, without redirects or caching",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0011
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > does not claim to run an LLM without session credentials",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > does not claim to run an LLM without session credentials",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0012
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > does not leak secrets when the provider rejects the token",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > does not leak secrets when the provider rejects the token",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0016
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > does not override SimPy verdicts when enriching a report",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > does not override SimPy verdicts when enriching a report",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > fails closed if the provider cannot be reached",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > fails closed if the provider cannot be reached",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0018
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > prevents overlong bodies before parsing sensitive configuration",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > prevents overlong bodies before parsing sensitive configuration",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects invalid RPS for indeterminate explanations",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > rejects invalid RPS for indeterminate explanations",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects missing API key on connection test",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > rejects missing API key on connection test",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects private-network endpoints (SSRF regression)",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > rejects private-network endpoints (SSRF regression)",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.001
+    },
+    {
+      "id": "frontend:app/api/reasoning/route.test.ts::LLM proxy security and boundary enforcement > rejects unsupported request types without provider calls",
+      "suite": "frontend",
+      "name": "LLM proxy security and boundary enforcement > rejects unsupported request types without provider calls",
+      "group": "app/api/reasoning/route.test.ts",
+      "file": "frontend/app/api/reasoning/route.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0078
+    },
+    {
+      "id": "frontend:components/access-roles.test.tsx::Access & Roles permission matrix > shows actual permissions for all five roles across six workspace menus",
+      "suite": "frontend",
+      "name": "Access & Roles permission matrix > shows actual permissions for all five roles across six workspace menus",
+      "group": "components/access-roles.test.tsx",
+      "file": "frontend/components/access-roles.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.2331
+    },
+    {
+      "id": "frontend:components/access-roles.test.tsx::Access & Roles permission matrix > shows which role is active and switches perspective through the demo session",
+      "suite": "frontend",
+      "name": "Access & Roles permission matrix > shows which role is active and switches perspective through the demo session",
+      "group": "components/access-roles.test.tsx",
+      "file": "frontend/components/access-roles.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.1308
+    },
+    {
+      "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > allows returning a cycle to Development",
+      "suite": "frontend",
+      "name": "Technical Lead release decision controls > allows returning a cycle to Development",
+      "group": "components/alignment-decision.test.tsx",
+      "file": "frontend/components/alignment-decision.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0536
+    },
+    {
+      "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > lets the reviewer edit the rationale before confirming",
+      "suite": "frontend",
+      "name": "Technical Lead release decision controls > lets the reviewer edit the rationale before confirming",
+      "group": "components/alignment-decision.test.tsx",
+      "file": "frontend/components/alignment-decision.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0366
+    },
+    {
+      "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > requires a review note before confirmation",
+      "suite": "frontend",
+      "name": "Technical Lead release decision controls > requires a review note before confirmation",
+      "group": "components/alignment-decision.test.tsx",
+      "file": "frontend/components/alignment-decision.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0881
+    },
+    {
+      "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > shows confirmation before committing sign-off recommendation",
+      "suite": "frontend",
+      "name": "Technical Lead release decision controls > shows confirmation before committing sign-off recommendation",
+      "group": "components/alignment-decision.test.tsx",
+      "file": "frontend/components/alignment-decision.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0629
+    },
+    {
+      "id": "frontend:components/alignment-decision.test.tsx::Technical Lead release decision controls > warns when forwarding an overloaded model outcome",
+      "suite": "frontend",
+      "name": "Technical Lead release decision controls > warns when forwarding an overloaded model outcome",
+      "group": "components/alignment-decision.test.tsx",
+      "file": "frontend/components/alignment-decision.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0258
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > clears visible replay failures after selecting another scenario",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > clears visible replay failures after selecting another scenario",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.1027
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > does not display internal non-Error thrown objects to users",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > does not display internal non-Error thrown objects to users",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0642
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > falls back to another available scenario if the selected one disappears",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > falls back to another available scenario if the selected one disappears",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.034
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > never offers synthetic playback for an unassessable workload",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > never offers synthetic playback for an unassessable workload",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0583
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > rejects an incomplete backend trace instead of fabricating animation",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > rejects an incomplete backend trace instead of fabricating animation",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0812
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > renders custom headings for saved release evidence",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > renders custom headings for saved release evidence",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0728
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > renders nothing for an empty scenario list",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > renders nothing for an empty scenario list",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0138
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > shows a progress state until an actual model inspection resolves",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > shows a progress state until an actual model inspection resolves",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.1341
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > shows a real trend for older scenarios that lack full replay fields",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > shows a real trend for older scenarios that lack full replay fields",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.051
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.edge.test.tsx::Simulation playback degradation and error recovery > shows the backend error and supports retry",
+      "suite": "frontend",
+      "name": "Simulation playback degradation and error recovery > shows the backend error and supports retry",
+      "group": "components/alignment-scenario-replay.edge.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.edge.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0809
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > can fetch an actual replay for older saved cases",
+      "suite": "frontend",
+      "name": "QA/Technical Lead simulation visualization > can fetch an actual replay for older saved cases",
+      "group": "components/alignment-scenario-replay.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0757
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > does not invent a replay for missing event data",
+      "suite": "frontend",
+      "name": "QA/Technical Lead simulation visualization > does not invent a replay for missing event data",
+      "group": "components/alignment-scenario-replay.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0292
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > does not trigger a network replay without the user's click",
+      "suite": "frontend",
+      "name": "QA/Technical Lead simulation visualization > does not trigger a network replay without the user's click",
+      "group": "components/alignment-scenario-replay.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0405
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > renders real timeline replay for normal load",
+      "suite": "frontend",
+      "name": "QA/Technical Lead simulation visualization > renders real timeline replay for normal load",
+      "group": "components/alignment-scenario-replay.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0492
+    },
+    {
+      "id": "frontend:components/alignment-scenario-replay.test.tsx::QA/Technical Lead simulation visualization > switches between normal, double and triple demand",
+      "suite": "frontend",
+      "name": "QA/Technical Lead simulation visualization > switches between normal, double and triple demand",
+      "group": "components/alignment-scenario-replay.test.tsx",
+      "file": "frontend/components/alignment-scenario-replay.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0948
+    },
+    {
+      "id": "frontend:components/back-to-top.test.tsx::Back-to-top affordance > respects reduced motion and hides on short pages",
+      "suite": "frontend",
+      "name": "Back-to-top affordance > respects reduced motion and hides on short pages",
+      "group": "components/back-to-top.test.tsx",
+      "file": "frontend/components/back-to-top.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.011
+    },
+    {
+      "id": "frontend:components/back-to-top.test.tsx::Back-to-top affordance > stays out of the way at the top and appears after scrolling a long page",
+      "suite": "frontend",
+      "name": "Back-to-top affordance > stays out of the way at the top and appears after scrolling a long page",
+      "group": "components/back-to-top.test.tsx",
+      "file": "frontend/components/back-to-top.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0951
+    },
+    {
+      "id": "frontend:components/demo-login.test.tsx::five-persona guided login > persists the selected persona and clears an error when the password changes",
+      "suite": "frontend",
+      "name": "five-persona guided login > persists the selected persona and clears an error when the password changes",
+      "group": "components/demo-login.test.tsx",
+      "file": "frontend/components/demo-login.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0835
+    },
+    {
+      "id": "frontend:components/demo-login.test.tsx::five-persona guided login > rejects an incorrect password without creating a session",
+      "suite": "frontend",
+      "name": "five-persona guided login > rejects an incorrect password without creating a session",
+      "group": "components/demo-login.test.tsx",
+      "file": "frontend/components/demo-login.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.1779
+    },
+    {
+      "id": "frontend:components/demo-login.test.tsx::five-persona guided login > shows and hides password, then uses the provided demo credentials",
+      "suite": "frontend",
+      "name": "five-persona guided login > shows and hides password, then uses the provided demo credentials",
+      "group": "components/demo-login.test.tsx",
+      "file": "frontend/components/demo-login.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.1047
+    },
+    {
+      "id": "frontend:components/engine-comparison.test.tsx::Engine cross-check visual comparison > highlights the largest difference while retaining exact model values",
+      "suite": "frontend",
+      "name": "Engine cross-check visual comparison > highlights the largest difference while retaining exact model values",
+      "group": "components/engine-comparison.test.tsx",
+      "file": "frontend/components/engine-comparison.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.1134
+    },
+    {
+      "id": "frontend:components/engine-comparison.test.tsx::Engine cross-check visual comparison > shows a clear message when verdicts disagree",
+      "suite": "frontend",
+      "name": "Engine cross-check visual comparison > shows a clear message when verdicts disagree",
+      "group": "components/engine-comparison.test.tsx",
+      "file": "frontend/components/engine-comparison.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0156
+    },
+    {
+      "id": "frontend:components/engine-comparison.test.tsx::Engine cross-check visual comparison > uses a shared scale for ratios over capacity, without hiding the percentage",
+      "suite": "frontend",
+      "name": "Engine cross-check visual comparison > uses a shared scale for ratios over capacity, without hiding the percentage",
+      "group": "components/engine-comparison.test.tsx",
+      "file": "frontend/components/engine-comparison.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0266
+    },
+    {
+      "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > groups six real modules by user goal instead of repeating equal-weight feature cards",
+      "suite": "frontend",
+      "name": "Examiner-facing editorial Showcase > groups six real modules by user goal instead of repeating equal-weight feature cards",
+      "group": "components/platform-showcase.test.tsx",
+      "file": "frontend/components/platform-showcase.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0394
+    },
+    {
+      "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > presents a focused goal, an actionable route, and the existing role boundaries",
+      "suite": "frontend",
+      "name": "Examiner-facing editorial Showcase > presents a focused goal, an actionable route, and the existing role boundaries",
+      "group": "components/platform-showcase.test.tsx",
+      "file": "frontend/components/platform-showcase.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.353
+    },
+    {
+      "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > provides a clearly labeled three-step live demonstration for an examiner",
+      "suite": "frontend",
+      "name": "Examiner-facing editorial Showcase > provides a clearly labeled three-step live demonstration for an examiner",
+      "group": "components/platform-showcase.test.tsx",
+      "file": "frontend/components/platform-showcase.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0419
+    },
+    {
+      "id": "frontend:components/platform-showcase.test.tsx::Examiner-facing editorial Showcase > surfaces authentic CI/CD and API artifacts early with explicit source links",
+      "suite": "frontend",
+      "name": "Examiner-facing editorial Showcase > surfaces authentic CI/CD and API artifacts early with explicit source links",
+      "group": "components/platform-showcase.test.tsx",
+      "file": "frontend/components/platform-showcase.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.2191
+    },
+    {
+      "id": "frontend:components/trace-preview.test.tsx::recorded SimPy timeline preview > extends chart range above 100% without hiding an overloaded model sample",
+      "suite": "frontend",
+      "name": "recorded SimPy timeline preview > extends chart range above 100% without hiding an overloaded model sample",
+      "group": "components/trace-preview.test.tsx",
+      "file": "frontend/components/trace-preview.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0056
+    },
+    {
+      "id": "frontend:components/trace-preview.test.tsx::recorded SimPy timeline preview > labels absent, empty and one-bucket traces as unavailable, never as a measured chart",
+      "suite": "frontend",
+      "name": "recorded SimPy timeline preview > labels absent, empty and one-bucket traces as unavailable, never as a measured chart",
+      "group": "components/trace-preview.test.tsx",
+      "file": "frontend/components/trace-preview.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0236
+    },
+    {
+      "id": "frontend:components/trace-preview.test.tsx::recorded SimPy timeline preview > renders three paths from actual saved CPU, RAM and network samples",
+      "suite": "frontend",
+      "name": "recorded SimPy timeline preview > renders three paths from actual saved CPU, RAM and network samples",
+      "group": "components/trace-preview.test.tsx",
+      "file": "frontend/components/trace-preview.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0361
+    },
+    {
+      "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > does not accept decimal punctuation or exponent syntax",
+      "suite": "frontend",
+      "name": "Whole number demo input > does not accept decimal punctuation or exponent syntax",
+      "group": "components/whole-number-input.test.tsx",
+      "file": "frontend/components/whole-number-input.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0046
+    },
+    {
+      "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > does not round numbers outside safe integer range",
+      "suite": "frontend",
+      "name": "Whole number demo input > does not round numbers outside safe integer range",
+      "group": "components/whole-number-input.test.tsx",
+      "file": "frontend/components/whole-number-input.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0031
+    },
+    {
+      "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > keeps a deleted field empty instead of inserting zero",
+      "suite": "frontend",
+      "name": "Whole number demo input > keeps a deleted field empty instead of inserting zero",
+      "group": "components/whole-number-input.test.tsx",
+      "file": "frontend/components/whole-number-input.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0633
+    },
+    {
+      "id": "frontend:components/whole-number-input.test.tsx::Whole number demo input > normalizes leading zeroes",
+      "suite": "frontend",
+      "name": "Whole number demo input > normalizes leading zeroes",
+      "group": "components/whole-number-input.test.tsx",
+      "file": "frontend/components/whole-number-input.test.tsx",
+      "status": "passed",
+      "duration_seconds": 0.0043
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment field-level validation feedback > attaches impossible per-request memory to its input",
+      "suite": "frontend",
+      "name": "Alignment field-level validation feedback > attaches impossible per-request memory to its input",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment field-level validation feedback > identifies a missing workload field",
+      "suite": "frontend",
+      "name": "Alignment field-level validation feedback > identifies a missing workload field",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0001
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > accepts valid whole-number input",
+      "suite": "frontend",
+      "name": "Alignment input preflight > accepts valid whole-number input",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0015
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > allows overload scenarios to reach SimPy",
+      "suite": "frontend",
+      "name": "Alignment input preflight > allows overload scenarios to reach SimPy",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0032
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > blocks one request that needs more memory than the server holds",
+      "suite": "frontend",
+      "name": "Alignment input preflight > blocks one request that needs more memory than the server holds",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > does not accept fractional inputs",
+      "suite": "frontend",
+      "name": "Alignment input preflight > does not accept fractional inputs",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0001
+    },
+    {
+      "id": "frontend:lib/alignment-input-validation.test.ts::Alignment input preflight > flags a cleared field",
+      "suite": "frontend",
+      "name": "Alignment input preflight > flags a cleared field",
+      "group": "lib/alignment-input-validation.test.ts",
+      "file": "frontend/lib/alignment-input-validation.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Defensive paths in browser workflow storage > exports partially missing fields safely as empty CSV cells",
+      "suite": "frontend",
+      "name": "Defensive paths in browser workflow storage > exports partially missing fields safely as empty CSV cells",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0005
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Defensive paths in browser workflow storage > ignores browser APIs that throw during role inspection",
+      "suite": "frontend",
+      "name": "Defensive paths in browser workflow storage > ignores browser APIs that throw during role inspection",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > avoids localStorage and sessionStorage during SSR",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > avoids localStorage and sessionStorage during SSR",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0006
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > falls back to a valid persona for an unknown role",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > falls back to a valid persona for an unknown role",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > handles empty workflow CSV exports without throwing",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > handles empty workflow CSV exports without throwing",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.001
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > ignores invalid identities placed directly in sessionStorage",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > ignores invalid identities placed directly in sessionStorage",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > ignores unknown roles submitted to the role switcher",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > ignores unknown roles submitted to the role switcher",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > keeps incidents when updating alignment records",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > keeps incidents when updating alignment records",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > never returns another role for a forbidden menu",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > never returns another role for a forbidden menu",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0017
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > preserves valid alignments while ignoring a bad incident collection",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > preserves valid alignments while ignoring a bad incident collection",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > returns empty data if stored records have incorrect array types",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > returns empty data if stored records have incorrect array types",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > shows that client-side role access is not production authentication",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > shows that client-side role access is not production authentication",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.002
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > upserts incidents by identity without removing another incident",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > upserts incidents by identity without removing another incident",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0006
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > writes escaped CSV content and cleans up its temporary URL",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > writes escaped CSV content and cleans up its temporary URL",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0026
+    },
+    {
+      "id": "frontend:lib/demo-records.test.ts::Demo role and workflow data robustness > writes records and dispatches a workspace update event",
+      "suite": "frontend",
+      "name": "Demo role and workflow data robustness > writes records and dispatches a workspace update event",
+      "group": "lib/demo-records.test.ts",
+      "file": "frontend/lib/demo-records.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0015
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Completed starter scenarios with an honest unassessable case > treats preserved not-assessable scenarios as completed evidence, not a reason to retry",
+      "suite": "frontend",
+      "name": "Completed starter scenarios with an honest unassessable case > treats preserved not-assessable scenarios as completed evidence, not a reason to retry",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > backfills missing 1x/2x/3x traces without changing signed approvals",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > backfills missing 1x/2x/3x traces without changing signed approvals",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > considers complete 1x/2x/3x proof ready and avoids replay",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > considers complete 1x/2x/3x proof ready and avoids replay",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not create a fake case when the initial SimPy evaluation fails",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > does not create a fake case when the initial SimPy evaluation fails",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not re-run a previously unassessable legacy stress scenario",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > does not re-run a previously unassessable legacy stress scenario",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not repeat model calls for a fully completed seed",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > does not repeat model calls for a fully completed seed",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > does not replay an old non-SimPy run as a SimPy result",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > does not replay an old non-SimPy run as a SimPy result",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > keeps an older approved case if its original run is no longer available",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > keeps an older approved case if its original run is no longer available",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > marks failed follow-up scenarios indeterminate without changing the baseline",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > marks failed follow-up scenarios indeterminate without changing the baseline",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0005
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > never generates synthetic starter records when a shared cloud history is active",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > never generates synthetic starter records when a shared cloud history is active",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.002
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > preserves existing partial cases on replay errors and flags missing ones",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > preserves existing partial cases on replay errors and flags missing ones",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0005
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > preserves old evidence when replaying a model changes the saved verdict",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > preserves old evidence when replaying a model changes the saved verdict",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > reuses an in-progress upgrade promise for an older case",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > reuses an in-progress upgrade promise for an older case",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > seeds the baseline and both stress levels using evaluated model results",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > seeds the baseline and both stress levels using evaluated model results",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0019
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > shares one starter-generation promise across overlapping browser loads",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > shares one starter-generation promise across overlapping browser loads",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/demo-starter.test.ts::Guided QRIS case generation using real SimPy evidence > uses the actual SimPy verdict and never fabricates passing results",
+      "suite": "frontend",
+      "name": "Guided QRIS case generation using real SimPy evidence > uses the actual SimPy verdict and never fabricates passing results",
+      "group": "lib/demo-starter.test.ts",
+      "file": "frontend/lib/demo-starter.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > does not treat corrupted localStorage as valid case records",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > does not treat corrupted localStorage as valid case records",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > exposes five distinct demo personas",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > exposes five distinct demo personas",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0021
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > keeps previously saved release evidence when switching user roles",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > keeps previously saved release evidence when switching user roles",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > logs out and clears temporary LLM credentials",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > logs out and clears temporary LLM credentials",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > rejects incorrect demo passwords",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > rejects incorrect demo passwords",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > restricts menus by role in the presentation layer",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > restricts menus by role in the presentation layer",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > returns a known persona for a selected role",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > returns a known persona for a selected role",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > shares engineering demonstrations with all five personas independently of workflow actions",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > shares engineering demonstrations with all five personas independently of workflow actions",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0014
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > supports switching role without overwriting existing case records",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > supports switching role without overwriting existing case records",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0024
+    },
+    {
+      "id": "frontend:lib/demo.test.ts::role-aware TwinPeak demo workflows > upserts a case while keeping unrelated records",
+      "suite": "frontend",
+      "name": "role-aware TwinPeak demo workflows > upserts a case while keeping unrelated records",
+      "group": "lib/demo.test.ts",
+      "file": "frontend/lib/demo.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > checks maximum model identifier length and whitespace-only tokens",
+      "suite": "frontend",
+      "name": "LLM credential boundaries and malformed data > checks maximum model identifier length and whitespace-only tokens",
+      "group": "lib/llm-session.edge.test.ts",
+      "file": "frontend/lib/llm-session.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > does not expose browser credentials while rendering on the server",
+      "suite": "frontend",
+      "name": "LLM credential boundaries and malformed data > does not expose browser credentials while rendering on the server",
+      "group": "lib/llm-session.edge.test.ts",
+      "file": "frontend/lib/llm-session.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > fails safely when API response is not JSON",
+      "suite": "frontend",
+      "name": "LLM credential boundaries and malformed data > fails safely when API response is not JSON",
+      "group": "lib/llm-session.edge.test.ts",
+      "file": "frontend/lib/llm-session.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0017
+    },
+    {
+      "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > rejects a successful HTTP status with no valid explanatory text",
+      "suite": "frontend",
+      "name": "LLM credential boundaries and malformed data > rejects a successful HTTP status with no valid explanatory text",
+      "group": "lib/llm-session.edge.test.ts",
+      "file": "frontend/lib/llm-session.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > rejects client-side session save with an unsupported provider",
+      "suite": "frontend",
+      "name": "LLM credential boundaries and malformed data > rejects client-side session save with an unsupported provider",
+      "group": "lib/llm-session.edge.test.ts",
+      "file": "frontend/lib/llm-session.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.001
+    },
+    {
+      "id": "frontend:lib/llm-session.edge.test.ts::LLM credential boundaries and malformed data > rejects valid JSON that is not an approved session configuration",
+      "suite": "frontend",
+      "name": "LLM credential boundaries and malformed data > rejects valid JSON that is not an approved session configuration",
+      "group": "lib/llm-session.edge.test.ts",
+      "file": "frontend/lib/llm-session.edge.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0017
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > accepts a supported provider and exact host",
+      "suite": "frontend",
+      "name": "LLM session security > accepts a supported provider and exact host",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0011
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > allows explicit credential cleanup",
+      "suite": "frontend",
+      "name": "LLM session security > allows explicit credential cleanup",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > does not send credentials without a configured session",
+      "suite": "frontend",
+      "name": "LLM session security > does not send credentials without a configured session",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0009
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > forwards a configured session only when requesting reasoning",
+      "suite": "frontend",
+      "name": "LLM session security > forwards a configured session only when requesting reasoning",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > propagates failed reasoning responses without echoing provider credentials",
+      "suite": "frontend",
+      "name": "LLM session security > propagates failed reasoning responses without echoing provider credentials",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0009
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > rejects arbitrary, local and private-network endpoints",
+      "suite": "frontend",
+      "name": "LLM session security > rejects arbitrary, local and private-network endpoints",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > rejects corrupted browser session JSON",
+      "suite": "frontend",
+      "name": "LLM session security > rejects corrupted browser session JSON",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0001
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > rejects empty keys, empty models, and overlong credentials",
+      "suite": "frontend",
+      "name": "LLM session security > rejects empty keys, empty models, and overlong credentials",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/llm-session.test.ts::LLM session security > stores credentials only in sessionStorage, never in localStorage",
+      "suite": "frontend",
+      "name": "LLM session security > stores credentials only in sessionStorage, never in localStorage",
+      "group": "lib/llm-session.test.ts",
+      "file": "frontend/lib/llm-session.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0009
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > does not access browser storage when rendering on the server",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > does not access browser storage when rendering on the server",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > exports a real CSV with escaped quote characters and revokes its object URL",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > exports a real CSV with escaped quote characters and revokes its object URL",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0027
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > exports an empty CSV header when no evaluations match",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > exports an empty CSV header when no evaluations match",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0006
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > handles failed JSON parsing without exposing a misleading provider result",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > handles failed JSON parsing without exposing a misleading provider result",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > handles object-valued API errors with an HTTP status",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > handles object-valued API errors with an HTTP status",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > handles unparsable inspect responses safely",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > handles unparsable inspect responses safely",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > has a label and help text for every supported verdict",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > has a label and help text for every supported verdict",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0015
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > limits local history to 50 runs to protect browser storage",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > limits local history to 50 runs to protect browser storage",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0098
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > posts the typed model workload and returns the original verdict",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > posts the typed model workload and returns the original verdict",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0006
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > preserves a validated API rejection message",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > preserves a validated API rejection message",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > rejects a successful HTTP response without a real SimPy timeline",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > rejects a successful HTTP response without a real SimPy timeline",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > rejects corrupted local history rather than crashing",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > rejects corrupted local history rather than crashing",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > saves actual runs, newest first, and broadcasts history changes",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > saves actual runs, newest first, and broadcasts history changes",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0017
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > starts with empty local evaluation history",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > starts with empty local evaluation history",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0007
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > surfaces a typed backend inspect error",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > surfaces a typed backend inspect error",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/model.test.ts::Capacity model storage and API contracts > uses the production SimPy inspect endpoint with no caching",
+      "suite": "frontend",
+      "name": "Capacity model storage and API contracts > uses the production SimPy inspect endpoint with no caching",
+      "group": "lib/model.test.ts",
+      "file": "frontend/lib/model.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > allows QA creation but not manager forging QA evidence",
+      "suite": "frontend",
+      "name": "server-enforced demo workflow transitions > allows QA creation but not manager forging QA evidence",
+      "group": "lib/persistence-rules.test.ts",
+      "file": "frontend/lib/persistence-rules.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0019
+    },
+    {
+      "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > allows sign-off only after review",
+      "suite": "frontend",
+      "name": "server-enforced demo workflow transitions > allows sign-off only after review",
+      "group": "lib/persistence-rules.test.ts",
+      "file": "frontend/lib/persistence-rules.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > keeps evidence immutable when Technical Lead reviews it",
+      "suite": "frontend",
+      "name": "server-enforced demo workflow transitions > keeps evidence immutable when Technical Lead reviews it",
+      "group": "lib/persistence-rules.test.ts",
+      "file": "frontend/lib/persistence-rules.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > permits incident creation by support and analysis by engineer",
+      "suite": "frontend",
+      "name": "server-enforced demo workflow transitions > permits incident creation by support and analysis by engineer",
+      "group": "lib/persistence-rules.test.ts",
+      "file": "frontend/lib/persistence-rules.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/persistence-rules.test.ts::server-enforced demo workflow transitions > stores simulations immutably and reports as snapshots",
+      "suite": "frontend",
+      "name": "server-enforced demo workflow transitions > stores simulations immutably and reports as snapshots",
+      "group": "lib/persistence-rules.test.ts",
+      "file": "frontend/lib/persistence-rules.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/quality-branch.test.ts::branch-specific verified engineering quality > counts only truly executed cases and excludes skips",
+      "suite": "frontend",
+      "name": "branch-specific verified engineering quality > counts only truly executed cases and excludes skips",
+      "group": "lib/quality-branch.test.ts",
+      "file": "frontend/lib/quality-branch.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/quality-branch.test.ts::branch-specific verified engineering quality > uses production evidence in main and local builds",
+      "suite": "frontend",
+      "name": "branch-specific verified engineering quality > uses production evidence in main and local builds",
+      "group": "lib/quality-branch.test.ts",
+      "file": "frontend/lib/quality-branch.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/quality-branch.test.ts::branch-specific verified engineering quality > uses the staging report on Vercel staging deployments",
+      "suite": "frontend",
+      "name": "branch-specific verified engineering quality > uses the staging report on Vercel staging deployments",
+      "group": "lib/quality-branch.test.ts",
+      "file": "frontend/lib/quality-branch.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0043
+    },
+    {
+      "id": "frontend:lib/quality-evidence.test.ts::Hypothesis evidence > calculates totals only from recorded property cases",
+      "suite": "frontend",
+      "name": "Hypothesis evidence > calculates totals only from recorded property cases",
+      "group": "lib/quality-evidence.test.ts",
+      "file": "frontend/lib/quality-evidence.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0008
+    },
+    {
+      "id": "frontend:lib/quality-evidence.test.ts::Hypothesis evidence > identifies Python property tests, not unrelated files",
+      "suite": "frontend",
+      "name": "Hypothesis evidence > identifies Python property tests, not unrelated files",
+      "group": "lib/quality-evidence.test.ts",
+      "file": "frontend/lib/quality-evidence.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0018
+    },
+    {
+      "id": "frontend:lib/quality-evidence.test.ts::Hypothesis evidence > returns zero counts when there is no evidence",
+      "suite": "frontend",
+      "name": "Hypothesis evidence > returns zero counts when there is no evidence",
+      "group": "lib/quality-evidence.test.ts",
+      "file": "frontend/lib/quality-evidence.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/replay-step.test.ts::recorded replay stepping > does not animate an empty or single-sample trace",
+      "suite": "frontend",
+      "name": "recorded replay stepping > does not animate an empty or single-sample trace",
+      "group": "lib/replay-step.test.ts",
+      "file": "frontend/lib/replay-step.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0001
+    },
+    {
+      "id": "frontend:lib/replay-step.test.ts::recorded replay stepping > starts again at the first recorded sample when looping",
+      "suite": "frontend",
+      "name": "recorded replay stepping > starts again at the first recorded sample when looping",
+      "group": "lib/replay-step.test.ts",
+      "file": "frontend/lib/replay-step.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0014
+    },
+    {
+      "id": "frontend:lib/replay-step.test.ts::recorded replay stepping > stays at the end when repeat is turned off",
+      "suite": "frontend",
+      "name": "recorded replay stepping > stays at the end when repeat is turned off",
+      "group": "lib/replay-step.test.ts",
+      "file": "frontend/lib/replay-step.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0001
+    },
+    {
+      "id": "frontend:lib/resource-pressure.test.ts::recorded resource pressure > does not infer load before the model returns a sample",
+      "suite": "frontend",
+      "name": "recorded resource pressure > does not infer load before the model returns a sample",
+      "group": "lib/resource-pressure.test.ts",
+      "file": "frontend/lib/resource-pressure.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0014
+    },
+    {
+      "id": "frontend:lib/resource-pressure.test.ts::recorded resource pressure > labels occupancy without claiming that the server crashed",
+      "suite": "frontend",
+      "name": "recorded resource pressure > labels occupancy without claiming that the server crashed",
+      "group": "lib/resource-pressure.test.ts",
+      "file": "frontend/lib/resource-pressure.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/resource-pressure.test.ts::recorded resource pressure > uses the recorded 80% and 100% thresholds",
+      "suite": "frontend",
+      "name": "recorded resource pressure > uses the recorded 80% and 100% thresholds",
+      "group": "lib/resource-pressure.test.ts",
+      "file": "frontend/lib/resource-pressure.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > identifies incomplete historical traces without inventing zero values",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > identifies incomplete historical traces without inventing zero values",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > limits user-requested samples to 200",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > limits user-requested samples to 200",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.001
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > preserves optional animation fields for the hardware replay",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > preserves optional animation fields for the hardware replay",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0004
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > removes malformed and NaN bucket data",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > removes malformed and NaN bucket data",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > retains the real input buckets when already within the sample limit",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > retains the real input buckets when already within the sample limit",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0065
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > samples a bounded trace using actual endpoints and no fabricated buckets",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > samples a bounded trace using actual endpoints and no fabricated buckets",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.2145
+    },
+    {
+      "id": "frontend:lib/trace.test.ts::SimPy evidence integrity > treats null, empty and single-point traces as non-replayable",
+      "suite": "frontend",
+      "name": "SimPy evidence integrity > treats null, empty and single-point traces as non-replayable",
+      "group": "lib/trace.test.ts",
+      "file": "frontend/lib/trace.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/workspace-auth.test.ts::Signed demo session and request origin > authenticates only valid, untampered role cookies",
+      "suite": "frontend",
+      "name": "Signed demo session and request origin > authenticates only valid, untampered role cookies",
+      "group": "lib/workspace-auth.test.ts",
+      "file": "frontend/lib/workspace-auth.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/workspace-auth.test.ts::Signed demo session and request origin > enforces a same-origin browser write",
+      "suite": "frontend",
+      "name": "Signed demo session and request origin > enforces a same-origin browser write",
+      "group": "lib/workspace-auth.test.ts",
+      "file": "frontend/lib/workspace-auth.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0019
+    },
+    {
+      "id": "frontend:lib/workspace-auth.test.ts::Signed demo session and request origin > refuses cloud access until both staging secrets are available",
+      "suite": "frontend",
+      "name": "Signed demo session and request origin > refuses cloud access until both staging secrets are available",
+      "group": "lib/workspace-auth.test.ts",
+      "file": "frontend/lib/workspace-auth.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0016
+    },
+    {
+      "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > decodes the JSONB scalar string created by older Postgres bindings",
+      "suite": "frontend",
+      "name": "Workspace JSONB and legacy browser payloads > decodes the JSONB scalar string created by older Postgres bindings",
+      "group": "lib/workspace-record.test.ts",
+      "file": "frontend/lib/workspace-record.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0016
+    },
+    {
+      "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > keeps new JSONB objects unchanged",
+      "suite": "frontend",
+      "name": "Workspace JSONB and legacy browser payloads > keeps new JSONB objects unchanged",
+      "group": "lib/workspace-record.test.ts",
+      "file": "frontend/lib/workspace-record.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > normalizes alignment, incident and report history",
+      "suite": "frontend",
+      "name": "Workspace JSONB and legacy browser payloads > normalizes alignment, incident and report history",
+      "group": "lib/workspace-record.test.ts",
+      "file": "frontend/lib/workspace-record.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0002
+    },
+    {
+      "id": "frontend:lib/workspace-record.test.ts::Workspace JSONB and legacy browser payloads > rejects unreadable values without throwing in a dashboard",
+      "suite": "frontend",
+      "name": "Workspace JSONB and legacy browser payloads > rejects unreadable values without throwing in a dashboard",
+      "group": "lib/workspace-record.test.ts",
+      "file": "frontend/lib/workspace-record.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0003
+    },
+    {
+      "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > hydrates all saved record kinds from the server and tracks report history",
+      "suite": "frontend",
+      "name": "Shared workspace cloud sync > hydrates all saved record kinds from the server and tracks report history",
+      "group": "lib/workspace-sync.test.ts",
+      "file": "frontend/lib/workspace-sync.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0024
+    },
+    {
+      "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > preserves local records when the cloud is not configured",
+      "suite": "frontend",
+      "name": "Shared workspace cloud sync > preserves local records when the cloud is not configured",
+      "group": "lib/workspace-sync.test.ts",
+      "file": "frontend/lib/workspace-sync.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0046
+    },
+    {
+      "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > repairs legacy browser cache before React mounts and retains a backup of invalid entries",
+      "suite": "frontend",
+      "name": "Shared workspace cloud sync > repairs legacy browser cache before React mounts and retains a backup of invalid entries",
+      "group": "lib/workspace-sync.test.ts",
+      "file": "frontend/lib/workspace-sync.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0019
+    },
+    {
+      "id": "frontend:lib/workspace-sync.test.ts::Shared workspace cloud sync > serializes writes and reports remote conflicts without claiming cloud success",
+      "suite": "frontend",
+      "name": "Shared workspace cloud sync > serializes writes and reports remote conflicts without claiming cloud success",
+      "group": "lib/workspace-sync.test.ts",
+      "file": "frontend/lib/workspace-sync.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0014
+    },
+    {
+      "id": "frontend:next.config.test.ts::Next.js response hardening > applies security headers across application routes",
+      "suite": "frontend",
+      "name": "Next.js response hardening > applies security headers across application routes",
+      "group": "next.config.test.ts",
+      "file": "frontend/next.config.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0005
+    },
+    {
+      "id": "frontend:next.config.test.ts::Next.js response hardening > enables React strict mode",
+      "suite": "frontend",
+      "name": "Next.js response hardening > enables React strict mode",
+      "group": "next.config.test.ts",
+      "file": "frontend/next.config.test.ts",
+      "status": "passed",
+      "duration_seconds": 0.0011
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::Green navigation accent is consistent without changing blue actions",
+      "suite": "e2e",
+      "name": "Green navigation accent is consistent without changing blue actions",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.279
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::Homepage keeps readable copy and uses green only as a small accent",
+      "suite": "e2e",
+      "name": "Homepage keeps readable copy and uses green only as a small accent",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.644
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::Quality checks show their purpose and reveal the real CI command on demand",
+      "suite": "e2e",
+      "name": "Quality checks show their purpose and reveal the real CI command on demand",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.141
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::Showcase links expose original CI configuration and API reference",
+      "suite": "e2e",
+      "name": "Showcase links expose original CI configuration and API reference",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.795
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a QA can enter and navigate to the release alignment workspace",
+      "suite": "e2e",
+      "name": "TwinPeak role-based demo \u203a QA can enter and navigate to the release alignment workspace",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.972
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a Technical Lead can open the alignment evidence from its role perspective",
+      "suite": "e2e",
+      "name": "TwinPeak role-based demo \u203a Technical Lead can open the alignment evidence from its role perspective",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.648
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a security response headers are present on public pages",
+      "suite": "e2e",
+      "name": "TwinPeak role-based demo \u203a security response headers are present on public pages",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.017
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::TwinPeak role-based demo \u203a shows all five role choices on the entry screen",
+      "suite": "e2e",
+      "name": "TwinPeak role-based demo \u203a shows all five role choices on the entry screen",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.688
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a Access & Roles can switch persona while retaining per-role permissions",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a Access & Roles can switch persona while retaining per-role permissions",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.247
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a engineer sees the shared showcase and retains workflow boundaries",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a engineer sees the shared showcase and retains workflow boundaries",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.727
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a lead sees the shared showcase and retains workflow boundaries",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a lead sees the shared showcase and retains workflow boundaries",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.824
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a manager sees the shared showcase and retains workflow boundaries",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a manager sees the shared showcase and retains workflow boundaries",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.673
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a mobile users can open the navigation and sign out of the guided session",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a mobile users can open the navigation and sign out of the guided session",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.019
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a qa sees the shared showcase and retains workflow boundaries",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a qa sees the shared showcase and retains workflow boundaries",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.425
+    },
+    {
+      "id": "e2e:demo-journey.spec.ts::role boundary journeys across the five personas \u203a support sees the shared showcase and retains workflow boundaries",
+      "suite": "e2e",
+      "name": "role boundary journeys across the five personas \u203a support sees the shared showcase and retains workflow boundaries",
+      "group": "e2e/demo-journey.spec.ts",
+      "file": "frontend/e2e/demo-journey.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.905
+    },
+    {
+      "id": "e2e:ui-01-landing.spec.ts::UI-01 landing page loads",
+      "suite": "e2e",
+      "name": "UI-01 landing page loads",
+      "group": "e2e/ui-01-landing.spec.ts",
+      "file": "frontend/e2e/ui-01-landing.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.722
+    },
+    {
+      "id": "e2e:ui-02-header-nav.spec.ts::UI-02 header navigation",
+      "suite": "e2e",
+      "name": "UI-02 header navigation",
+      "group": "e2e/ui-02-header-nav.spec.ts",
+      "file": "frontend/e2e/ui-02-header-nav.spec.ts",
+      "status": "passed",
+      "duration_seconds": 3.887
+    },
+    {
+      "id": "e2e:ui-03-rules.spec.ts::UI-03 example evaluation with Rules engine",
+      "suite": "e2e",
+      "name": "UI-03 example evaluation with Rules engine",
+      "group": "e2e/ui-03-rules.spec.ts",
+      "file": "frontend/e2e/ui-03-rules.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.966
+    },
+    {
+      "id": "e2e:ui-04-simpy.spec.ts::UI-04 example evaluation with SimPy engine",
+      "suite": "e2e",
+      "name": "UI-04 example evaluation with SimPy engine",
+      "group": "e2e/ui-04-simpy.spec.ts",
+      "file": "frontend/e2e/ui-04-simpy.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.862
+    },
+    {
+      "id": "e2e:ui-05-featured.spec.ts::UI-05 featured scenario details",
+      "suite": "e2e",
+      "name": "UI-05 featured scenario details",
+      "group": "e2e/ui-05-featured.spec.ts",
+      "file": "frontend/e2e/ui-05-featured.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.394
+    },
+    {
+      "id": "e2e:ui-06-main-website.spec.ts::UI-06 return to main website",
+      "suite": "e2e",
+      "name": "UI-06 return to main website",
+      "group": "e2e/ui-06-main-website.spec.ts",
+      "file": "frontend/e2e/ui-06-main-website.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.797
+    },
+    {
+      "id": "e2e:ui-07-api-docs.spec.ts::UI-07 API documentation loads",
+      "suite": "e2e",
+      "name": "UI-07 API documentation loads",
+      "group": "e2e/ui-07-api-docs.spec.ts",
+      "file": "frontend/e2e/ui-07-api-docs.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.177
+    },
+    {
+      "id": "e2e:ui-08-mobile.spec.ts::UI-08 homepage mobile navigation opens and closes accessibly",
+      "suite": "e2e",
+      "name": "UI-08 homepage mobile navigation opens and closes accessibly",
+      "group": "e2e/ui-08-mobile.spec.ts",
+      "file": "frontend/e2e/ui-08-mobile.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.736
+    },
+    {
+      "id": "e2e:ui-08-mobile.spec.ts::UI-08 mobile layout on demo page",
+      "suite": "e2e",
+      "name": "UI-08 mobile layout on demo page",
+      "group": "e2e/ui-08-mobile.spec.ts",
+      "file": "frontend/e2e/ui-08-mobile.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.467
+    },
+    {
+      "id": "e2e:ui-08-mobile.spec.ts::UI-08 mobile layout on landing page",
+      "suite": "e2e",
+      "name": "UI-08 mobile layout on landing page",
+      "group": "e2e/ui-08-mobile.spec.ts",
+      "file": "frontend/e2e/ui-08-mobile.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.597
+    },
+    {
+      "id": "e2e:ui-09-qa-simulation.spec.ts::UI-09 QA Tester runs a simulation",
+      "suite": "e2e",
+      "name": "UI-09 QA Tester runs a simulation",
+      "group": "e2e/ui-09-qa-simulation.spec.ts",
+      "file": "frontend/e2e/ui-09-qa-simulation.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.799
+    },
+    {
+      "id": "e2e:ui-10-support-incident.spec.ts::UI-10 Support & Monitoring fills in the incident form",
+      "suite": "e2e",
+      "name": "UI-10 Support & Monitoring fills in the incident form",
+      "group": "e2e/ui-10-support-incident.spec.ts",
+      "file": "frontend/e2e/ui-10-support-incident.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.073
+    },
+    {
+      "id": "e2e:ui-10-support-incident.spec.ts::UI-10b Record & escalate creates an incident",
+      "suite": "e2e",
+      "name": "UI-10b Record & escalate creates an incident",
+      "group": "e2e/ui-10-support-incident.spec.ts",
+      "file": "frontend/e2e/ui-10-support-incident.spec.ts",
+      "status": "skipped",
+      "duration_seconds": 0.0
+    },
+    {
+      "id": "e2e:ui-11-pm-signoff.spec.ts::UI-11 Project Manager opens the sign-off queue",
+      "suite": "e2e",
+      "name": "UI-11 Project Manager opens the sign-off queue",
+      "group": "e2e/ui-11-pm-signoff.spec.ts",
+      "file": "frontend/e2e/ui-11-pm-signoff.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.842
+    },
+    {
+      "id": "e2e:ui-11-pm-signoff.spec.ts::UI-11b Project Manager approves a release candidate",
+      "suite": "e2e",
+      "name": "UI-11b Project Manager approves a release candidate",
+      "group": "e2e/ui-11-pm-signoff.spec.ts",
+      "file": "frontend/e2e/ui-11-pm-signoff.spec.ts",
+      "status": "skipped",
+      "duration_seconds": 0.0
+    },
+    {
+      "id": "e2e:ui-12-lead-alignment.spec.ts::UI-12 Technical Lead runs the release alignment analysis",
+      "suite": "e2e",
+      "name": "UI-12 Technical Lead runs the release alignment analysis",
+      "group": "e2e/ui-12-lead-alignment.spec.ts",
+      "file": "frontend/e2e/ui-12-lead-alignment.spec.ts",
+      "status": "passed",
+      "duration_seconds": 2.529
+    },
+    {
+      "id": "e2e:ui-13-engineer-mitigation.spec.ts::UI-13 Integration Engineer tests a mitigation",
+      "suite": "e2e",
+      "name": "UI-13 Integration Engineer tests a mitigation",
+      "group": "e2e/ui-13-engineer-mitigation.spec.ts",
+      "file": "frontend/e2e/ui-13-engineer-mitigation.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.966
+    },
+    {
+      "id": "e2e:ui-13-engineer-mitigation.spec.ts::UI-13b Download incident PDF",
+      "suite": "e2e",
+      "name": "UI-13b Download incident PDF",
+      "group": "e2e/ui-13-engineer-mitigation.spec.ts",
+      "file": "frontend/e2e/ui-13-engineer-mitigation.spec.ts",
+      "status": "skipped",
+      "duration_seconds": 0.0
+    },
+    {
+      "id": "e2e:validation-navigation.spec.ts::QA blocks impossible memory input without sending a SimPy request",
+      "suite": "e2e",
+      "name": "QA blocks impossible memory input without sending a SimPy request",
+      "group": "e2e/validation-navigation.spec.ts",
+      "file": "frontend/e2e/validation-navigation.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.163
+    },
+    {
+      "id": "e2e:validation-navigation.spec.ts::Showcase returns to its source without duplicating module routes",
+      "suite": "e2e",
+      "name": "Showcase returns to its source without duplicating module routes",
+      "group": "e2e/validation-navigation.spec.ts",
+      "file": "frontend/e2e/validation-navigation.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.818
+    },
+    {
+      "id": "e2e:validation-navigation.spec.ts::SimPy invalid input highlights its field and scrolls the notification into view",
+      "suite": "e2e",
+      "name": "SimPy invalid input highlights its field and scrolls the notification into view",
+      "group": "e2e/validation-navigation.spec.ts",
+      "file": "frontend/e2e/validation-navigation.spec.ts",
+      "status": "passed",
+      "duration_seconds": 1.54
+    },
+    {
+      "id": "e2e:validation-navigation.spec.ts::whole-number field stays empty, strips leading zeroes, and rejects decimals",
+      "suite": "e2e",
+      "name": "whole-number field stays empty, strips leading zeroes, and rejects decimals",
+      "group": "e2e/validation-navigation.spec.ts",
+      "file": "frontend/e2e/validation-navigation.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.57
+    },
+    {
+      "id": "e2e:workspace-corrupt-cache.spec.ts::dashboard recovers double-encoded local and remote JSONB history without a crash",
+      "suite": "e2e",
+      "name": "dashboard recovers double-encoded local and remote JSONB history without a crash",
+      "group": "e2e/workspace-corrupt-cache.spec.ts",
+      "file": "frontend/e2e/workspace-corrupt-cache.spec.ts",
+      "status": "passed",
+      "duration_seconds": 0.643
+    }
+  ],
+  "suites": {
+    "backend": {
+      "total": 97,
+      "passed": 97,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "duration_seconds": 35.229,
+      "status": "reported"
+    },
+    "frontend": {
+      "total": 178,
+      "passed": 178,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "duration_seconds": 3.399,
+      "status": "reported"
+    },
+    "e2e": {
+      "total": 38,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 3,
+      "errors": 0,
+      "duration_seconds": 42.552,
+      "status": "reported"
+    }
+  },
+  "frontend_coverage": {
+    "line": 100.0,
+    "branch": 100.0,
+    "functions": 100.0,
+    "statements": 100.0,
+    "modules": 11,
+    "status": "reported"
+  },
+  "security": {
+    "npm": {
+      "critical": 0,
+      "high": 0,
+      "moderate": 0,
+      "low": 0,
+      "info": 0,
+      "total": 0,
+      "status": "reported"
+    },
+    "pip": {
+      "vulnerabilities": 0,
+      "packages_with_findings": 0,
+      "status": "reported"
+    }
+  }
+}
