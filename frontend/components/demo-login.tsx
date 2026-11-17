@@ -1,3 +1,4 @@
+import {startWorkspaceSession} from '../lib/workspace-sync';
 'use client';
 
 import Link from 'next/link';
@@ -20,9 +21,10 @@ export default function DemoLogin(){
   const [showPassword,setShowPassword]=useState(false);
   const [error,setError]=useState('');
   const persona=getPersona(role);
-  function submit(event:React.FormEvent<HTMLFormElement>){
+  async function submit(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setError('');
     if(!demoLogin(role,password)){setError('Password demo tidak sesuai. Gunakan demo123 untuk semua persona.');return;}
+    await startWorkspaceSession(role,password);
     router.push('/dashboard');
   }
   return <div className="demo-login">

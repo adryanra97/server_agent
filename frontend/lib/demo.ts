@@ -1,3 +1,4 @@
+import {startWorkspaceSession,closeWorkspaceSession,storageStatus,persistWorkspaceRecord} from './workspace-sync';
 import { defaultLoad, defaultSpec, history, inspectSimPy, saveRun, type ServerSpec, type Load, type VerdictResult } from './model';
 import { compactTimeline, hasFullReplay, type TraceSample } from './trace';
 import { clearLLMSession } from './llm-session';
@@ -74,10 +75,12 @@ export function demoLogin(role:DemoRole,password:string){
   if(!demoPersonas.some(p=>p.id===role)||password!==DEMO_PASSWORD)return false;
   window.sessionStorage.setItem(DEMO_SESSION_KEY,role);
   window.dispatchEvent(new Event('serveragent-demo-user'));
+  void startWorkspaceSession(role,password);
   return true;
 }
 export function demoLogout(){
   clearLLMSession();
+  void closeWorkspaceSession();
   window.sessionStorage.removeItem(DEMO_SESSION_KEY);
   window.dispatchEvent(new Event('serveragent-demo-user'));
 }
@@ -149,10 +152,12 @@ export function saveDemoRecords(value:DemoRecords){
 export function saveAlignment(record:DemoAlignment){
   const state=demoRecords();
   saveDemoRecords({...state,alignments:[record,...state.alignments.filter(x=>x.id!==record.id)]});
+  void persistWorkspaceRecord('alignment',record as unknown as Record<string,unknown>);
 }
 export function saveIncident(record:DemoIncident){
   const state=demoRecords();
   saveDemoRecords({...state,incidents:[record,...state.incidents.filter(x=>x.id!==record.id)]});
+  void persistWorkspaceRecord('incident',record as unknown as Record<string,unknown>);
 }
 export function demoCsv(records:DemoRecords){
   const header=['type','id','service','release_or_type','status','created_at','updated_at'];
@@ -171,12 +176,15 @@ export function selectDemoPersona(role:DemoRole){
   if(typeof window==='undefined'||!demoPersonas.some(person=>person.id===role))return;
   window.sessionStorage.setItem(DEMO_SESSION_KEY,role);
   window.dispatchEvent(new Event('serveragent-demo-user'));
+  void startWorkspaceSession(role);
 }
 const STARTER_KEY='twinpeak-starter-qris-v1';
 let starterPromise:Promise<boolean>|null=null;
 /** Populate example evidence from a real engine call; never fabricate a verdict. */
 export function ensureDemoStarter():Promise<boolean>{
   if(typeof window==='undefined')return Promise.resolve(false);
+  // The shared cloud history starts empty; never seed it with fake evidence.
+  if(storageStatus()==='cloud')return Promise.resolve(true);
   const starter=demoRecords().alignments.find(item=>item.id==='starter-qris-cycle03');
   if(starter){
     window.localStorage.setItem(STARTER_KEY,'generated');

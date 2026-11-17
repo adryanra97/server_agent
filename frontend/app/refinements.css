@@ -405,3 +405,12 @@
 .tp-back-to-top:focus-visible{outline:3px solid #337cfa;outline-offset:3px}
 @media(max-width:640px){.tp-back-to-top{right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));width:48px;padding:0}.tp-back-to-top span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){.tp-back-to-top{transition:none}.tp-back-to-top:hover{transform:none}}
+
+/* Persistent workspace visibility: never imply browser-only records were saved to the cloud. */
+.tp-storage-indicator{display:inline-flex;align-items:center;gap:9px;margin:0 0 20px;padding:7px 12px;border:1px solid #d9e3f0;border-radius:999px;background:#f7faff;color:#5b6e85;font-size:11px;font-weight:700;max-width:100%;line-height:1.5}
+.tp-storage-indicator>span{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#9aaec3}
+.tp-storage-cloud{background:#eef9f4;border-color:#c7e8d5;color:#136948}
+.tp-storage-cloud>span{background:#199a67}
+.tp-storage-connecting>span{background:#377fd7}
+.tp-storage-error{background:#fff5eb;border-color:#f2dabd;color:#87531a}
+.tp-storage-error>span{background:#d48a32}
