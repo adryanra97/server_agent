@@ -16,7 +16,8 @@ describe('QA-to-Technical-Lead handoff',()=>{
     expect(section).toHaveTextContent('Submitted by QA Tester');
     expect(section).toHaveTextContent('Development Notes');
     expect(section).toHaveTextContent('After the patch, CPU utilization stayed below threshold.');
-    expect(section.querySelector('.tp-qa-submission-text')).toHaveTextContent(submission.qaNotes);
+    // DOM textContent preserves the exact line breaks; jest-dom toHaveTextContent normalizes whitespace.
+    expect(section.querySelector('.tp-qa-submission-text')?.textContent).toBe(submission.qaNotes);
   });
   it('displays a specific empty state for legacy submissions with no notes',()=>{
     render(<QaSubmissionNotes item={{...submission,qaNotes:''}}/>);
