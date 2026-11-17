@@ -17,6 +17,7 @@ import SimulationTimeline, { type TimelinePoint } from './simpy-timeline';
 import { WholeNumberInput } from './whole-number-input';
 import { simulationFieldIssues } from '../lib/simulation-input-validation';
 import EngineComparison from './engine-comparison';
+import {rememberLastSimulationSettings} from '../lib/simulation-session';
 
 type SimulationEvidence = {
   arrival_process: string;
@@ -161,10 +162,14 @@ export default function Simulation(){
       }
       const data=payload as SimPyInspection;
       setReport(data);
+      const completedAt=new Date().toISOString();
+      const request:VerdictRequest={...body,engine:'simpy'};
+      // Personal to this tab and demo role. Never choose a "latest" run from shared cloud history.
+      rememberLastSimulationSettings(request,completedAt);
       saveRun({
-        id:crypto.randomUUID(),created_at:new Date().toISOString(),
+        id:crypto.randomUUID(),created_at:completedAt,
         label:`SimPy · ${body.load.rps} RPS · ${body.spec.cpu.cores} cores`,
-        request:{...body,engine:'simpy'},result:data.result,
+        request,result:data.result,
         timeline:compactTimeline(data.simulation.timeline),
       });
       if(compare){
