@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity, ArrowRight, ArrowUpRight, CheckCircle2, CircleAlert, ClipboardCheck,
   Clock3, Cpu, ChevronDown, Download, FileText, GitCompareArrows, Info, Play, ShieldCheck, Waves,
@@ -15,6 +15,7 @@ import {
 import { Outcome } from './ui';
 import { useWorkspaceRole } from './workspace-role';
 import AlignmentWorkbench, { type AnalysisCase } from './alignment-workbench';
+import { WholeNumberInput } from './whole-number-input';
 import AlignmentDecision from './alignment-decision';
 import AlignmentScenarioReplay from './alignment-scenario-replay';
 import { downloadTwinPeakPDF } from '../lib/report-pdf';
@@ -50,6 +51,10 @@ export default function DemoWorkflows({section}:{section:Section}){
   const data=useDemoRecords();
   const [runs,setRuns]=useState<HistoryItem[]>([]);
   const [analysisCases,setAnalysisCases]=useState<AnalysisCase[]>([]);
+  const [assessmentIssue,setAssessmentIssue]=useState('');
+  const [submissionBlock,setSubmissionBlock]=useState('');
+  const submissionCloseRef=useRef<HTMLButtonElement|null>(null);
+  useEffect(()=>{if(submissionBlock)submissionCloseRef.current?.focus();},[submissionBlock]);
   const [release,setRelease]=useState('QRIS-RC03');
   const [cycle,setCycle]=useState(3);
   const [service,setService]=useState('QRIS Payment');
@@ -74,9 +79,16 @@ export default function DemoWorkflows({section}:{section:Section}){
   const latestByRelease=useMemo(()=>data.alignments.slice().sort((a,b)=>b.createdAt.localeCompare(a.createdAt)),[data.alignments]);
   function submitAlignment(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setMessage('');
-    if(role!=='qa'||!selectedRun){setMessage('Run a SimPy evaluation first, then select its result.');return;}
-    if(analysisCases[0]?.verdict==='not_assessable'){
-      setMessage('The selected normal-demand simulation could not be evaluated. Retry the SimPy engine before submitting release evidence.');return;
+    if(role!=='qa')return;
+    if(assessmentIssue){setSubmissionBlock(assessmentIssue);return;}
+    if(analysisCases.length>0&&(analysisCases.length!==3||analysisCases.some(item=>!item.result||item.verdict==='not_assessable'))){
+      setSubmissionBlock('One or more required scenarios have no completed SimPy result. Run all three scenarios successfully before submitting release evidence.');return;
+    }
+    if(!selectedRun||selectedRun.request.engine!=='simpy'||selectedRun.result.verdict==='not_assessable'){
+      setSubmissionBlock('No completed SimPy evidence is selected. Run a valid simulation first, then attach its result to the release submission.');return;
+    }
+    if(!release.trim()||!service.trim()||!Number.isSafeInteger(cycle)||cycle<1){
+      setMessage('Enter a release candidate, service name, and a valid sprint cycle.');return;
     }
     if(!note.trim()){setMessage('Add a brief QA test summary before submitting the release candidate.');return;}
     const stamp=now();
@@ -141,6 +153,7 @@ export default function DemoWorkflows({section}:{section:Section}){
   function submitIncident(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setMessage('');
     if(role!=='support')return;
+    if(!Number.isSafeInteger(incidentRps)||incidentRps<0){setMessage('Enter a valid whole-number peak request rate before escalating.');return;}
     const stamp=now();
     saveIncident({
       id:crypto.randomUUID(),type:'incident',createdAt:stamp,updatedAt:stamp,
@@ -152,7 +165,7 @@ export default function DemoWorkflows({section}:{section:Section}){
   }
   async function investigate(item:DemoIncident){
     if(role!=='engineer')return;
-    if(!Number.isFinite(mitigationCores)||mitigationCores<=0){
+    if(!Number.isSafeInteger(mitigationCores)||mitigationCores<=0){
       setMessage('Mitigation CPU cores must be greater than zero.');return;
     }
     setMessage('');setBusy(item.id);
@@ -183,21 +196,33 @@ export default function DemoWorkflows({section}:{section:Section}){
       <div className="role-workflow-owner"><span>YOUR RESPONSIBILITY</span><strong>{getPersona(role).shortRole}</strong><small>{section==='incident'&&role==='support'?'Record & escalate':section==='incident'&&role==='engineer'?'Reproduce & test':section==='alignment'&&role==='qa'?'Prepare evidence':section==='alignment'&&role==='lead'?'Review & decide':section==='signoff'?'Approve or reject':'Read-only oversight'}</small></div>
     </div>
     {message&&<div className="role-workflow-message" role="status"><Info size={18}/>{message}</div>}
+    {submissionBlock&&<div className="tp-submission-overlay">
+      <div className="tp-submission-dialog" role="alertdialog" aria-modal="true" aria-labelledby="tp-submission-title" aria-describedby="tp-submission-description" onKeyDown={event=>{if(event.key==='Escape')setSubmissionBlock('');}}>
+        <div className="tp-submission-dialog-icon"><CircleAlert size={23}/></div>
+        <h3 id="tp-submission-title">Release evidence cannot be submitted yet</h3>
+        <p id="tp-submission-description">{submissionBlock}</p>
+        <p className="tp-submission-dialog-note">This is an input or evidence validation issue, not a failed release decision. No alignment record was created.</p>
+        <div className="tp-submission-dialog-actions">
+          <button type="button" ref={submissionCloseRef} onClick={()=>setSubmissionBlock('')}>Review inputs</button>
+          <Link href="/simulation" onClick={()=>setSubmissionBlock('')}>Open SimPy workbench <ArrowUpRight size={16}/></Link>
+        </div>
+      </div>
+    </div>}
 
     {section==='alignment'&&<>
-      {(role==='qa'||role==='lead')&&<AlignmentWorkbench onEvaluated={cases=>{setAnalysisCases(cases);setRunId('');}}/>}
+      {(role==='qa'||role==='lead')&&<AlignmentWorkbench onEvaluated={(cases,issue)=>{setAnalysisCases(cases);setAssessmentIssue(issue??'');setRunId('');}}/>}
       {role==='qa'&&<section className="role-form-panel">
         <div className="role-panel-head"><div><span className="role-eyebrow">STEP 01 / QA SUBMISSION</span><h3>Submit simulation evidence</h3></div><Activity size={22}/></div>
         <p>Select an actual evaluation saved by the ServerAgent simulator. It will be attached to this release-cycle submission.</p>
-        <form onSubmit={submitAlignment} className="role-form-grid">
+        <form noValidate onSubmit={submitAlignment} className="role-form-grid">
           <label>Release candidate<input required value={release} onChange={e=>setRelease(e.target.value)}/></label>
-          <label>Sprint cycle<input required type="number" min="1" step="1" value={cycle} onChange={e=>setCycle(Number(e.target.value))}/></label>
+          <label>Sprint cycle<WholeNumberInput required min={1} value={cycle} onChange={setCycle}/></label>
           <label>Service<input required value={service} onChange={e=>setService(e.target.value)}/></label>
           <label>SimPy evidence<select aria-label="Select saved simulation" value={selectedRun?.id??''} onChange={e=>setRunId(e.target.value)} disabled={!runs.length}>
             {runs.length?runs.map(item=><option key={item.id} value={item.id}>{item.result.engine.toUpperCase()} · {item.request.load.rps} RPS · {item.result.verdict}</option>):<option value="">No simulation available</option>}
           </select></label>
           <label className="role-form-wide">QA testing notes<textarea rows={3} required placeholder="Summary of Dev test, changes, and acceptance context" value={note} onChange={e=>setNote(e.target.value)}/></label>
-          <div className="role-form-wide role-form-footer"><Link href="/simulation">Open SimPy simulator <ArrowUpRight size={16}/></Link><button type="submit" disabled={!selectedRun}>Submit for Technical Lead review <ArrowRight size={16}/></button></div>
+          <div className="role-form-wide role-form-footer"><Link href="/simulation">Open SimPy simulator <ArrowUpRight size={16}/></Link><button type="submit">Submit for Technical Lead review <ArrowRight size={16}/></button></div>
         </form>
       </section>}
       {role==='lead'&&<div className="role-review-hint"><ClipboardCheck size={19}/><span>Review submitted model evidence. The Technical Lead records the alignment decision.</span></div>}
@@ -249,7 +274,7 @@ export default function DemoWorkflows({section}:{section:Section}){
         <form onSubmit={submitIncident} className="role-form-grid">
           <label>Service<input required value={incidentService} onChange={e=>setIncidentService(e.target.value)}/></label>
           <label>Incident type<select value={incidentType} onChange={e=>setIncidentType(e.target.value)}><option>Traffic spike</option><option>Memory pressure</option><option>Batch job overlap</option><option>Response timeout</option></select></label>
-          <label>Peak request rate<input type="number" min="0" max="100000" required value={incidentRps} onChange={e=>setIncidentRps(Number(e.target.value))}/></label>
+          <label>Peak request rate<WholeNumberInput aria-label="Peak request rate" required min={0} value={incidentRps} onChange={setIncidentRps}/></label>
           <label className="role-form-wide">Observed symptoms<textarea required rows={3} value={symptom} onChange={e=>setSymptom(e.target.value)}/></label>
           <div className="role-form-wide role-form-footer"><span>Incident escalation</span><button type="submit">Record & escalate <ArrowRight size={16}/></button></div>
         </form>
@@ -269,7 +294,7 @@ export default function DemoWorkflows({section}:{section:Section}){
           {item.afterTimeline&&<><h4>After mitigation · recorded simulation</h4><TracePreview points={item.afterTimeline}/></>}
           {item.engineerNotes&&<p className="role-review-note"><strong>Engineer finding:</strong> {item.engineerNotes}</p>}
           {role==='engineer'&&<div className="role-record-actions">
-            {selectedIncident===item.id&&<div className="role-investigation-form"><label>Mitigation CPU cores<input type="number" min="1" step="1" value={mitigationCores} onChange={e=>setMitigationCores(Number(e.target.value))}/></label><label>Investigation note<textarea rows={3} value={note} onChange={e=>setNote(e.target.value)} placeholder="Describe the modeled mitigation and observation"/></label></div>}
+            {selectedIncident===item.id&&<div className="role-investigation-form"><label>Mitigation CPU cores<WholeNumberInput aria-label="Mitigation CPU cores" required min={1} value={mitigationCores} onChange={setMitigationCores}/></label><label>Investigation note<textarea rows={3} value={note} onChange={e=>setNote(e.target.value)} placeholder="Describe the modeled mitigation and observation"/></label></div>}
             <div>{selectedIncident!==item.id?<button onClick={()=>setSelectedIncident(item.id)}><GitCompareArrows size={17}/> Test mitigation</button>:<button onClick={()=>investigate(item)} disabled={busy===item.id}>{busy===item.id?'Running SimPy…':'Run before / after SimPy'} <Play size={16}/></button>}</div>
           </div>}
               <div className="tp-case-actions"><button type="button" onClick={()=>void downloadTwinPeakPDF({alignments:[],incidents:[item]},[])}><Download size={16}/> Download incident PDF</button></div>
