@@ -440,3 +440,37 @@
 .tp-saved-export>span{font-size:10px;color:#14866b;background:#e8f6f1;border-radius:99px;padding:6px 10px;white-space:nowrap}
 @media(max-width:900px){.tp-history-overview{grid-template-columns:1fr}}
 @media(max-width:600px){.tp-history-panel,.tp-saved-exports{padding:18px}.tp-history-panel-title,.tp-saved-exports-heading{flex-wrap:wrap}.tp-history-events time{font-size:9px}}
+
+
+/* NN/g: show a contextual, voluntary "reuse" action before the alignment fields.
+   Quiet secondary styling keeps Run simulated analysis the primary task. */
+.sa-app .tp-reuse-settings{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+  margin:16px 0 21px;padding:16px 18px;border:1px solid #CEDFEA;
+  border-radius:8px;background:#F5F9FC;
+}
+.sa-app .tp-reuse-settings-copy{display:flex;align-items:flex-start;gap:11px;min-width:0;flex:1 1 340px}
+.sa-app .tp-reuse-settings-copy>svg{flex:none;color:#296B97;margin-top:2px}
+.sa-app .tp-reuse-settings-copy>div{display:grid;gap:4px;min-width:0}
+.sa-app .tp-reuse-settings-copy strong{font-size:13px;line-height:1.45;font-weight:800;color:#16496C}
+.sa-app .tp-reuse-settings-copy span{font-size:13px;font-weight:750;color:#305A78;font-variant-numeric:tabular-nums}
+.sa-app .tp-reuse-settings-copy small{font-size:11px;line-height:1.5;color:#5B778C}
+.sa-app .tp-reuse-settings-button{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:10px 14px;border:1px solid #8AB9D4;
+  border-radius:5px;background:#fff;color:#0A608E;
+  font-family:inherit;font-size:12px;font-weight:800;line-height:1.4;
+  cursor:pointer;white-space:normal;text-align:center;
+}
+.sa-app .tp-reuse-settings-button:hover:not(:disabled){background:#E8F4FC;border-color:#468EBB}
+.sa-app .tp-reuse-settings-button:disabled{opacity:.6;cursor:not-allowed}
+.sa-app .tp-reuse-settings-button:focus-visible{outline:3px solid #1374AC;outline-offset:3px}
+.sa-app .tp-reuse-feedback{
+  display:flex;align-items:flex-start;gap:9px;margin:0 0 18px;
+  color:#1F684F;font-size:12px;font-weight:700;line-height:1.6;
+}
+.sa-app .tp-reuse-feedback svg{flex:none;margin-top:1px}
+@media(max-width:640px){
+  .sa-app .tp-reuse-settings{align-items:stretch;padding:15px;margin-bottom:18px}
+  .sa-app .tp-reuse-settings-button{width:100%}
+}

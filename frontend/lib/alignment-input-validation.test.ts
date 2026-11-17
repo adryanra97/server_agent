@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {validateAlignmentInputs,type AlignmentInputs} from './alignment-input-validation';
-const good:AlignmentInputs={peak:45,cores:4,ram:512,cpuMs:11,memPerReq:5,concurrent:20,payload:10,bandwidth:100,maxConnections:1000};
+const good:AlignmentInputs={peak:45,cores:4,ram:512,cpuMs:11,memPerReq:5,concurrent:20,payload:10,bandwidth:100,maxConnections:1000,clockGhz:2.5};
 describe('Alignment input preflight',()=>{
   it('accepts valid whole-number input',()=>expect(validateAlignmentInputs(good)).toBeNull());
   it('blocks one request that needs more memory than the server holds',()=>{
@@ -11,6 +11,11 @@ describe('Alignment input preflight',()=>{
   it('flags a cleared field',()=>expect(validateAlignmentInputs({...good,peak:NaN})).toMatch(/Normal demand.*whole number/));
   it('does not accept fractional inputs',()=>expect(validateAlignmentInputs({...good,cpuMs:1.5})).toMatch(/CPU time.*whole number/));
   it('allows overload scenarios to reach SimPy',()=>expect(validateAlignmentInputs({...good,concurrent:100000,maxConnections:10})).toBeNull());
+  it('accepts fractional CPU clock rates but rejects zero and invalid clocks',()=>{
+    expect(validateAlignmentInputs({...good,clockGhz:3.2})).toBeNull();
+    expect(validateAlignmentInputs({...good,clockGhz:0})).toMatch(/CPU clock speed/);
+    expect(alignmentFieldIssues({...good,clockGhz:NaN}).clockGhz).toMatch(/greater than zero/);
+  });
 });
 
 // Visual error feedback should identify the actual field, not blame the engine.
