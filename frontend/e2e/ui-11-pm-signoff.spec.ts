@@ -26,7 +26,3 @@ test('UI-11 Project Manager opens the sign-off queue', async ({ page }) => {
   }
 });
 
-// Pending: diaktifkan setelah ada kandidat sign-off di antrean
-test.fixme('UI-11b Project Manager approves a release candidate', async ({ page }) => {
-  // Nanti: pilih dokumen di antrean, klik Approve, lalu cek status berubah
-});
