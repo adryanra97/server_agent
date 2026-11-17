@@ -33,7 +33,3 @@ test('UI-13 Integration Engineer tests a mitigation', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Download incident PDF' })).toBeVisible();
 });
 
-// Pending: diaktifkan setelah download PDF sudah jalan
-test.fixme('UI-13b Download incident PDF', async ({ page }) => {
-  // Nanti: klik Download incident PDF, lalu cek file terunduh
-});

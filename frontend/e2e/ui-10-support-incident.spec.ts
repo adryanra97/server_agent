@@ -32,7 +32,3 @@ test('UI-10 Support & Monitoring fills in the incident form', async ({ page }) =
   await expect(page.getByRole('button', { name: /Record & escalate/ })).toBeEnabled();
 });
 
-// Pending: diaktifkan setelah fitur escalate siap
-test.fixme('UI-10b Record & escalate creates an incident', async ({ page }) => {
-  // Nanti: klik Record & escalate, lalu cek insiden baru muncul
-});
