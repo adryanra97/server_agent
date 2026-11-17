@@ -6,8 +6,8 @@ describe('Examiner-facing editorial Showcase',()=>{
   it('presents a focused goal, an actionable route, and the existing role boundaries',()=>{
     render(<PlatformShowcase/>);
     expect(screen.getByRole('heading',{level:1,name:/From simulation\s+to evidence/i})).toBeInTheDocument();
-    expect(screen.getByRole('link',{name:/Try the simulation/})).toHaveAttribute('href','/simulation');
-    expect(screen.getByRole('link',{name:/View engineering evidence/})).toHaveAttribute('href','/quality');
+    expect(screen.getByRole('link',{name:/Try the simulation/})).toHaveAttribute('href','/simulation?from=showcase');
+    expect(screen.getByRole('link',{name:/View engineering evidence/})).toHaveAttribute('href','/quality?from=showcase');
     expect(screen.getByText(/All five demo personas can access this technical showcase/)).toBeInTheDocument();
     expect(screen.getByText(/not an additional business use case or UAM role/)).toBeInTheDocument();
     expect(screen.getByText(/not production authorization/)).toBeInTheDocument();
@@ -17,9 +17,9 @@ describe('Examiner-facing editorial Showcase',()=>{
     render(<PlatformShowcase/>);
     const walk=screen.getByRole('complementary',{name:'Suggested examiner walkthrough'});
     expect(within(walk).getAllByRole('listitem')).toHaveLength(3);
-    expect(within(walk).getByRole('link',{name:/Step 1: Open SimPy Workbench/})).toHaveAttribute('href','/simulation');
-    expect(within(walk).getByRole('link',{name:/Step 2: Compare workload scenarios/})).toHaveAttribute('href','/compare');
-    expect(within(walk).getByRole('link',{name:/Step 3: Inspect real engineering evidence/})).toHaveAttribute('href','/quality');
+    expect(within(walk).getByRole('link',{name:/Step 1: Open SimPy Workbench/})).toHaveAttribute('href','/simulation?from=showcase');
+    expect(within(walk).getByRole('link',{name:/Step 2: Compare workload scenarios/})).toHaveAttribute('href','/compare?from=showcase');
+    expect(within(walk).getByRole('link',{name:/Step 3: Inspect real engineering evidence/})).toHaveAttribute('href','/quality?from=showcase');
     expect(within(walk).getByText(/not an illustrative slide/)).toBeInTheDocument();
   });
 
@@ -28,12 +28,12 @@ describe('Examiner-facing editorial Showcase',()=>{
     expect(container.querySelectorAll('.tp-showcase-card')).toHaveLength(6);
     expect(screen.getAllByText(/MODEL & PERFORMANCE|QUALITY & DELIVERY|DESIGN & CONFIGURATION/)).toHaveLength(3);
     const expected=[
-      ['SimPy Workbench','/simulation'],
-      ['Compare Workloads','/compare'],
-      ['Engineering Quality','/quality'],
-      ['API Explorer','/developer'],
-      ['Engine Methodology','/methodology'],
-      ['LLM Settings','/settings'],
+      ['SimPy Workbench','/simulation?from=showcase'],
+      ['Compare Workloads','/compare?from=showcase'],
+      ['Engineering Quality','/quality?from=showcase'],
+      ['API Explorer','/developer?from=showcase'],
+      ['Engine Methodology','/methodology?from=showcase'],
+      ['LLM Settings','/settings?from=showcase'],
     ];
     for(const [name,href] of expected){
       const link=Array.from(container.querySelectorAll('.tp-showcase-card'))

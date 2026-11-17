@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText,
   ClipboardCheck, FileClock, FileSignature, FlaskConical, Layers3,
-  LogOut, Menu, Settings2, ShieldCheck, Terminal, UserRound, Waves, X,
+  ArrowLeft, LogOut, Menu, Settings2, ShieldCheck, Terminal, UserRound, Waves, X,
 } from 'lucide-react';
 import { Brand, Eyebrow } from './ui';
 import { getDemoRole, getPersona, allowedPages, canVisit, demoLogout, type DemoRole } from '../lib/demo';
@@ -57,6 +57,8 @@ export default function Workspace({children}:{children:ReactNode}){
   const [role,setRole]=useState<DemoRole|null>(null);
   const [loaded,setLoaded]=useState(false);
   const [mobileOpen,setMobileOpen]=useState(false);
+  const [fromShowcase,setFromShowcase]=useState(false);
+  useEffect(()=>{setFromShowcase(new URLSearchParams(window.location.search).get('from')==='showcase');},[pathname]);
 
   useEffect(()=>{
     const update=()=>{setRole(getDemoRole());setLoaded(true);};
@@ -123,6 +125,9 @@ export default function Workspace({children}:{children:ReactNode}){
     </header>
     <main className={'sa-main sa-section-'+section}>
       <div className="sa-breadcrumb"><Link href="/demo" aria-label="TwinPeak demo">TwinPeak</Link><span>/</span><span>{currentUser?.shortRole}</span><span>/</span><strong>{title.title}</strong></div>
+      {fromShowcase&&section!=='showcase'&&allowed&&<div className="sa-showcase-return">
+        <Link href="/showcase"><ArrowLeft size={16}/> Back to Platform Showcase</Link>
+      </div>}
       {allowed?<>{section!=='showcase'&&<div className={'page-header sa-page-header sa-page-head-'+section}><div><Eyebrow>{title.eyebrow}</Eyebrow><h1>{title.title}</h1><p>{title.description}</p></div><span className="sa-demo-label">ENGINE EVALUATION</span></div>}
         {children}
       </>:<div className="sa-access-denied"><ShieldCheck size={34}/><span className="role-eyebrow">ROLE-SPECIFIC ACCESS</span>

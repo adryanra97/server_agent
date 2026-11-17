@@ -153,6 +153,7 @@ export default function DemoWorkflows({section}:{section:Section}){
   function submitIncident(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();setMessage('');
     if(role!=='support')return;
+    if(!Number.isSafeInteger(incidentRps)||incidentRps<0){setMessage('Enter a valid whole-number peak request rate before escalating.');return;}
     const stamp=now();
     saveIncident({
       id:crypto.randomUUID(),type:'incident',createdAt:stamp,updatedAt:stamp,
@@ -164,7 +165,7 @@ export default function DemoWorkflows({section}:{section:Section}){
   }
   async function investigate(item:DemoIncident){
     if(role!=='engineer')return;
-    if(!Number.isFinite(mitigationCores)||mitigationCores<=0){
+    if(!Number.isSafeInteger(mitigationCores)||mitigationCores<=0){
       setMessage('Mitigation CPU cores must be greater than zero.');return;
     }
     setMessage('');setBusy(item.id);
